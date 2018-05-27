@@ -1,5 +1,7 @@
 package cz.ophite.mimic.vhackos.botnet.api;
 
+import cz.ophite.mimic.vhackos.botnet.api.dto.ProxyData;
+
 /**
  * Konfigurace pro botnet API.
  *
@@ -26,4 +28,14 @@ public interface IBotnetConfig {
      * Maximální počet pokusů o navázání připojení.
      */
     int getMaxRequestAttempts();
+
+    /**
+     * Prodleva pro uspání vlákna.
+     */
+    long getSleepDelay();
+
+    /**
+     * Získá informace o proxy serveru.
+     */
+    ProxyData getProxyData();
 }

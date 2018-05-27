@@ -74,6 +74,7 @@ public abstract class Module implements IModule {
 
             while (attempts > 0) {
                 try {
+                    Thread.sleep(getConfig().getSleepDelay());
                     var request = new OpcodeRequest(opcode);
                     return request.send(this);
 
@@ -94,6 +95,8 @@ public abstract class Module implements IModule {
                     } catch (InterruptedException e1) {
                         break;
                     }
+                } catch (InterruptedException e) {
+                    break;
                 }
             }
             throw new ConnectionException("Could not send request to server");

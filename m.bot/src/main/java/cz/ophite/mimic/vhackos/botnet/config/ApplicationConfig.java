@@ -1,6 +1,7 @@
 package cz.ophite.mimic.vhackos.botnet.config;
 
 import cz.ophite.mimic.vhackos.botnet.api.IBotnetConfig;
+import cz.ophite.mimic.vhackos.botnet.api.dto.ProxyData;
 import cz.ophite.mimic.vhackos.botnet.shared.dto.AppStoreType;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
@@ -65,6 +66,17 @@ public final class ApplicationConfig implements IBotnetConfig {
     @ConfigValue(value = "sys.sleep.delay", comment = "Delay before each server request in milliseconds",
                  defaultValue = "(500+(Math.floor(Math.random()*2001)+500))")
     private String sleepDelay;
+
+    @ConfigValue(value = "sys.proxy.enable", comment = "Enables the use of a proxy server", defaultValue = "False")
+    private String proxyEnable;
+
+    @ConfigValue(value = "sys.proxy.host",
+                 comment = "Proxy server IP address. Currently supports only HTTP connections",
+                 defaultValue = "136.243.63.53")
+    private String proxyHost;
+
+    @ConfigValue(value = "sys.proxy.port", comment = "Proxy server port", defaultValue = "3128")
+    private String proxyPort;
 
     // služba - update
 
@@ -253,8 +265,21 @@ public final class ApplicationConfig implements IBotnetConfig {
         return Integer.valueOf(maxRequestAttempts);
     }
 
+    @Override
     public long getSleepDelay() {
         return ((Double) SharedUtils.eval(sleepDelay)).longValue();
+    }
+
+    @Override
+    public ProxyData getProxyData() {
+        var enable = Boolean.valueOf(dbEnable);
+        if (enable && !proxyHost.isEmpty() && !proxyPort.isEmpty()) {
+            var proxy = new ProxyData();
+            proxy.setIp(proxyHost);
+            proxy.setPort(Integer.valueOf(proxyPort));
+            return proxy;
+        }
+        return null;
     }
 
     public String getFixedAccessToken() {

@@ -30,22 +30,18 @@ public final class ConfigProvider {
 
         if (file.exists() && file.isFile()) {
             LOG.debug("Configuration file '{}' was found and will be loaded", file.getName());
+            checkAndMergeConfig(file);
             config = loadConfigProperties(file);
         } else {
             LOG.debug("Configuration file '{}' has not been found and will be created", file.getName());
         }
         if (config == null) {
-            config = createNewConfigFile(file);
+            createNewConfigFile(file);
+            config = loadConfigProperties(file);
+            LOG.debug("The configuration file '{}' was successfully created and loaded", file.getName());
         }
         LOG.info("Configuration from file '{}' was loaded", file.getName());
         return config;
-    }
-
-    /**
-     * Získá název konfiguračního osuboru.
-     */
-    public String getConfigFileName() {
-        return APPLICATION_CONFIG_FILE;
     }
 
     /**
@@ -69,7 +65,7 @@ public final class ConfigProvider {
     /**
      * Vytvoří nový konfigurační soubor.
      */
-    private ApplicationConfig createNewConfigFile(File file) {
+    private void createNewConfigFile(File file, Map<String, List<ConfigData>> configData) {
         try (var bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
             LOG.info("Creating (configuration) properties file: {}", file.getName());
 
@@ -80,8 +76,6 @@ public final class ConfigProvider {
             bw.write("# ================================================================");
             bw.newLine();
             bw.newLine();
-
-            var configData = prepareConfigData();
 
             for (var entry : configData.entrySet()) {
                 bw.write(String.format("[%s]", entry.getKey()));
@@ -99,17 +93,79 @@ public final class ConfigProvider {
                     LOG.debug("Write value: {} = {}", cd.key, cd.value);
                 }
             }
-            var config = loadConfigProperties(file);
-            LOG.debug("The configuration file '{}' was successfully created and loaded", file.getName());
-            return config;
-
         } catch (Exception e) {
             LOG.error("An unexpected error occurred while creating a configuration file: " + file.getName(), e);
             throw new ConfigurationException("File '" + file.getName() + "' could not be created", e);
         }
     }
 
-    private static Map<String, List<ConfigData>> prepareConfigData() throws Exception {
+    /**
+     * Vytvoří nový konfigurační soubor.
+     */
+    private void createNewConfigFile(File file) {
+        var configData = prepareConfigData();
+        createNewConfigFile(file, configData);
+    }
+
+    /**
+     * Zkontroluje konfigurační soubor a pokud v něm chybí nějaké klíče, tak je doplní.
+     */
+    private void checkAndMergeConfig(File file) {
+        try {
+            LOG.debug("Start checking the configuration file and eventually merge");
+            var missingKeys = new ArrayList<ConfigData>();
+            var current = prepareConfigData();
+            Properties prop;
+
+            try (var fis = new FileInputStream(file)) {
+                prop = new Properties();
+                prop.load(fis);
+
+                for (var entry : prop.entrySet()) {
+                    if (isCategory(entry.getKey().toString())) {
+                        prop.remove(entry.getKey());
+                    }
+                }
+                var names = prop.stringPropertyNames();
+
+                for (var data : current.values()) {
+                    for (var cd : data) {
+                        var found = false;
+
+                        for (var name : names) {
+                            if (name.equals(cd.key)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            missingKeys.add(cd);
+                        }
+                    }
+                }
+            }
+            if (!missingKeys.isEmpty()) {
+                LOG.info("{} new configurations have been found. Starting merge configuration...", missingKeys.size());
+
+                for (var data : current.values()) {
+                    for (var cd : data) {
+                        for (var entry : prop.entrySet()) {
+                            if (cd.key.equals(entry.getKey())) {
+                                cd.value = entry.getValue().toString();
+                                break;
+                            }
+                        }
+                    }
+                }
+                createNewConfigFile(file, current);
+                LOG.info("Merge configuration file complete");
+            }
+        } catch (Exception e) {
+            throw new ConfigurationException("An error occurred while merging the configuration file", e);
+        }
+    }
+
+    private static Map<String, List<ConfigData>> prepareConfigData() {
         var fields = ApplicationConfig.class.getDeclaredFields();
         var data = new LinkedHashMap<String, List<ConfigData>>();
 
@@ -171,7 +227,7 @@ public final class ConfigProvider {
         return config;
     }
 
-    private static String replaceVariables(String text) throws Exception {
+    private static String replaceVariables(String text) {
         var p = Pattern.compile("\\$\\{(.+?)\\}");
         var m = p.matcher(text);
 
@@ -182,11 +238,16 @@ public final class ConfigProvider {
                 var dotPos = cmd.lastIndexOf('.');
 
                 if (dotPos > 0) {
-                    var clazz = Class.forName(cmd.substring(0, dotPos));
-                    var fieldName = cmd.substring(dotPos + 1);
-                    var field = clazz.getDeclaredField(fieldName);
-                    var value = field.get(null);
+                    Object value;
+                    try {
+                        var clazz = Class.forName(cmd.substring(0, dotPos));
+                        var fieldName = cmd.substring(dotPos + 1);
+                        var field = clazz.getDeclaredField(fieldName);
+                        value = field.get(null);
 
+                    } catch (Exception e) {
+                        throw new ConfigurationException("There was an error getting a configuration variable. Command is: " + cmd, e);
+                    }
                     if (value != null) {
                         if (value instanceof Collection) {
                             var c = (Collection) value;
@@ -216,6 +277,10 @@ public final class ConfigProvider {
         regex = regex.replaceAll("\\{", "\\\\\\{");
         regex = regex.replaceAll("\\}", "\\\\\\}");
         return regex;
+    }
+
+    private static boolean isCategory(String key) {
+        return key.matches("\\[(.+?)\\]");
     }
 
     private static final class ConfigData {

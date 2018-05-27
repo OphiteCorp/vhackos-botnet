@@ -2,6 +2,7 @@ package cz.ophite.mimic.vhackos.botnet.api.net;
 
 import com.google.gson.Gson;
 import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
+import cz.ophite.mimic.vhackos.botnet.api.dto.ProxyData;
 import cz.ophite.mimic.vhackos.botnet.api.exception.*;
 import cz.ophite.mimic.vhackos.botnet.api.module.base.IModule;
 import cz.ophite.mimic.vhackos.botnet.api.opcode.base.IOpcode;
@@ -16,6 +17,8 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.Map;
 
@@ -77,7 +80,7 @@ public final class OpcodeRequest {
         LOG.trace("Target URI: {}", uri);
 
         try {
-            conn = createConnection(uri, getUserAgent(module));
+            conn = createConnection(uri, getUserAgent(module), module.getBotnet().getConfig().getProxyData());
             var responseCode = conn.getResponseCode();
 
             if (responseCode == 200) {
@@ -144,9 +147,16 @@ public final class OpcodeRequest {
     /**
      * Vytvoří HTTPS připojení.
      */
-    private HttpsURLConnection createConnection(String uri, String userAgent) throws IOException {
+    private HttpsURLConnection createConnection(String uri, String userAgent, ProxyData proxyData) throws IOException {
         var url = new URL(uri);
-        var conn = (HttpsURLConnection) url.openConnection();
+        HttpsURLConnection conn;
+
+        if (proxyData != null) {
+            var proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyData.getIp(), proxyData.getPort()));
+            conn = (HttpsURLConnection) url.openConnection(proxy);
+        } else {
+            conn = (HttpsURLConnection) url.openConnection();
+        }
         conn.setRequestProperty("User-Agent", userAgent);
         conn.setRequestProperty("Accept-Encoding", "gzip");
         conn.setConnectTimeout(30000);
