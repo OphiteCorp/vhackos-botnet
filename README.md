@@ -63,7 +63,7 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
 
 ### How to use Botnet
 1) The application uses the java version 10. If you do not have it, download it here - [Download](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-2) Download the latest release of Botnet from github
+2) Download the latest release of Botnet from github here - [Download](https://github.com/mimic2300/vhackos-botnet/releases)
 3) Botnet is currently a console application, so you need to run it through the console
    - Put downloaded Botnet somewhere in your directory. For example `c:/botnet/botnet.jar`
    - Run the command line using `cmd` via `Win + R`
