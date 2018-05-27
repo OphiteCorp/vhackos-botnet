@@ -29,9 +29,9 @@ For the game server, Botnet behaves like a human, so when the settings are corre
 
 ### Information
 
-![Github All Releases](https://img.shields.io/github/downloads/mimic2300/vhackos-botnet/total.svg?style=for-the-badge)
-
 ![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=for-the-badge)
+
+[![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=for-the-badge)](https://discord.gg/Cdz39vu)
 
 ### Notice!
 Even if the odds are small, I am not responsible for any damage caused by Botnet. Like a ban on an account, etc. If you use this application, you are aware of the potential consequences and all the risks associated with it.
