@@ -1,0 +1,65 @@
+package cz.ophite.mimic.vhackos.botnet.db.dao;
+
+import cz.ophite.mimic.vhackos.botnet.db.dao.base.Dao;
+import cz.ophite.mimic.vhackos.botnet.db.entity.ScannedIpEntity;
+import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Práce s DB entitou skenovaných IP.
+ *
+ * @author mimic
+ */
+@Inject
+public final class ScannedIpDao extends Dao<ScannedIpEntity> {
+
+    /**
+     * Vytvoří nebo aktualizuje záznam v databázi.
+     */
+    public ScannedIpEntity createOrUpdate(String ip, int level, int firewall, String userName) {
+        var entity = getByIp(ip);
+
+        if (entity == null) {
+            entity = new ScannedIpEntity();
+            entity.setIp(ip);
+            entity.setCreated(new Date());
+            entity.setValid(true);
+        } else {
+            entity.setUpdated(new Date());
+        }
+        entity.setLevel(level);
+        entity.setFirewall(firewall);
+
+        if (userName != null) {
+            entity.setUserName(userName);
+        }
+        var finalEntity = entity;
+        return execute(s -> createOrUpdate(s, finalEntity, finalEntity.getUpdated() == null));
+    }
+
+    /**
+     * Získá všechny naskenované IP.
+     */
+    public List<ScannedIpEntity> getScannedIps() {
+        return execute(s -> {
+            var q = s
+                    .createQuery(query("select sip from {entity} sip order by sip." + ScannedIpEntity.CREATED), ScannedIpEntity.class);
+            return q.list();
+        });
+    }
+
+    /**
+     * Získá naskenovanou IP podle IP.
+     */
+    public ScannedIpEntity getByIp(String ip) {
+        var hql = query("select sip from {entity} sip where sip." + ScannedIpEntity.IP + " = :IP");
+
+        return execute(s -> {
+            var q = s.createQuery(hql, ScannedIpEntity.class);
+            q.setParameter("IP", ip);
+            return q.uniqueResult();
+        });
+    }
+}
