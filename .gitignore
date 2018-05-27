@@ -1,0 +1,18 @@
+# Files
+############################################
+
+*.properties
+*.json
+*.iml
+*.class
+*.log
+*.tmp
+*.jar
+
+# Directories
+############################################
+
+.idea/
+logs/
+target/
+src/test/
