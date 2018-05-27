@@ -98,7 +98,7 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
      - If you know your access token and user ID, fill in the following `game.fixed.access.token` and `game.fixed.user.uid`. This will allow you to sign up on another device at the same time (like a mobile phone)
 5) Run Botnet again with the same command as before
 6) When fully loaded, you can use the `.help` command to display the help (available commands)
-7) Quit Botnet using the `.q` command. This is a safe way to properly terminate all services and update the cache.
+7) Quit Botnet using the `.q` command. This is a safe way to properly terminate all services and update the cache
 8) Enjoy your botting ;-)
 
 ### FAQ
@@ -107,6 +107,11 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
 
 - Is my login name and my password safe to enter into my configuration?
   - Yes. Besides vHack, your data is not sent anywhere else
+  
+- How do I get my access token and UID from my mobile?
+  - First of all, you need to have root devices
+  - Open a file manager and go to: `/data/data/cc.vhack.vhackxtmobile/shared_prefs` and edit file `vXTMobile.xml.xml`
+  - You will find the `uid` and `accessstoken` values in the file. Then use them in Botnet
   
 ### Project information
 ```
