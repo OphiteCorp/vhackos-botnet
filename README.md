@@ -86,7 +86,23 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
 - Is my login name and my password safe to enter into my configuration?
   - Yes. Besides vHack, your data is not sent anywhere else
   
+### Project information
+```
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Java                           211           2867           2162          12069
+XML                             12              7              0           3306
+Maven                            4             24              0            284
+Markdown                         3             20              0             97
+JSON                             1              0              0              9
+-------------------------------------------------------------------------------
+SUM:                           231           2918           2162          15765
+-------------------------------------------------------------------------------
+```
 ### A few application images
 
 ![](screens/botnet.png)
 ![](screens/services.png)
+
+Huge image of v0.8 - [HERE](screens/botnet_v0.8_big.png)
