@@ -63,7 +63,8 @@ public final class ApplicationConfig implements IBotnetConfig {
                  comment = "The maximum number of attempts to send the request to the server", defaultValue = "3")
     private String maxRequestAttempts;
 
-    @ConfigValue(value = "sys.sleep.delay", comment = "Delay before each server request in milliseconds",
+    @ConfigValue(value = "sys.sleep.delay",
+                 comment = "Delay before each server request in milliseconds.\nDefault: between 1-3s",
                  defaultValue = "(500+(Math.floor(Math.random()*2001)+500))")
     private String sleepDelay;
 
@@ -80,34 +81,39 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // služba - update
 
-    @ConfigValue(value = "service.update.timeout", comment = "Delay between repeated executing in milliseconds",
-                 defaultValue = "(5*60+(Math.floor(Math.random()*111)+10))*1e3")
+    @ConfigValue(value = "service.update.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 5-7min",
+                 defaultValue = "(4*60+(Math.floor(Math.random()*121)+60))*1e3")
     private String sUpdateTimeout;
 
     // služba - miner
 
-    @ConfigValue(value = "service.miner.enable", comment = "Enable netcoins mining service", defaultValue = "True")
+    @ConfigValue(value = "service.miner.enable", comment = "Enable netcoins mining service", defaultValue = "False")
     private String sMinerEnable;
 
-    @ConfigValue(value = "service.miner.timeout", comment = "Delay between repeated executing in milliseconds",
+    @ConfigValue(value = "service.miner.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 1h 10s and 1h 1min",
                  defaultValue = "(60*60+(Math.floor(Math.random()*51)+10))*1e3")
     private String sMinerTimeout;
 
     // služba - malware
 
-    @ConfigValue(value = "service.malware.enable", comment = "Enable malware production service", defaultValue = "True")
+    @ConfigValue(value = "service.malware.enable", comment = "Enable malware production service",
+                 defaultValue = "False")
     private String sMalwareEnable;
 
-    @ConfigValue(value = "service.malware.timeout", comment = "Delay between repeated executing in milliseconds",
+    @ConfigValue(value = "service.malware.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 10min 10s and 11min",
                  defaultValue = "(10*60+(Math.floor(Math.random()*51)+10))*1e3")
     private String sMalwareTimeout;
 
     // služba - server
 
-    @ConfigValue(value = "service.server.enable", comment = "Enable server control", defaultValue = "True")
+    @ConfigValue(value = "service.server.enable", comment = "Enable server control", defaultValue = "False")
     private String sServerEnable;
 
-    @ConfigValue(value = "service.server.timeout", comment = "Delay between repeated executing in milliseconds",
+    @ConfigValue(value = "service.server.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 45min 10s and 47min",
                  defaultValue = "(45*60+(Math.floor(Math.random()*111)+10))*1e3")
     private String sServerTimeout;
 
@@ -126,11 +132,12 @@ public final class ApplicationConfig implements IBotnetConfig {
     // služba - store
 
     @ConfigValue(value = "service.store.enable", comment = "Enables shop control to purchase apps",
-                 defaultValue = "True")
+                 defaultValue = "False")
     private String sStoreEnable;
 
-    @ConfigValue(value = "service.store.timeout", comment = "Delay between repeated executing in milliseconds",
-                 defaultValue = "(60+(Math.floor(Math.random()*51)+10))*1e3")
+    @ConfigValue(value = "service.store.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 2min 10s and 3min",
+                 defaultValue = "(2*60+(Math.floor(Math.random()*51)+10))*1e3")
     private String sStoreTimeout;
 
     @ConfigValue(value = "service.store.updated.apps",
@@ -141,25 +148,27 @@ public final class ApplicationConfig implements IBotnetConfig {
     // služba - booster
 
     @ConfigValue(value = "service.booster.enable", comment = "Enables use of boosters for active tasks",
-                 defaultValue = "True")
+                 defaultValue = "False")
     private String sBoosterEnable;
 
-    @ConfigValue(value = "service.booster.timeout", comment = "Delay between repeated executing in milliseconds",
+    @ConfigValue(value = "service.booster.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 5min 10s and 6min",
                  defaultValue = "(5*60+(Math.floor(Math.random()*51)+10))*1e3")
     private String sBoosterTimeout;
 
     @ConfigValue(value = "service.booster.req.time",
-                 comment = "Required task time for booster use. If at least one task time is greater than this value, then boost will be used\nTime is in seconds",
+                 comment = "Required task time for booster use. If at least one task time is greater than this value, then boost will be used\nTime is in seconds. Default: 15min",
                  defaultValue = "900")
     private String sBoosterReqTime;
 
     // služba - mission
 
     @ConfigValue(value = "service.mission.enable",
-                 comment = "Enables automatic completion of missions and picking up rewards", defaultValue = "True")
+                 comment = "Enables automatic completion of missions and picking up rewards", defaultValue = "False")
     private String sMissionEnable;
 
-    @ConfigValue(value = "service.mission.timeout", comment = "Delay between repeated executing in milliseconds",
+    @ConfigValue(value = "service.mission.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 6h 10min and 7h",
                  defaultValue = "(6*60*60+(Math.floor(Math.random()*3001)+600))*1e3")
     private String sMissionTimeout;
 
@@ -170,8 +179,9 @@ public final class ApplicationConfig implements IBotnetConfig {
                  defaultValue = "False")
     private String sNetworkEnable;
 
-    @ConfigValue(value = "service.network.timeout", comment = "Delay between repeated executing in milliseconds",
-                 defaultValue = "(60*60+(Math.floor(Math.random()*2401)+1200))*1e3")
+    @ConfigValue(value = "service.network.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 51-55min",
+                 defaultValue = "(50*60+(Math.floor(Math.random()*241)+60))*1e3")
     private String sNetworkTimeout;
 
     // služba - netscan
@@ -181,7 +191,8 @@ public final class ApplicationConfig implements IBotnetConfig {
                  defaultValue = "False")
     private String sNetworkScanEnable;
 
-    @ConfigValue(value = "service.netscan.timeout", comment = "Delay between repeated executing in milliseconds",
+    @ConfigValue(value = "service.netscan.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 10-15s",
                  defaultValue = "(5+(Math.floor(Math.random()*11)+5))*1e3")
     private String sNetworkScanTimeout;
 

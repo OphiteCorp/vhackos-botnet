@@ -176,17 +176,8 @@ public final class ConfigProvider {
                 d.key = cv.value();
                 d.value = replaceVariables(cv.defaultValue());
                 d.category = cv.value().split("\\.")[0];
+                d.comments = mapToComments(cv.comment());
 
-                if (!cv.comment().isEmpty()) {
-                    var commentLines = cv.comment().split("\n");
-                    d.comments = new ArrayList<>(commentLines.length);
-
-                    for (var cl : commentLines) {
-                        d.comments.add(replaceVariables(cl));
-                    }
-                } else {
-                    d.comments = Collections.emptyList();
-                }
                 List<ConfigData> list;
                 if (data.containsKey(d.category)) {
                     list = data.get(d.category);
@@ -225,6 +216,23 @@ public final class ConfigProvider {
             throw new ConfigurationException("An error occurred while converting the configuration file", e);
         }
         return config;
+    }
+
+    /**
+     * Přemapuje řádek s komentářem na víceřádkový komentář.
+     */
+    private static List<String> mapToComments(String comment) {
+        if (!comment.isEmpty()) {
+            var commentLines = comment.split("\n");
+            var list = new ArrayList<String>(commentLines.length);
+
+            for (var cl : commentLines) {
+                list.add(replaceVariables(cl));
+            }
+            return list;
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private static String replaceVariables(String text) {
