@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Parameter;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -66,7 +67,14 @@ public final class Application implements ICommandListener {
             try {
                 HibernateManager.initialize(config);
             } catch (DatabaseConnectionException e) {
-                LOG.error("Database connection failed. Verify that the database server is running and that it is " + "configured correctly. The database will not be used");
+                if (e.getCause() != null && e.getCause() instanceof SQLException) {
+                    var eSql = (SQLException) e.getCause();
+                    LOG.error("A database error has occurred: SQL state {}, message: {}", eSql.getSQLState(), eSql
+                            .getMessage());
+                } else {
+                    LOG.error("An unexpected error occurred when connecting to the database. The database will not be used. Message: {}", e
+                            .getMessage());
+                }
             }
         }
 
