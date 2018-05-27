@@ -7,9 +7,9 @@ For the game server, Botnet behaves like a human, so when the settings are corre
 
 ### Information
 
-![Github All Releases](https://img.shields.io/github/downloads/mimic2300/vhackos-botnet/total.svg?style=for-the-badge)![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=for-the-badge)
+![Github All Releases](https://img.shields.io/github/downloads/mimic2300/vhackos-botnet/total.svg?style=for-the-badge)
 
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/badges/shields.svg?style=for-the-badge)![GitHub repo size in bytes](https://img.shields.io/github/repo-size/badges/shields.svg?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=for-the-badge)
 
 ### Notice!
 Even if the odds are small, I am not responsible for any damage caused by Botnet. Like a ban on an account, etc. If you use this application, you are aware of the potential consequences and all the risks associated with it.
@@ -76,7 +76,8 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
      - If you know your access token and user ID, fill in the following `game.fixed.access.token` and `game.fixed.user.uid`. This will allow you to sign up on another device at the same time (like a mobile phone)
 5) Run Botnet again with the same command as before
 6) When fully loaded, you can use the `.help` command to display the help (available commands)
-7) Enjoy your botting ;-)
+7) Quit Botnet using the `.q` command. This is a safe way to properly terminate all services and update the cache.
+8) Enjoy your botting ;-)
 
 ### FAQ
 - Can I run Botnet multiple times at the same time under one account?
@@ -84,3 +85,8 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
 
 - Is my login name and my password safe to enter into my configuration?
   - Yes. Besides vHack, your data is not sent anywhere else
+  
+### A few application images
+
+![](screens/botnet.png)
+![](screens/services.png)
