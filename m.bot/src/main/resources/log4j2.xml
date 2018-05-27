@@ -36,14 +36,14 @@
     </Appenders>
 
     <Loggers>
-        <Root level="debug"> <!-- PROD - info -->
+        <Root level="info"> <!-- PROD - info -->
             <AppenderRef ref="console_appender" />
-            <AppenderRef ref="file_appender_application" level="trace" /> <!-- PROD - debug -->
+            <AppenderRef ref="file_appender_application" level="debug" /> <!-- PROD - debug -->
             <AppenderRef ref="file_appender_error" level="error" />
         </Root>
 
         <logger name="com.mchange.v2.c3p0" level="error" /> <!-- PROD - error -->
-        <logger name="org.hibernate" level="info" /> <!-- PROD - error -->
+        <logger name="org.hibernate" level="error" /> <!-- PROD - error -->
     </Loggers>
 
 </Configuration>

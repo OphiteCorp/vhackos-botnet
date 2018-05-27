@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author mimic
  */
-public abstract class Service implements IService, Runnable {
+public abstract class Service implements IService {
 
     public static final String SERVICES_PACKAGE = "cz.ophite.mimic.vhackos.botnet.service";
     private static final long DEFAULT_INIT_DELAY = 1000;
@@ -64,21 +64,19 @@ public abstract class Service implements IService, Runnable {
     }
 
     @Override
-    public final boolean start(boolean async) {
+    public final boolean start(ServiceConfig config) {
         initialize();
 
-        if (async) {
+        if (config.isAsync() && !config.isFirstRunSync()) {
             if (executor == null || executor.isShutdown()) {
-                if (timeout == 0) {
-                    throw new IllegalStateException("Timeout not set");
-                }
+                validateTimeout();
                 executor = Executors.newScheduledThreadPool(1, new ExecThreadFactory());
-                executor.scheduleAtFixedRate(this, initDelay, timeout, TimeUnit.MILLISECONDS);
+                executor.scheduleAtFixedRate(new Run(config), initDelay, timeout, TimeUnit.MILLISECONDS);
                 running = true;
                 return true;
             }
         } else {
-            run();
+            new Run(config).run();
             return true;
         }
         return false;
@@ -86,7 +84,11 @@ public abstract class Service implements IService, Runnable {
 
     @Override
     public final boolean start() {
-        return start(true);
+        var config = new ServiceConfig();
+        config.setAsync(true);
+        config.setFirstRunSync(false);
+
+        return start(config);
     }
 
     @Override
@@ -103,24 +105,6 @@ public abstract class Service implements IService, Runnable {
             }
         }
         return false;
-    }
-
-    @Override
-    public final void run() {
-        log.info("Starting...");
-        try {
-            execute();
-        } catch (Exception e) {
-            log.error("An unexpected error occurred while processing the service", e);
-        }
-        log.debug("Finished");
-
-        if (autoResetExecutor && executor != null && !executor.isShutdown()) {
-            executor.shutdownNow();
-            initialize();
-            executor = Executors.newScheduledThreadPool(1, new ExecThreadFactory());
-            executor.scheduleAtFixedRate(this, timeout, timeout, TimeUnit.MILLISECONDS);
-        }
     }
 
     @Override
@@ -177,6 +161,12 @@ public abstract class Service implements IService, Runnable {
         }
     }
 
+    private void validateTimeout() {
+        if (timeout == 0) {
+            throw new IllegalStateException("Timeout not set");
+        }
+    }
+
     /**
      * Uspí vlákno na čas z konfigurace.
      */
@@ -197,6 +187,42 @@ public abstract class Service implements IService, Runnable {
      */
     protected final boolean hasEnoughNetcoins(int netcoins) {
         return (netcoins > getConfig().getSafeNetcoins());
+    }
+
+    /**
+     * Samotný process.
+     */
+    private class Run implements Runnable {
+
+        private final ServiceConfig config;
+
+        private Run(ServiceConfig config) {
+            this.config = config;
+        }
+
+        @Override
+        public void run() {
+            log.info("Starting...");
+            try {
+                execute();
+            } catch (Exception e) {
+                log.error("An unexpected error occurred while processing the service", e);
+            }
+            log.debug("Finished");
+
+            if (executor == null && config.isFirstRunSync()) {
+                validateTimeout();
+                executor = Executors.newScheduledThreadPool(1, new ExecThreadFactory());
+                executor.scheduleAtFixedRate(this, timeout, timeout, TimeUnit.MILLISECONDS);
+                running = true;
+
+            } else if (autoResetExecutor && executor != null && !executor.isShutdown()) {
+                executor.shutdownNow();
+                initialize();
+                executor = Executors.newScheduledThreadPool(1, new ExecThreadFactory());
+                executor.scheduleAtFixedRate(this, timeout, timeout, TimeUnit.MILLISECONDS);
+            }
+        }
     }
 
     /**

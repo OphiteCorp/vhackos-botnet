@@ -10,6 +10,7 @@ import cz.ophite.mimic.vhackos.botnet.dto.CacheData;
 import cz.ophite.mimic.vhackos.botnet.exception.MissingLoginGredentialException;
 import cz.ophite.mimic.vhackos.botnet.service.base.IService;
 import cz.ophite.mimic.vhackos.botnet.service.base.Service;
+import cz.ophite.mimic.vhackos.botnet.service.base.ServiceConfig;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.json.Json;
 import org.slf4j.Logger;
@@ -73,8 +74,11 @@ public final class Botnet implements IBotnet {
             connectionData.set(cache.getConnectionData());
         }
         // zkontroluje, případně přihlásí uživatele s novým tokenem
-        LOG.info("Check user access token. Please wait...");
-        Service.getServices().get(IService.SERVICE_UPDATE).start(false);
+        LOG.info("Getting user information. Please wait...");
+        var serviceConfig = new ServiceConfig();
+        serviceConfig.setAsync(true);
+        serviceConfig.setFirstRunSync(true);
+        Service.getServices().get(IService.SERVICE_UPDATE).start(serviceConfig);
 
         // spustí služby
         initializeServices();
@@ -87,9 +91,6 @@ public final class Botnet implements IBotnet {
     private void initializeServices() {
         var services = Service.getServices();
 
-        if (config.isUpdateEnable()) {
-            services.get(IService.SERVICE_UPDATE).start();
-        }
         if (config.isMinerEnable()) {
             services.get(IService.SERVICE_MINER).start();
         }

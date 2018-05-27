@@ -40,6 +40,7 @@ public final class UpdateService extends Service {
     @Override
     protected void initialize() {
         setTimeout(getConfig().getUpdateTimeout());
+        setInitDelay(0);
     }
 
     @Override

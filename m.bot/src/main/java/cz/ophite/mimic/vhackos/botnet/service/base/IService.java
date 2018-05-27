@@ -25,7 +25,7 @@ public interface IService {
     /**
      * Spustí službu (je možné spustit službu i synchronně).
      */
-    boolean start(boolean async);
+    boolean start(ServiceConfig config);
 
     /**
      * Zastaví službu.

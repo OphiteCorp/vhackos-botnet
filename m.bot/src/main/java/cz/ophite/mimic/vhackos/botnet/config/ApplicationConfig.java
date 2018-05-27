@@ -68,10 +68,6 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // služba - update
 
-    @ConfigValue(value = "service.update.enable", comment = "Enable service to keep up-to-date user data",
-                 defaultValue = "True")
-    private String sUpdateEnable;
-
     @ConfigValue(value = "service.update.timeout", comment = "Delay between repeated executing in milliseconds",
                  defaultValue = "(5*60+(Math.floor(Math.random()*111)+10))*1e3")
     private String sUpdateTimeout;
@@ -271,10 +267,6 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     public boolean isDbEnable() {
         return Boolean.valueOf(dbEnable);
-    }
-
-    public boolean isUpdateEnable() {
-        return Boolean.valueOf(sUpdateEnable);
     }
 
     public long getUpdateTimeout() {
