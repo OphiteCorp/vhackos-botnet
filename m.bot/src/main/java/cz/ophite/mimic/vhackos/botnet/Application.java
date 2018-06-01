@@ -37,6 +37,7 @@ public final class Application implements ICommandListener {
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     public static final int ERROR_CODE_MISSING_LOGIN_CREDENTIAL = 10;
+    public static final String LOGO = getBotnetLogo();
 
     private static Botnet botnet;
     private static BotnetGui gui;
@@ -52,7 +53,7 @@ public final class Application implements ICommandListener {
             gui = new BotnetGui();
             gui.open();
         }
-        LOG.info(getBotnetLogo());
+        LOG.info(LOGO);
         LOG.info("The botnet starting...");
 
         // vytvoří instanci aplikace a botnetu

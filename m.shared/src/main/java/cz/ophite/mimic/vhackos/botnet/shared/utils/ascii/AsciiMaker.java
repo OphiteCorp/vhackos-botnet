@@ -35,6 +35,10 @@ public final class AsciiMaker extends AsciiTable {
         getContext().setGridTheme(TA_GridThemes.INSIDE);
     }
 
+    public void setTopTheme() {
+        getContext().setGridTheme(TA_GridThemes.TOP);
+    }
+
     public AT_Row add(Collection<?> columns) throws NullPointerException, AsciiTableException {
         Validate.notNull(columns);
         return add(columns.toArray());

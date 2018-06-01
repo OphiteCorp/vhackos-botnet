@@ -1,5 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.command;
 
+import cz.ophite.mimic.vhackos.botnet.Application;
 import cz.ophite.mimic.vhackos.botnet.api.exception.IpNotExistsException;
 import cz.ophite.mimic.vhackos.botnet.api.module.*;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.*;
@@ -60,6 +61,17 @@ final class BotnetCommands extends BaseCommand {
 
     @Autowired
     private SdkModule sdkModule;
+
+    /**
+     * Vypíše logo.
+     */
+    @Command(value = "logo", comment = "Prints the logo")
+    private String logo() {
+        return execute("logo", am -> {
+            am.setTopTheme();
+            put(am, " ", Application.LOGO);
+        });
+    }
 
     /**
      * Přenačte konfiguraci aplikace.
