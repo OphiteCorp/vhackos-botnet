@@ -1,21 +1,3 @@
-```
-              __  __              __      ____  _____                             
-      _   __ / / / /____ _ _____ / /__   / __ \/ ___/                             
-     | | / // /_/ // __ `// ___// //_/  / / / /\__ \                              
-     | |/ // __  // /_/ // /__ / ,<    / /_/ /___/ /                              
-     |___//_/ /_/ \__,_/ \___//_/|_|   \____//____/                               
-       ____          __                __                                         
-      / __ ) ____   / /_ ____   ___   / /_                                        
-     / __  |/ __ \ / __// __ \ / _ \ / __/                                        
- _  / /_/ // /_/ // /_ / / / //  __// /_                                          
-(_)/_____/ \____/ \__//_/ /_/ \___/ \__/                                          
-       __              ____          __     _  __         ______                  
-      / /_   __  __   / __ \ ____   / /_   (_)/ /_ ___   / ____/____   _____ ____ 
-     / __ \ / / / /  / / / // __ \ / __ \ / // __// _ \ / /    / __ \ / ___// __ \
-    / /_/ // /_/ /  / /_/ // /_/ // / / // // /_ /  __// /___ / /_/ // /   / /_/ /
-   /_.___/ \__, /   \____// .___//_/ /_//_/ \__/ \___/ \____/ \____//_/   / .___/ 
-          /____/         /_/                                             /_/         
-```
 # vHack OS - Botnet
 vHack OS is a mobile game. My Botnet works as a console client for windows / linux and bot at the same time.
 The original idea was to create an application for command calls as well as in the game. Later, I extended it with a lot of things, including services, so it became a full-fledged bot.
@@ -23,10 +5,13 @@ For the game server, Botnet behaves like a human, so when the settings are corre
 
 ## Join [Discord](https://discord.gg/Cdz39vu) for help, advice, chat, and more
 
+## Download latest [**HERE**](https://github.com/OphiteCorp/vhackos-botnet/releases) (with changelog)
+
+***
+
 ### Information
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=for-the-badge)
-
 [![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=for-the-badge)](https://discord.gg/Cdz39vu)
 
 ### Notice!
@@ -103,7 +88,6 @@ SUM:                           231           2918           2162          15765
 ```
 ### A few application images
 
-![](screens/botnet.png)
-![](screens/services.png)
+![](screens/console_help.png)
 
-Huge image of v0.8 - [HERE](screens/botnet_v0.8_big.png)
+Huge image of v0.8 - [HERE](screens/old/botnet_v0.8_big.png)
