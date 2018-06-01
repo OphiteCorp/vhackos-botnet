@@ -1,24 +1,20 @@
 ```
- ██▒   █▓ ██░ ██  ▄▄▄       ▄████▄   ██ ▄█▀    ▒█████    ██████ 
-▓██░   █▒▓██░ ██▒▒████▄    ▒██▀ ▀█   ██▄█▒    ▒██▒  ██▒▒██    ▒ 
- ▓██  █▒░▒██▀▀██░▒██  ▀█▄  ▒▓█    ▄ ▓███▄░    ▒██░  ██▒░ ▓██▄   
-  ▒██ █░░░▓█ ░██ ░██▄▄▄▄██ ▒▓▓▄ ▄██▒▓██ █▄    ▒██   ██░  ▒   ██▒
-   ▒▀█░  ░▓█▒░██▓ ▓█   ▓██▒▒ ▓███▀ ░▒██▒ █▄   ░ ████▓▒░▒██████▒▒
-   ░ ▐░   ▒ ░░▒░▒ ▒▒   ▓▒█░░ ░▒ ▒  ░▒ ▒▒ ▓▒   ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░
-   ░ ░░   ▒ ░▒░ ░  ▒   ▒▒ ░  ░  ▒   ░ ░▒ ▒░     ░ ▒ ▒░ ░ ░▒  ░ ░
-     ░░   ░  ░░ ░  ░   ▒   ░        ░ ░░ ░    ░ ░ ░ ▒  ░  ░  ░  
-      ░   ░  ░  ░      ░  ░░ ░      ░  ░          ░ ░        ░  
-     ░                     ░                                    
- ▄▄▄▄    ▒█████  ▄▄▄█████▓ ███▄    █ ▓█████ ▄▄▄█████▓           
-▓█████▄ ▒██▒  ██▒▓  ██▒ ▓▒ ██ ▀█   █ ▓█   ▀ ▓  ██▒ ▓▒           
-▒██▒ ▄██▒██░  ██▒▒ ▓██░ ▒░▓██  ▀█ ██▒▒███   ▒ ▓██░ ▒░           
-▒██░█▀  ▒██   ██░░ ▓██▓ ░ ▓██▒  ▐▌██▒▒▓█  ▄ ░ ▓██▓ ░            
-░▓█  ▀█▓░ ████▓▒░  ▒██▒ ░ ▒██░   ▓██░░▒████▒  ▒██▒ ░            
-░▒▓███▀▒░ ▒░▒░▒░   ▒ ░░   ░ ▒░   ▒ ▒ ░░ ▒░ ░  ▒ ░░              
-▒░▒   ░   ░ ▒ ▒░     ░    ░ ░░   ░ ▒░ ░ ░  ░    ░               
- ░    ░ ░ ░ ░ ▒    ░         ░   ░ ░    ░     ░                 
- ░          ░ ░                    ░    ░  ░                    
-      ░                                                         
+              __  __              __      ____  _____                             
+      _   __ / / / /____ _ _____ / /__   / __ \/ ___/                             
+     | | / // /_/ // __ `// ___// //_/  / / / /\__ \                              
+     | |/ // __  // /_/ // /__ / ,<    / /_/ /___/ /                              
+     |___//_/ /_/ \__,_/ \___//_/|_|   \____//____/                               
+       ____          __                __                                         
+      / __ ) ____   / /_ ____   ___   / /_                                        
+     / __  |/ __ \ / __// __ \ / _ \ / __/                                        
+ _  / /_/ // /_/ // /_ / / / //  __// /_                                          
+(_)/_____/ \____/ \__//_/ /_/ \___/ \__/                                          
+       __              ____          __     _  __         ______                  
+      / /_   __  __   / __ \ ____   / /_   (_)/ /_ ___   / ____/____   _____ ____ 
+     / __ \ / / / /  / / / // __ \ / __ \ / // __// _ \ / /    / __ \ / ___// __ \
+    / /_/ // /_/ /  / /_/ // /_/ // / / // // /_ /  __// /___ / /_/ // /   / /_/ /
+   /_.___/ \__, /   \____// .___//_/ /_//_/ \__/ \___/ \____/ \____//_/   / .___/ 
+          /____/         /_/                                             /_/         
 ```
 # vHack OS - Botnet
 vHack OS is a mobile game. My Botnet works as a console client for windows / linux and bot at the same time.
@@ -66,6 +62,8 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
 - [x] Multi-threaded processing of services
 - [x] Links to the MySQL database + including the creation of a complete database schema
 - [x] Support for revealing hidden IPs in a bank transaction (for this, you need a lot of data in the database)
+- [x] GUI display support
+- [x] Proxy server support
 
 ### Available services
 - [x] Updating your profile and tasks
@@ -113,7 +111,7 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
   - Open a file manager and go to: `/data/data/cc.vhack.vhackxtmobile/shared_prefs` and edit file `vXTMobile.xml.xml`
   - You will find the `uid` and `accessstoken` values in the file. Then use them in Botnet
   
-### Project information
+### Project information (v0.8)
 ```
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
