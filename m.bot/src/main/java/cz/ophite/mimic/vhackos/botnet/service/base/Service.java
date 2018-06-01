@@ -1,6 +1,10 @@
 package cz.ophite.mimic.vhackos.botnet.service.base;
 
 import cz.ophite.mimic.vhackos.botnet.Botnet;
+import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetCoreException;
+import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetException;
+import cz.ophite.mimic.vhackos.botnet.api.exception.ConnectionException;
+import cz.ophite.mimic.vhackos.botnet.api.module.CommonModule;
 import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
 import cz.ophite.mimic.vhackos.botnet.dto.BotnetSharedData;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
@@ -39,6 +43,9 @@ public abstract class Service implements IService {
 
     @Autowired
     private ApplicationConfig config;
+
+    @Autowired
+    private CommonModule commonModule;
 
     protected Service(Botnet botnet) {
         this.botnet = botnet;
@@ -120,6 +127,10 @@ public abstract class Service implements IService {
         return config;
     }
 
+    protected final CommonModule getCommonModule() {
+        return commonModule;
+    }
+
     protected final void setTimeout(long timeout) {
         this.timeout = timeout;
     }
@@ -151,7 +162,7 @@ public abstract class Service implements IService {
     /**
      * Uspí vlákno na určitý čas.
      */
-    private void sleep(long millis) {
+    protected void sleep(long millis) {
         try {
             log.debug("Forced timeout: {}ms", millis);
             Thread.sleep(millis);
@@ -205,8 +216,12 @@ public abstract class Service implements IService {
             log.info("Starting...");
             try {
                 execute();
-            } catch (Exception e) {
+            } catch (ConnectionException e) {
+                throw e;
+            } catch (BotnetException e) {
                 log.error("An unexpected error occurred while processing the service", e);
+            } catch (Exception e) {
+                throw new BotnetCoreException("There was a critical error when calling a service", e);
             }
             log.debug("Finished");
 

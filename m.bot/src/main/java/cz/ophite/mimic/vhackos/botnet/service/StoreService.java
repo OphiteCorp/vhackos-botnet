@@ -2,6 +2,7 @@ package cz.ophite.mimic.vhackos.botnet.service;
 
 import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.module.StoreModule;
+import cz.ophite.mimic.vhackos.botnet.api.module.TaskModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.AppStoreResponse;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.AppStoreData;
 import cz.ophite.mimic.vhackos.botnet.service.base.EndpointService;
@@ -28,6 +29,9 @@ public final class StoreService extends Service {
 
     @Autowired
     private StoreModule storeModule;
+
+    @Autowired
+    private TaskModule taskModule;
 
     protected StoreService(Botnet botnet) {
         super(botnet);
@@ -72,6 +76,11 @@ public final class StoreService extends Service {
         } catch (OutOfMoneyException e) {
             // nic
         }
+        // nutné pro aktualizaci volných tásků
+        sleep();
+        var tasks = taskModule.getTasks();
+        getShared().setTaskResponse(tasks);
+
         getLog().info("Done. Next check will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
     }
 
@@ -107,13 +116,12 @@ public final class StoreService extends Service {
                 } else {
                     // jsou peníze pro hromadný nákup jedné aplikace
                     sleep();
-                    var prevLevel = app.data.getLevel();
                     resp = storeModule.buyAllApp(app.type);
                     var newApp = createApp(resp, app.type);
                     app.update(newApp);
                     freeTasks = 0;
-                    getLog().info("Purchased '{}' for {} to level {} -> {}. Remain money: {}", app.type
-                            .getAlias(), SharedUtils.toMoneyFormat(app.data.getPrice()), prevLevel, newApp.data
+                    getLog().info("Purchased '{}' for {} to level {}. Remain money: {}", app.type
+                            .getAlias(), SharedUtils.toMoneyFormat(app.data.getPrice()), newApp.data
                             .getLevel(), SharedUtils.toMoneyFormat(resp.getMoney()));
                     break;
                 }
@@ -165,6 +173,6 @@ public final class StoreService extends Service {
     }
 
     private static final class OutOfMoneyException extends RuntimeException {
-
+        // nic
     }
 }

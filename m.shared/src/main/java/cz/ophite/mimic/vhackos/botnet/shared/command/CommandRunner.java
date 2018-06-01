@@ -171,7 +171,7 @@ public final class CommandRunner {
                         }
                     }
                     method.setAccessible(true);
-                    LOG.debug("Executing command: {}", command);
+                    LOG.info("Wait. Processing a command: {}", command);
                     var result = method.invoke(instance, realParams.toArray());
                     LOG.debug("Command '{}' finished", command);
 

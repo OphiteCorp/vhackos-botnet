@@ -139,6 +139,10 @@ public final class ServerModule extends Module {
         ModuleHelper.setField(response, dto, ServerResponse.P_NODE_NUMBER);
         ModuleHelper.setField(response, dto, ServerResponse.P_SPACK_TYPE);
         ModuleHelper.setField(response, dto, ServerResponse.P_SHOW_MUCH);
+        ModuleHelper.setField(response, dto, ServerResponse.P_SERVER);
+        ModuleHelper.setField(response, dto, ServerResponse.P_AV);
+        ModuleHelper.setField(response, dto, ServerResponse.P_FW);
+        ModuleHelper.setField(response, dto, ServerResponse.P_BOOST);
         return dto;
     }
 }

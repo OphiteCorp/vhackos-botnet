@@ -32,6 +32,11 @@ public final class UpdateResponse extends Response {
     private String userName;
     public static final String P_USERNAME = "userName";
 
+    @AsciiRow("Email")
+    @ResponseKey("email")
+    private String email;
+    public static final String P_EMAIL = "email";
+
     @AsciiRow(value = "Expired", converter = AsciiBooleanConverter.class)
     @ResponseKey("expired")
     private Integer expired;
@@ -277,6 +282,14 @@ public final class UpdateResponse extends Response {
     @ResponseKey("inet")
     private String internetConnection;
     public static final String P_INTERNET_CONNECTION = "internetConnection";
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getUserName() {
         return userName;

@@ -15,7 +15,7 @@ public class BotnetCoreException extends RuntimeException {
         super(message);
     }
 
-    BotnetCoreException(String message, Throwable cause) {
+    public BotnetCoreException(String message, Throwable cause) {
         super(message, cause);
     }
 

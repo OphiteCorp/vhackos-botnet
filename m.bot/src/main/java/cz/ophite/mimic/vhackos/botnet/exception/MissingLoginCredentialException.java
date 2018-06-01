@@ -7,6 +7,6 @@ import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetCoreException;
  *
  * @author mimic
  */
-public final class MissingLoginGredentialException extends BotnetCoreException {
+public final class MissingLoginCredentialException extends BotnetCoreException {
 
 }

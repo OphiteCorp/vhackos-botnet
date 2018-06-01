@@ -49,7 +49,7 @@ public final class MinerService extends Service {
         var state = MinerState.getByCode(resp.getRunning());
         var currentNetcoins = resp.getNetCoins();
 
-        getLog().info("{} -> Netcoins: {}, GPUs: {}", state.getAlias(), resp.getNetCoins(), resp.getGpuCount());
+        getLog().info("{} -> Netcoins: {}, GPUs: {}", state.getAlias(), currentNetcoins, resp.getGpuCount());
 
         switch (state) {
             case STOPPED:
@@ -57,7 +57,9 @@ public final class MinerService extends Service {
                 break;
 
             case FINISHED:
-                resp = miningModule.collect();
+                miningModule.collect();
+                sleep();
+                resp = miningModule.getMining();
                 getLog().info("{} netcoins were mined", resp.getNetCoins() - currentNetcoins);
                 sleep();
                 tryBuyGpu(resp);
@@ -76,7 +78,7 @@ public final class MinerService extends Service {
         if (resp.getGpuCount() < MAX_GPU_COUNT && resp.getNetCoins() >= resp.getNewGpuCosts()) {
             getLog().info("Buying {} GPU for {} netcoins", resp.getGpuCount() + 1, resp.getNewGpuCosts());
             resp = miningModule.buyGpu();
-            getLog().info("Another GPU was bought. You have {} netcoins left", resp.getNetCoins());
+            getLog().info("Next GPU was bought. You have {} netcoins left", resp.getNetCoins());
             sleep();
         }
         return resp;

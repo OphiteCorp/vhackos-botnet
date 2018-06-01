@@ -5,11 +5,14 @@ import cz.ophite.mimic.vhackos.botnet.api.module.*;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.*;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.*;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
+import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
+import cz.ophite.mimic.vhackos.botnet.config.ConfigProvider;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandParam;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
+import cz.ophite.mimic.vhackos.botnet.shared.injection.InjectionContext;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,6 +27,12 @@ import java.util.Map;
  */
 @Inject
 final class BotnetCommands extends BaseCommand {
+
+    @Autowired
+    private ConfigProvider configProvider;
+
+    @Autowired
+    private ApplicationConfig config;
 
     @Autowired
     private DatabaseService databaseService;
@@ -51,6 +60,32 @@ final class BotnetCommands extends BaseCommand {
 
     @Autowired
     private SdkModule sdkModule;
+
+    /**
+     * Přenačte konfiguraci aplikace.
+     */
+    @Command(value = "reload", comment = "Forces reloading configuration")
+    private String reloadConfig() {
+        return execute("reload configuration", am -> {
+            var config = configProvider.getAppConfig();
+            InjectionContext.getInstance().get(ApplicationConfig.class).set(config);
+            put(am, "Info", "The configuration has been reloaded");
+        });
+    }
+
+    /**
+     * Získá konfiguraci.
+     */
+    @Command(value = "config", comment = "Get the current configuration")
+    private String getConfig() {
+        return execute("configuration", am -> {
+            var map = config.asMap();
+
+            for (var entry : map.entrySet()) {
+                put(am, entry.getKey(), entry.getValue());
+            }
+        });
+    }
 
     /**
      * Přihlásí uživatele znovu.
@@ -90,6 +125,7 @@ final class BotnetCommands extends BaseCommand {
             put(am, fields.remove(UpdateResponse.P_ACCESS_TOKEN));
             put(am, fields.remove(UpdateResponse.P_UID));
             put(am, fields.remove(UpdateResponse.P_USERNAME));
+            put(am, fields.remove(UpdateResponse.P_EMAIL));
             put(am, fields.remove(UpdateResponse.P_APP_ANTIVIRUS));
             put(am, fields.remove(UpdateResponse.P_APP_BRUTEFORCE));
             put(am, fields.remove(UpdateResponse.P_APP_FIREWALL));

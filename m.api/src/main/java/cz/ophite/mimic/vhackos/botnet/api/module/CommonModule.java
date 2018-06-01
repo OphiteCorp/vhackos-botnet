@@ -88,6 +88,7 @@ public final class CommonModule extends Module {
         ModuleHelper.setField(response, dto, UpdateResponse.P_ACCESS_TOKEN);
         ModuleHelper.setField(response, dto, UpdateResponse.P_UID);
         ModuleHelper.setField(response, dto, UpdateResponse.P_USERNAME);
+        ModuleHelper.setField(response, dto, UpdateResponse.P_EMAIL);
         ModuleHelper.setField(response, dto, UpdateResponse.P_EXPIRED);
         ModuleHelper.setField(response, dto, UpdateResponse.P_EASTER_EVENT);
         ModuleHelper.setField(response, dto, UpdateResponse.P_BLUE);

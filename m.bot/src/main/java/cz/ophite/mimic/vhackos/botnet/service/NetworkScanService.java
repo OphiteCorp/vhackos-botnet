@@ -25,6 +25,9 @@ public final class NetworkScanService extends Service {
     @Autowired
     private NetworkModule networkModule;
 
+    private Integer scansCountBeforePause;
+    private int counter;
+
     protected NetworkScanService(Botnet botnet) {
         super(botnet);
     }
@@ -37,6 +40,10 @@ public final class NetworkScanService extends Service {
     @Override
     protected void initialize() {
         setTimeout(getConfig().getNetworkScanTimeout());
+
+        if (scansCountBeforePause == null) {
+            scansCountBeforePause = getConfig().getNetworkScanCountBeforePause();
+        }
     }
 
     @Override
@@ -46,6 +53,17 @@ public final class NetworkScanService extends Service {
         for (var ip : resp.getIps()) {
             databaseService.addScanIp(ip);
         }
-        getLog().info("Next scan will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+
+        if (++counter > scansCountBeforePause) {
+            var pause = getConfig().getNetworkScanPause();
+            scansCountBeforePause = null;
+            counter = 0;
+
+            getLog().info("There will be a break in length: ~ {}", SharedUtils.toTimeFormat(pause));
+            sleep(pause);
+        } else {
+            getLog().info("Counter: {}/{}. Next scan will be in: {}", counter, scansCountBeforePause, SharedUtils
+                    .toTimeFormat(getTimeout()));
+        }
     }
 }

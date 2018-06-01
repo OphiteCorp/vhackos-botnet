@@ -222,6 +222,26 @@ public final class ServerResponse extends Response {
     private Integer sHowMuch;
     public static final String P_SHOW_MUCH = "sHowMuch";
 
+    @AsciiRow("sServer")
+    @ResponseKey("sServer")
+    private String sServer;
+    public static final String P_SERVER = "sServer";
+
+    @AsciiRow("sAV")
+    @ResponseKey("sAV")
+    private String sAV;
+    public static final String P_AV = "sAV";
+
+    @AsciiRow("sFW")
+    @ResponseKey("sFW")
+    private String sFW;
+    public static final String P_FW = "sFW";
+
+    @AsciiRow("sBoost")
+    @ResponseKey("sBoost")
+    private String sBoost;
+    public static final String P_BOOST = "sBoost";
+
     public Integer getAvAdded() {
         return avAdded;
     }
@@ -548,5 +568,37 @@ public final class ServerResponse extends Response {
 
     public void setsHowMuch(Integer sHowMuch) {
         this.sHowMuch = sHowMuch;
+    }
+
+    public String getsServer() {
+        return sServer;
+    }
+
+    public void setsServer(String sServer) {
+        this.sServer = sServer;
+    }
+
+    public String getsAV() {
+        return sAV;
+    }
+
+    public void setsAV(String sAV) {
+        this.sAV = sAV;
+    }
+
+    public String getsFW() {
+        return sFW;
+    }
+
+    public void setsFW(String sFW) {
+        this.sFW = sFW;
+    }
+
+    public String getsBoost() {
+        return sBoost;
+    }
+
+    public void setsBoost(String sBoost) {
+        this.sBoost = sBoost;
     }
 }

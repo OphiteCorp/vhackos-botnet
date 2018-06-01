@@ -39,6 +39,7 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-exec</artifactId>
         </dependency>
+
         <dependency>
             <groupId>cz.ophite.mimic</groupId>
             <artifactId>m.shared</artifactId>
@@ -50,8 +51,6 @@
     </dependencies>
 
     <build>
-        <finalName>${p.jarName}</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -70,26 +69,19 @@
                     </archive>
                 </configuration>
             </plugin>
-
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>${p.main}</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <finalName>${p.jarName}</finalName>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -101,6 +93,7 @@
                 <targetPath>${project.build.directory}/classes</targetPath>
                 <includes>
                     <include>log4j2.xml</include>
+                    <include>font.ttf</include>
                 </includes>
             </resource>
         </resources>

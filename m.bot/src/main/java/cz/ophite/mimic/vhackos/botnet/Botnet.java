@@ -7,7 +7,7 @@ import cz.ophite.mimic.vhackos.botnet.api.net.response.LoginResponse;
 import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
 import cz.ophite.mimic.vhackos.botnet.dto.BotnetSharedData;
 import cz.ophite.mimic.vhackos.botnet.dto.CacheData;
-import cz.ophite.mimic.vhackos.botnet.exception.MissingLoginGredentialException;
+import cz.ophite.mimic.vhackos.botnet.exception.MissingLoginCredentialException;
 import cz.ophite.mimic.vhackos.botnet.service.base.IService;
 import cz.ophite.mimic.vhackos.botnet.service.base.Service;
 import cz.ophite.mimic.vhackos.botnet.service.base.ServiceConfig;
@@ -60,7 +60,7 @@ public final class Botnet implements IBotnet {
      */
     void start() {
         if (!config.hasValidCredentials()) {
-            throw new MissingLoginGredentialException();
+            throw new MissingLoginCredentialException();
         }
         // připraví connection data
         connectionData.setLang(Locale.getDefault().getLanguage());
@@ -74,9 +74,9 @@ public final class Botnet implements IBotnet {
             connectionData.set(cache.getConnectionData());
         }
         // zkontroluje, případně přihlásí uživatele s novým tokenem
-        LOG.info("Getting user information. Please wait...");
+        LOG.info("Getting user '{}' information. Please wait...", config.getUserName());
         var serviceConfig = new ServiceConfig();
-        serviceConfig.setAsync(true);
+        serviceConfig.setAsync(false);
         serviceConfig.setFirstRunSync(true);
         Service.getServices().get(IService.SERVICE_UPDATE).start(serviceConfig);
 

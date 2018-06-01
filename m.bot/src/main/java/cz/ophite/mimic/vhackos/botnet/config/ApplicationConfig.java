@@ -7,10 +7,7 @@ import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * Konfigurace aplikace.
@@ -45,16 +42,16 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // zpráva ponechaná v logu cílového systému
 
-    @ConfigValue(value = "game.message.left.in.log", defaultValue = "I did not take the money!\\nby Ophite.botnet",
-                 comment = "The message will be left in the remote system log")
+    @ConfigValue(value = "game.message.left.in.log", defaultValue = "I did not take the money!<br>by Ophite.botnet",
+                 comment = "The message will be left in the remote system log. Use <br> for a new line")
     private String messageLog;
 
     @ConfigValue(value = "game.safe.netcoins", defaultValue = "5000",
-                 comment = "Minimum number of netcoins for which something to buy")
+                 comment = "The number of netcoins that not be touched")
     private String safeNetcoins;
 
     @ConfigValue(value = "game.safe.boosters", defaultValue = "20",
-                 comment = "Minimum number of boosters that will no longer be used")
+                 comment = "The number of boosters that not be touched")
     private String safeBoosters;
 
     // maximální počet pokusů na odeslání požadavku na vHack server
@@ -79,122 +76,138 @@ public final class ApplicationConfig implements IBotnetConfig {
     @ConfigValue(value = "sys.proxy.port", comment = "Proxy server port", defaultValue = "3128")
     private String proxyPort;
 
+    // GUI
+
+    @ConfigValue(value = "gui.fullscreen.mode", comment = "Expands the application across the desktop",
+                 defaultValue = "False")
+    private String fullScreenMode;
+
     // služba - update
 
-    @ConfigValue(value = "service.update.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 5-7min",
-                 defaultValue = "(4*60+(Math.floor(Math.random()*121)+60))*1e3")
+    @ConfigValue(value = "service-update.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 1.5h-3h",
+                 defaultValue = "(60*60+(Math.floor(Math.random()*5401)+1800))*1e3")
     private String sUpdateTimeout;
 
     // služba - miner
 
-    @ConfigValue(value = "service.miner.enable", comment = "Enable netcoins mining service", defaultValue = "False")
+    @ConfigValue(value = "service-miner.enable", comment = "Enable netcoins mining service", defaultValue = "False")
     private String sMinerEnable;
 
-    @ConfigValue(value = "service.miner.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 1h 10s and 1h 1min",
-                 defaultValue = "(60*60+(Math.floor(Math.random()*51)+10))*1e3")
+    @ConfigValue(value = "service-miner.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 1h 10s and 1h 15min",
+                 defaultValue = "(60*60+(Math.floor(Math.random()*891)+10))*1e3")
     private String sMinerTimeout;
 
     // služba - malware
 
-    @ConfigValue(value = "service.malware.enable", comment = "Enable malware production service",
+    @ConfigValue(value = "service-malware.enable", comment = "Enable malware production service",
                  defaultValue = "False")
     private String sMalwareEnable;
 
-    @ConfigValue(value = "service.malware.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 10min 10s and 11min",
-                 defaultValue = "(10*60+(Math.floor(Math.random()*51)+10))*1e3")
+    @ConfigValue(value = "service-malware.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 10min 10s and 15min",
+                 defaultValue = "(10*60+(Math.floor(Math.random()*291)+10))*1e3")
     private String sMalwareTimeout;
 
     // služba - server
 
-    @ConfigValue(value = "service.server.enable", comment = "Enable server control", defaultValue = "False")
+    @ConfigValue(value = "service-server.enable", comment = "Enable server control", defaultValue = "False")
     private String sServerEnable;
 
-    @ConfigValue(value = "service.server.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 45min 10s and 47min",
-                 defaultValue = "(45*60+(Math.floor(Math.random()*111)+10))*1e3")
+    @ConfigValue(value = "service-server.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 45min 10s and 1h",
+                 defaultValue = "(45*60+(Math.floor(Math.random()*891)+10))*1e3")
     private String sServerTimeout;
 
-    @ConfigValue(value = "service.server.update.limit", comment = "Maximum number of updates per node",
+    @ConfigValue(value = "service-server.update.limit", comment = "Maximum number of updates per node",
                  defaultValue = "2500")
     private String sServerUpdateLimit;
 
-    @ConfigValue(value = "service.server.core.update.limit", comment = "Maximum number of server core updates",
+    @ConfigValue(value = "service-server.core.update.limit", comment = "Maximum number of server core updates",
                  defaultValue = "9999")
     private String sServerCoreUpdateLimit;
 
-    @ConfigValue(value = "service.server.purchase.packages", comment = "Purchase packages for netcoins",
+    @ConfigValue(value = "service-server.purchase.packages", comment = "Purchase packages for netcoins",
                  defaultValue = "True")
     private String sServerBuyPackagesForNetcoins;
 
     // služba - store
 
-    @ConfigValue(value = "service.store.enable", comment = "Enables shop control to purchase apps",
+    @ConfigValue(value = "service-store.enable", comment = "Enables shop control to purchase apps",
                  defaultValue = "False")
     private String sStoreEnable;
 
-    @ConfigValue(value = "service.store.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 2min 10s and 3min",
-                 defaultValue = "(2*60+(Math.floor(Math.random()*51)+10))*1e3")
+    @ConfigValue(value = "service-store.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 2min 10s and 6min",
+                 defaultValue = "(2*60+(Math.floor(Math.random()*231)+10))*1e3")
     private String sStoreTimeout;
 
-    @ConfigValue(value = "service.store.updated.apps",
+    @ConfigValue(value = "service-store.updated.apps",
                  comment = "List of applications to update separated by a comma\nSupported applications are: ${cz.ophite.mimic.vhackos.botnet.shared.dto.AppStoreType.UPDATABLE_APP_CODES}",
                  defaultValue = "[${cz.ophite.mimic.vhackos.botnet.shared.dto.AppStoreType.UPDATABLE_APP_CODES}]")
     private String sUpdatedAppsList;
 
     // služba - booster
 
-    @ConfigValue(value = "service.booster.enable", comment = "Enables use of boosters for active tasks",
+    @ConfigValue(value = "service-booster.enable", comment = "Enables use of boosters for active tasks",
                  defaultValue = "False")
     private String sBoosterEnable;
 
-    @ConfigValue(value = "service.booster.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 5min 10s and 6min",
-                 defaultValue = "(5*60+(Math.floor(Math.random()*51)+10))*1e3")
+    @ConfigValue(value = "service-booster.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 5min 10s and 8min",
+                 defaultValue = "(5*60+(Math.floor(Math.random()*171)+10))*1e3")
     private String sBoosterTimeout;
 
-    @ConfigValue(value = "service.booster.req.time",
+    @ConfigValue(value = "service-booster.req.time",
                  comment = "Required task time for booster use. If at least one task time is greater than this value, then boost will be used\nTime is in seconds. Default: 15min",
                  defaultValue = "900")
     private String sBoosterReqTime;
 
     // služba - mission
 
-    @ConfigValue(value = "service.mission.enable",
+    @ConfigValue(value = "service-mission.enable",
                  comment = "Enables automatic completion of missions and picking up rewards", defaultValue = "False")
     private String sMissionEnable;
 
-    @ConfigValue(value = "service.mission.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 6h 10min and 7h",
-                 defaultValue = "(6*60*60+(Math.floor(Math.random()*3001)+600))*1e3")
+    @ConfigValue(value = "service-mission.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 6h and 10h",
+                 defaultValue = "(6*60*60+(Math.floor(Math.random()*14401))*1e3")
     private String sMissionTimeout;
 
     // služba - network
 
-    @ConfigValue(value = "service.network.enable",
+    @ConfigValue(value = "service-network.enable",
                  comment = "Enable exploit, target bank hack, and cash withdrawal from the bank",
                  defaultValue = "False")
     private String sNetworkEnable;
 
-    @ConfigValue(value = "service.network.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 51-55min",
-                 defaultValue = "(50*60+(Math.floor(Math.random()*241)+60))*1e3")
+    @ConfigValue(value = "service-network.timeout",
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 50min and 2h",
+                 defaultValue = "(50*60+(Math.floor(Math.random()*4201))*1e3")
     private String sNetworkTimeout;
 
     // služba - netscan
 
-    @ConfigValue(value = "service.netscan.enable",
+    @ConfigValue(value = "service-netscan.enable",
                  comment = "Enable network scanning and data storage in the database\nFor this service, you need to have a configured database, otherwise it does not make sense to turn it on",
                  defaultValue = "False")
     private String sNetworkScanEnable;
 
-    @ConfigValue(value = "service.netscan.timeout",
+    @ConfigValue(value = "service-netscan.timeout",
                  comment = "Delay between repeated executing in milliseconds.\nDefault: between 10-15s",
                  defaultValue = "(5+(Math.floor(Math.random()*11)+5))*1e3")
     private String sNetworkScanTimeout;
+
+    @ConfigValue(value = "service-netscan.count.before.pause",
+                 comment = "Number of network scanning before pause.\nDefault: between 30-80",
+                 defaultValue = "(Math.floor(Math.random()*51)+30)")
+    private String sNetworkScanCountBeforePause;
+
+    @ConfigValue(value = "service-netscan.pause",
+                 comment = "Break interval between the number of scans.\nDefault: between 30min and 1h",
+                 defaultValue = "(Math.floor(Math.random()*1801)+1800)*1e3")
+    private String sNetworkScanPause;
 
     // databáze
 
@@ -228,6 +241,28 @@ public final class ApplicationConfig implements IBotnetConfig {
                 }
             }
         }
+    }
+
+    /**
+     * Získá konfiguraci jako mapu.
+     */
+    public Map<String, Object> asMap() {
+        var map = new LinkedHashMap<String, Object>();
+        var fields = getClass().getDeclaredFields();
+
+        for (var field : fields) {
+            if (field.isAnnotationPresent(ConfigValue.class)) {
+                field.setAccessible(true);
+                var a = field.getAnnotation(ConfigValue.class);
+                try {
+                    var value = field.get(this);
+                    map.put(a.value(), value);
+                } catch (Exception e) {
+                    throw new IllegalStateException("An unexpected error has occurred", e);
+                }
+            }
+        }
+        return map;
     }
 
     /**
@@ -283,7 +318,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @Override
     public ProxyData getProxyData() {
-        var enable = Boolean.valueOf(dbEnable);
+        var enable = Boolean.valueOf(proxyEnable);
         if (enable && !proxyHost.isEmpty() && !proxyPort.isEmpty()) {
             var proxy = new ProxyData();
             proxy.setIp(proxyHost);
@@ -411,5 +446,17 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     public long getNetworkScanTimeout() {
         return ((Double) SharedUtils.eval(sNetworkScanTimeout)).longValue();
+    }
+
+    public boolean isFullScreenMode() {
+        return Boolean.valueOf(fullScreenMode);
+    }
+
+    public int getNetworkScanCountBeforePause() {
+        return ((Double) SharedUtils.eval(sNetworkScanCountBeforePause)).intValue();
+    }
+
+    public long getNetworkScanPause() {
+        return ((Double) SharedUtils.eval(sNetworkScanPause)).longValue();
     }
 }

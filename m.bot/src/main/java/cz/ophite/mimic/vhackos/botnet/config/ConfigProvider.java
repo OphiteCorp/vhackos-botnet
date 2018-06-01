@@ -273,7 +273,6 @@ public final class ConfigProvider {
                     }
                     var regex = escapeRegex(group);
                     text = text.replaceAll(regex, value.toString());
-                    System.out.println();
                 }
             }
         }

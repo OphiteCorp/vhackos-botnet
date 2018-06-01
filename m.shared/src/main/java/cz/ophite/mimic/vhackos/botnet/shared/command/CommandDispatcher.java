@@ -59,6 +59,25 @@ public final class CommandDispatcher {
         }
     }
 
+    /**
+     * Zavolá příkaz manuálně.
+     */
+    public void call(String command) {
+        if (StringUtils.isNotEmpty(command) && command.startsWith(COMMANDS_PREFIX)) {
+            command = command.substring(COMMANDS_PREFIX.length());
+
+            if (command.length() > 0) {
+                for (var listener : listeners) {
+                    try {
+                        listener.incomingCommand(CommandDispatcher.INSTANCE, command);
+                    } catch (Exception e) {
+                        LOG.error("An unexpected error occurred. Make sure you have treated all the exceptions", e);
+                    }
+                }
+            }
+        }
+    }
+
     private final class Operator implements Runnable {
 
         @Override
@@ -66,23 +85,10 @@ public final class CommandDispatcher {
             try (var br = new BufferedReader(new InputStreamReader(System.in))) {
                 while (running) {
                     var line = br.readLine();
-
-                    if (StringUtils.isNotEmpty(line) && line.startsWith(COMMANDS_PREFIX)) {
-                        line = line.substring(COMMANDS_PREFIX.length());
-
-                        if (line.length() > 0) {
-                            for (var listener : listeners) {
-                                try {
-                                    listener.incomingCommand(CommandDispatcher.INSTANCE, line);
-                                } catch (Exception e) {
-                                    LOG.error("An unexpected error occurred. Make sure you have treated all the exceptions", e);
-                                }
-                            }
-                        }
-                    }
+                    call(line);
                 }
             } catch (IOException e) {
-                LOG.error("An unexpected error occurred while reading the console", e);
+                // nic
             }
         }
     }

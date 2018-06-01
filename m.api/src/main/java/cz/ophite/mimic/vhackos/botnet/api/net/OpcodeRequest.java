@@ -134,7 +134,7 @@ public final class OpcodeRequest {
             }
         } catch (IOException e) {
             LOG.error("Something is wrong with processing the request. URI: {}", uri);
-            throw new IllegalStateException("An error occurred while processing request: " + uri, e);
+            throw new ConnectionException(null, "An error occurred while processing request: " + uri, e);
         } finally {
             if (conn != null) {
                 LOG.debug("Closing connection for opcode: {}->{}", opcode.getTarget(), opcode.getOpcodeValue());

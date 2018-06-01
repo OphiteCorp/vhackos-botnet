@@ -145,51 +145,51 @@ public final class BotnetServerCommand extends BaseCommand {
         put(am, fields.remove(ServerResponse.P_FW_FREE_PIECES));
 
         var server = String.format("%s / %s | %s*", StringUtils
-                .leftPad(fields.remove(ServerResponse.P_SERVER_MAX_PIECES).value.toString(), 5), StringUtils
-                .rightPad(fields.remove(ServerResponse.P_SERVER_PIECES).value.toString(), 5), fields
+                .leftPad(fields.remove(ServerResponse.P_SERVER_PIECES).value.toString(), 5), StringUtils
+                .rightPad(fields.remove(ServerResponse.P_SERVER_MAX_PIECES).value.toString(), 5), fields
                 .remove(ServerResponse.P_SERVER_STARS).value);
         put(am, "Server", server);
 
         var fAv1 = fields.remove(ServerResponse.P_AV1_PIECES).value;
         var fAv1Max = fields.remove(ServerResponse.P_AV1_MAX_PIECES).value;
         if (fAv1Max != null) {
-            var av1 = String.format("%s / %s | %s*", StringUtils.leftPad(fAv1Max.toString(), 5), StringUtils
-                    .rightPad(fAv1.toString(), 5), fields.remove(ServerResponse.P_AV1_STARS).value);
+            var av1 = String.format("%s / %s | %s*", StringUtils.leftPad(fAv1.toString(), 5), StringUtils
+                    .rightPad(fAv1Max.toString(), 5), fields.remove(ServerResponse.P_AV1_STARS).value);
             put(am, "Antivirus 1", av1);
         }
         var fAv2 = fields.remove(ServerResponse.P_AV2_PIECES).value;
         var fAv2Max = fields.remove(ServerResponse.P_AV2_MAX_PIECES).value;
         if (fAv2Max != null) {
-            var av2 = String.format("%s / %s | %s*", StringUtils.leftPad(fAv2Max.toString(), 5), StringUtils
-                    .rightPad(fAv2.toString(), 5), fields.remove(ServerResponse.P_AV2_STARS).value);
+            var av2 = String.format("%s / %s | %s*", StringUtils.leftPad(fAv2.toString(), 5), StringUtils
+                    .rightPad(fAv2Max.toString(), 5), fields.remove(ServerResponse.P_AV2_STARS).value);
             put(am, "Antivirus 2", av2);
         }
         var fAv3 = fields.remove(ServerResponse.P_AV3_PIECES).value;
         var fAv3Max = fields.remove(ServerResponse.P_AV3_MAX_PIECES).value;
         if (fAv3Max != null) {
-            var av3 = String.format("%s / %s | %s*", StringUtils.leftPad(fAv3Max.toString(), 5), StringUtils
-                    .rightPad(fAv3.toString(), 5), fields.remove(ServerResponse.P_AV3_STARS).value);
+            var av3 = String.format("%s / %s | %s*", StringUtils.leftPad(fAv3.toString(), 5), StringUtils
+                    .rightPad(fAv3Max.toString(), 5), fields.remove(ServerResponse.P_AV3_STARS).value);
             put(am, "Antivirus 3", av3);
         }
         var fFw1 = fields.remove(ServerResponse.P_FW1_PIECES).value;
         var fFw1Max = fields.remove(ServerResponse.P_FW1_MAX_PIECES).value;
         if (fFw1Max != null) {
-            var fw1 = String.format("%s / %s | %s*", StringUtils.leftPad(fFw1Max.toString(), 5), StringUtils
-                    .rightPad(fFw1.toString(), 5), fields.remove(ServerResponse.P_FW1_STARS).value);
+            var fw1 = String.format("%s / %s | %s*", StringUtils.leftPad(fFw1.toString(), 5), StringUtils
+                    .rightPad(fFw1Max.toString(), 5), fields.remove(ServerResponse.P_FW1_STARS).value);
             put(am, "Firewall 1", fw1);
         }
         var fFw2 = fields.remove(ServerResponse.P_FW2_PIECES).value;
         var fFw2Max = fields.remove(ServerResponse.P_FW2_MAX_PIECES).value;
         if (fFw2Max != null) {
-            var fw2 = String.format("%s / %s | %s*", StringUtils.leftPad(fFw2Max.toString(), 5), StringUtils
-                    .rightPad(fFw2.toString(), 5), fields.remove(ServerResponse.P_FW2_STARS).value);
+            var fw2 = String.format("%s / %s | %s*", StringUtils.leftPad(fFw2.toString(), 5), StringUtils
+                    .rightPad(fFw2Max.toString(), 5), fields.remove(ServerResponse.P_FW2_STARS).value);
             put(am, "Firewall 2", fw2);
         }
         var fFw3 = fields.remove(ServerResponse.P_FW3_PIECES).value;
         var fFw3Max = fields.remove(ServerResponse.P_FW3_MAX_PIECES).value;
         if (fFw3Max != null) {
-            var fw3 = String.format("%s / %s | %s*", StringUtils.leftPad(fFw3Max.toString(), 5), StringUtils
-                    .rightPad(fFw3.toString(), 5), fields.remove(ServerResponse.P_FW3_STARS).value);
+            var fw3 = String.format("%s / %s | %s*", StringUtils.leftPad(fFw3.toString(), 5), StringUtils
+                    .rightPad(fFw3Max.toString(), 5), fields.remove(ServerResponse.P_FW3_STARS).value);
             put(am, "Firewall 3", fw3);
         }
         var boughtPacks = String.format("%s / %s", StringUtils

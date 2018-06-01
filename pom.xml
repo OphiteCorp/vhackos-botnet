@@ -20,7 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <p.java>10</p.java>
         <p.main>cz.ophite.mimic.vhackos.botnet.Application</p.main>
-        <p.jarName>botnet</p.jarName>
+        <p.jarName>botnet_latest</p.jarName>
     </properties>
 
     <dependencyManagement>
@@ -111,6 +111,14 @@
             <version>3.7</version>
         </dependency>
     </dependencies>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://central.maven.org/maven2</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
         <pluginManagement>

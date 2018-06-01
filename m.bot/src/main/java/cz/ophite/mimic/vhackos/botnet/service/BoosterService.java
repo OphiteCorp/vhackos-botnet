@@ -43,10 +43,10 @@ public final class BoosterService extends Service {
         getShared().setTaskResponse(resp);
 
         if (resp.getBoosters() <= getConfig().getSafeBoosters() || resp.getUpdates().isEmpty()) {
-            printEndMessage();
+            printEndMessage(resp);
             return;
         }
-        TaskUpdateData data = getLongestLastingTask(getShared().getTaskResponse());
+        var data = getLongestLastingTask(resp);
         var seconds = data.getEnd() - data.getNow();
 
         while (seconds > getConfig().getBoosterReqTime()) {
@@ -57,7 +57,7 @@ public final class BoosterService extends Service {
             seconds = data.getEnd() - data.getNow();
             getLog().info("Boost used. The longest time is now: {}", SharedUtils.toTimeFormat(seconds * 1000));
         }
-        printEndMessage();
+        printEndMessage(resp);
     }
 
     private TaskUpdateData getLongestLastingTask(TaskResponse resp) {
@@ -73,8 +73,8 @@ public final class BoosterService extends Service {
         return data;
     }
 
-    private void printEndMessage() {
-        getLog().info("Done. Remaining {} boosters. Next check will be in: {}", getShared().getTaskResponse()
-                .getBoosters(), SharedUtils.toTimeFormat(getTimeout()));
+    private void printEndMessage(TaskResponse resp) {
+        getLog().info("Done. Remaining {} boosters. Next check will be in: {}", resp.getBoosters(), SharedUtils
+                .toTimeFormat(getTimeout()));
     }
 }
