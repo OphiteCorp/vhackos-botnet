@@ -1,3 +1,25 @@
+```
+ ██▒   █▓ ██░ ██  ▄▄▄       ▄████▄   ██ ▄█▀    ▒█████    ██████ 
+▓██░   █▒▓██░ ██▒▒████▄    ▒██▀ ▀█   ██▄█▒    ▒██▒  ██▒▒██    ▒ 
+ ▓██  █▒░▒██▀▀██░▒██  ▀█▄  ▒▓█    ▄ ▓███▄░    ▒██░  ██▒░ ▓██▄   
+  ▒██ █░░░▓█ ░██ ░██▄▄▄▄██ ▒▓▓▄ ▄██▒▓██ █▄    ▒██   ██░  ▒   ██▒
+   ▒▀█░  ░▓█▒░██▓ ▓█   ▓██▒▒ ▓███▀ ░▒██▒ █▄   ░ ████▓▒░▒██████▒▒
+   ░ ▐░   ▒ ░░▒░▒ ▒▒   ▓▒█░░ ░▒ ▒  ░▒ ▒▒ ▓▒   ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░
+   ░ ░░   ▒ ░▒░ ░  ▒   ▒▒ ░  ░  ▒   ░ ░▒ ▒░     ░ ▒ ▒░ ░ ░▒  ░ ░
+     ░░   ░  ░░ ░  ░   ▒   ░        ░ ░░ ░    ░ ░ ░ ▒  ░  ░  ░  
+      ░   ░  ░  ░      ░  ░░ ░      ░  ░          ░ ░        ░  
+     ░                     ░                                    
+ ▄▄▄▄    ▒█████  ▄▄▄█████▓ ███▄    █ ▓█████ ▄▄▄█████▓           
+▓█████▄ ▒██▒  ██▒▓  ██▒ ▓▒ ██ ▀█   █ ▓█   ▀ ▓  ██▒ ▓▒           
+▒██▒ ▄██▒██░  ██▒▒ ▓██░ ▒░▓██  ▀█ ██▒▒███   ▒ ▓██░ ▒░           
+▒██░█▀  ▒██   ██░░ ▓██▓ ░ ▓██▒  ▐▌██▒▒▓█  ▄ ░ ▓██▓ ░            
+░▓█  ▀█▓░ ████▓▒░  ▒██▒ ░ ▒██░   ▓██░░▒████▒  ▒██▒ ░            
+░▒▓███▀▒░ ▒░▒░▒░   ▒ ░░   ░ ▒░   ▒ ▒ ░░ ▒░ ░  ▒ ░░              
+▒░▒   ░   ░ ▒ ▒░     ░    ░ ░░   ░ ▒░ ░ ░  ░    ░               
+ ░    ░ ░ ░ ░ ▒    ░         ░   ░ ░    ░     ░                 
+ ░          ░ ░                    ░    ░  ░                    
+      ░                                                         
+```
 # vHack OS - Botnet
 vHack OS is a mobile game. My Botnet works as a console client for windows / linux and bot at the same time.
 The original idea was to create an application for command calls as well as in the game. Later, I extended it with a lot of things, including services, so it became a full-fledged bot.
@@ -7,9 +29,9 @@ For the game server, Botnet behaves like a human, so when the settings are corre
 
 ### Information
 
-![Github All Releases](https://img.shields.io/github/downloads/mimic2300/vhackos-botnet/total.svg?style=for-the-badge)
-
 ![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=for-the-badge)
+
+[![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=for-the-badge)](https://discord.gg/Cdz39vu)
 
 ### Notice!
 Even if the odds are small, I am not responsible for any damage caused by Botnet. Like a ban on an account, etc. If you use this application, you are aware of the potential consequences and all the risks associated with it.
@@ -63,7 +85,7 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
 
 ### How to use Botnet
 1) The application uses the java version 10. If you do not have it, download it here - [Download](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-2) Download the latest release of Botnet from github
+2) Download the latest release of Botnet from github here and unpack - [Download](https://github.com/OphiteCorp/vhackos-botnet/releases)
 3) Botnet is currently a console application, so you need to run it through the console
    - Put downloaded Botnet somewhere in your directory. For example `c:/botnet/botnet.jar`
    - Run the command line using `cmd` via `Win + R`
@@ -76,7 +98,7 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
      - If you know your access token and user ID, fill in the following `game.fixed.access.token` and `game.fixed.user.uid`. This will allow you to sign up on another device at the same time (like a mobile phone)
 5) Run Botnet again with the same command as before
 6) When fully loaded, you can use the `.help` command to display the help (available commands)
-7) Quit Botnet using the `.q` command. This is a safe way to properly terminate all services and update the cache.
+7) Quit Botnet using the `.q` command. This is a safe way to properly terminate all services and update the cache
 8) Enjoy your botting ;-)
 
 ### FAQ
@@ -85,6 +107,11 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
 
 - Is my login name and my password safe to enter into my configuration?
   - Yes. Besides vHack, your data is not sent anywhere else
+  
+- How do I get my access token and UID from my mobile?
+  - First of all, you need to have root devices
+  - Open a file manager and go to: `/data/data/cc.vhack.vhackxtmobile/shared_prefs` and edit file `vXTMobile.xml.xml`
+  - You will find the `uid` and `accessstoken` values in the file. Then use them in Botnet
   
 ### Project information
 ```
