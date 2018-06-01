@@ -32,6 +32,12 @@ For the game server, Botnet behaves like a human, so when the settings are corre
 ### Notice!
 Even if the odds are small, I am not responsible for any damage caused by Botnet. Like a ban on an account, etc. If you use this application, you are aware of the potential consequences and all the risks associated with it.
 
+### Installation and startup instructions
+Find on WIKI - [**HERE**](https://github.com/OphiteCorp/vhackos-botnet/wiki/How-to-install-and-run)
+
+### FAQ
+Find on WIKI - [**HERE**](https://github.com/OphiteCorp/vhackos-botnet/wiki/FAQ)
+
 ### Application status and goals
 - [x] Configuration, including comments, so everyone knows what they're doing
 - [x] Support for ASCII output to console
@@ -80,36 +86,6 @@ Even if the odds are small, I am not responsible for any damage caused by Botnet
 - Network scanning (user name and UID, IP, level, firewall)
 - Bank transaction (thanks to this there is a partial revelation of the hidden IP)
 - System log on the target system
-
-### How to use Botnet
-1) The application uses the java version 10. If you do not have it, download it here - [Download](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-2) Download the latest release of Botnet from github here and unpack - [Download](https://github.com/OphiteCorp/vhackos-botnet/releases)
-3) Botnet is currently a console application, so you need to run it through the console
-   - Put downloaded Botnet somewhere in your directory. For example `c:/botnet/botnet.jar`
-   - Run the command line using `cmd` via `Win + R`
-   - Go to the directory with `botnet.jar`. In our case `cd c:/botnet`
-   - Run Botnet using `java -jar botnet.jar`
-4) At first run, only configuration files are generated and applications are shut down. One file is called `botnet.properties`, which is the main configuration file for the application. To make Botnet work, we need to set up these things:
-   - Fill `game.userName` with login to the game
-   - Fill `game.password` with a password in the game
-   - Optional
-     - If you know your access token and user ID, fill in the following `game.fixed.access.token` and `game.fixed.user.uid`. This will allow you to sign up on another device at the same time (like a mobile phone)
-5) Run Botnet again with the same command as before
-6) When fully loaded, you can use the `.help` command to display the help (available commands)
-7) Quit Botnet using the `.q` command. This is a safe way to properly terminate all services and update the cache
-8) Enjoy your botting ;-)
-
-### FAQ
-- Can I run Botnet multiple times at the same time under one account?
-  - Yes, if the same login name, password, access token and user ID are used. But it does not really make it more effective, but rather, there is a higher chance of getting a ban. Only if the second instance of Botnet did not use any services but served only for manual commands. That's safe then
-
-- Is my login name and my password safe to enter into my configuration?
-  - Yes. Besides vHack, your data is not sent anywhere else
-  
-- How do I get my access token and UID from my mobile?
-  - First of all, you need to have root devices
-  - Open a file manager and go to: `/data/data/cc.vhack.vhackxtmobile/shared_prefs` and edit file `vXTMobile.xml.xml`
-  - You will find the `uid` and `accessstoken` values in the file. Then use them in Botnet
   
 ### Project information (v0.8)
 ```
