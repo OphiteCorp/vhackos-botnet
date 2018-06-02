@@ -6,6 +6,7 @@ import cz.ophite.mimic.vhackos.botnet.db.HibernateManager;
 import cz.ophite.mimic.vhackos.botnet.db.dao.ScannedIpDao;
 import cz.ophite.mimic.vhackos.botnet.db.dao.TransactionDao;
 import cz.ophite.mimic.vhackos.botnet.db.dao.UserDao;
+import cz.ophite.mimic.vhackos.botnet.db.entity.ScannedIpEntity;
 import cz.ophite.mimic.vhackos.botnet.db.entity.UserEntity;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
@@ -57,6 +58,17 @@ public final class DatabaseService {
         }
         LOG.info("Processing a database query for user ID: {}", userId);
         return userDao.getIps(userId);
+    }
+
+    /**
+     * Získá všechny naskenované IP.
+     */
+    public List<ScannedIpEntity> getScannedIPs(String orderColumn) {
+        if (!HibernateManager.isConnected()) {
+            return Collections.emptyList();
+        }
+        LOG.info("Processing a database query for list of all scanned IP's");
+        return scannedIpDao.getScannedIps(orderColumn);
     }
 
     /**

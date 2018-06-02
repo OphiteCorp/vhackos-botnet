@@ -3,6 +3,7 @@ package cz.ophite.mimic.vhackos.botnet.db.dao;
 import cz.ophite.mimic.vhackos.botnet.db.dao.base.Dao;
 import cz.ophite.mimic.vhackos.botnet.db.entity.ScannedIpEntity;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -42,10 +43,17 @@ public final class ScannedIpDao extends Dao<ScannedIpEntity> {
     /**
      * Získá všechny naskenované IP.
      */
-    public List<ScannedIpEntity> getScannedIps() {
+    public List<ScannedIpEntity> getScannedIps(String orderColumn) {
         return execute(s -> {
-            var q = s
-                    .createQuery(query("select sip from {entity} sip order by sip." + ScannedIpEntity.CREATED), ScannedIpEntity.class);
+            var sb = new StringBuilder();
+            sb.append("select sip from {entity} sip ");
+
+            if (StringUtils.isEmpty(orderColumn)) {
+                sb.append("order by sip." + ScannedIpEntity.LEVEL + " desc, sip." + ScannedIpEntity.FIREWALL + " desc");
+            } else {
+                sb.append("order by sip.").append(orderColumn).append(" desc");
+            }
+            var q = s.createQuery(query(sb.toString()), ScannedIpEntity.class);
             return q.list();
         });
     }

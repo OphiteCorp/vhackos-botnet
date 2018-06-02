@@ -23,7 +23,7 @@ public final class DatabaseCommands extends BaseCommand {
      * Vyhledá v DB všechny uživatele, kteří mají tuto IP.
      */
     @Command(value = "db find ip", comment = "Search for IP from user list")
-    private String dbSearchUserIp(@CommandParam("ip") String ip) {
+    private String searchUserIp(@CommandParam("ip") String ip) {
         return execute("DB | search user -> " + ip, am -> {
             var data = databaseService.searchIp(ip);
 
@@ -49,7 +49,7 @@ public final class DatabaseCommands extends BaseCommand {
      * Vyhledá všechny IP pro ID uživatele.
      */
     @Command(value = "db find uid", comment = "Search IP by user ID")
-    private String dbSearchIpByUserId(@CommandParam("uid") int userId) {
+    private String searchIpByUserId(@CommandParam("uid") int userId) {
         return execute("DB | search user by ID -> " + userId, am -> {
             var data = databaseService.searchIpByUserId(userId);
 
@@ -57,6 +57,38 @@ public final class DatabaseCommands extends BaseCommand {
                 for (var i = 0; i < data.size(); i++) {
                     var ip = data.get(i);
                     put(am, (i == 0) ? "IP" : "", ip);
+                }
+            } else {
+                put(am, "Result", "IP for user ID was not found");
+            }
+        });
+    }
+
+    /**
+     * Vypíše všechny naskenované IP.
+     */
+    @Command(value = "db scanned list", comment = "Prints a complete list of all scanned IPs")
+    private String getScannedIps(@CommandParam("orderColumn") String order) {
+        if ("null".equalsIgnoreCase(order)) {
+            order = "";
+        }
+        var orderColumn = order;
+
+        return execute("DB | scanned IP's list", am -> {
+            var data = databaseService.getScannedIPs(orderColumn);
+
+            if (!data.isEmpty()) {
+                put(am, "Count", data.size());
+
+                for (var i = 0; i < data.size(); i++) {
+                    var ip = data.get(i);
+                    var user = (ip.getUserName() == null) ? "-" : ip.getUserName();
+                    var out = String.format("%s | Level: %s | FW: %s | User: %s", StringUtils
+                            .rightPad(ip.getIp(), 15), StringUtils
+                            .leftPad(String.valueOf(ip.getLevel()), 3), StringUtils
+                            .leftPad(String.valueOf(ip.getFirewall()), 5), StringUtils.rightPad(user, 20));
+
+                    put(am, (i == 0) ? "IP" : "", out);
                 }
             } else {
                 put(am, "Result", "IP for user ID was not found");
