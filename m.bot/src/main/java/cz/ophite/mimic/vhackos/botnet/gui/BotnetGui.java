@@ -62,6 +62,10 @@ public final class BotnetGui extends JFrame {
             setUndecorated(true);
             setLocationRelativeTo(null);
             setVisible(true);
+        } else {
+            if (config.hasValidCredentials()) {
+                setTitle(getTitle() + " | Account: " + config.getUserName());
+            }
         }
     }
 
