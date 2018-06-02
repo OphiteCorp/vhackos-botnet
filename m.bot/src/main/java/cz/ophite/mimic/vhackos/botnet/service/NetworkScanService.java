@@ -50,6 +50,11 @@ public final class NetworkScanService extends Service {
     }
 
     @Override
+    protected void onStopped() {
+        scansCountBeforePause = null;
+    }
+
+    @Override
     protected void execute() {
         counter.incrementAndGet();
         var resp = networkModule.scan();

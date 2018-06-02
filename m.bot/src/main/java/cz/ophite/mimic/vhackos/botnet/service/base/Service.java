@@ -109,6 +109,7 @@ public abstract class Service implements IService {
                 log.info("Waiting for finish...");
                 executor.shutdownNow();
                 log.info("Stopped");
+                onStopped();
                 return true;
             } else {
                 log.debug("Executor was already stopped");
@@ -116,6 +117,7 @@ public abstract class Service implements IService {
         } else if (running) {
             log.info("Stopped");
             running = false;
+            onStopped();
             return true;
         } else {
             log.debug("Service is already stopped");
@@ -155,6 +157,10 @@ public abstract class Service implements IService {
     protected abstract void initialize();
 
     protected abstract void execute() throws Exception;
+
+    protected void onStopped() {
+        // nic
+    }
 
     protected final Logger getLog() {
         return log;
@@ -253,9 +259,12 @@ public abstract class Service implements IService {
                 try {
                     execute();
                 } catch (ConnectionException e) {
+                    stop();
                     throw e;
+
                 } catch (BotnetException e) {
                     log.error("An unexpected error occurred while processing the service", e);
+
                 } catch (Exception e) {
                     log.error("There was a fatal error while processing the service. The service will be stopped", e);
                     stop();

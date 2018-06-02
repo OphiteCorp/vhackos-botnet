@@ -71,6 +71,7 @@ public abstract class Module implements IModule {
                     .getOpcodeValue(), getConfig().getUserName());
 
             int attempts = getBotnet().getConfig().getMaxRequestAttempts(); // maximální počet pokusů
+            Exception prevException = null;
 
             while (attempts > 0) {
                 try {
@@ -79,6 +80,7 @@ public abstract class Module implements IModule {
                     return request.send(this);
 
                 } catch (InvalidAccessTokenException e) {
+                    prevException = e;
                     try {
                         log.info("Invalid access token. Getting a new...");
                         Thread.sleep(5000);
@@ -95,11 +97,20 @@ public abstract class Module implements IModule {
                     } catch (InterruptedException e1) {
                         break;
                     }
+                } catch (ConnectionException e) {
+                    prevException = e;
+                    attempts--;
+                    log.error("Request failed. Remaining attempts: {}", attempts);
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e1) {
+                        break;
+                    }
                 } catch (InterruptedException e) {
                     break;
                 }
             }
-            throw new ConnectionException("Could not send request to server");
+            throw new ConnectionException(null, "Could not send request to server", prevException);
         }
     }
 }

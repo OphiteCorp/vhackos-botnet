@@ -13,7 +13,7 @@ public interface IBotnet {
     /**
      * Verze Botnetu.
      */
-    String VERSION = "0.9.2";
+    String VERSION = "0.9.3";
 
     /**
      * Verze REST API pro vHackOS.
