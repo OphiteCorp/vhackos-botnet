@@ -74,7 +74,9 @@ public final class BoosterService extends Service {
     }
 
     private void printEndMessage(TaskResponse resp) {
-        getLog().info("Done. Remaining {} boosters. Next check will be in: {}", resp.getBoosters(), SharedUtils
-                .toTimeFormat(getTimeout()));
+        if (isRunningAsync()) {
+            getLog().info("Done. Remaining {} boosters. Next check will be in: {}", resp.getBoosters(), SharedUtils
+                    .toTimeFormat(getTimeout()));
+        }
     }
 }

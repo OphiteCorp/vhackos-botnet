@@ -10,6 +10,8 @@ import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Služba, která pouze skenuje síť a ukládá data do DB.
  *
@@ -25,8 +27,8 @@ public final class NetworkScanService extends Service {
     @Autowired
     private NetworkModule networkModule;
 
-    private Integer scansCountBeforePause;
-    private int counter;
+    private volatile Integer scansCountBeforePause;
+    private volatile AtomicInteger counter;
 
     protected NetworkScanService(Botnet botnet) {
         super(botnet);
@@ -43,27 +45,30 @@ public final class NetworkScanService extends Service {
 
         if (scansCountBeforePause == null) {
             scansCountBeforePause = getConfig().getNetworkScanCountBeforePause();
+            counter = new AtomicInteger(0);
         }
     }
 
     @Override
     protected void execute() {
+        counter.incrementAndGet();
         var resp = networkModule.scan();
 
         for (var ip : resp.getIps()) {
             databaseService.addScanIp(ip);
         }
 
-        if (++counter > scansCountBeforePause) {
+        if (counter.get() >= scansCountBeforePause) {
             var pause = getConfig().getNetworkScanPause();
+            getLog().info("Counter: {}/{}. There will be a break in length: {}", counter, scansCountBeforePause, SharedUtils
+                    .toTimeFormat(getTimeout() + pause));
             scansCountBeforePause = null;
-            counter = 0;
-
-            getLog().info("There will be a break in length: ~ {}", SharedUtils.toTimeFormat(pause));
             sleep(pause);
         } else {
-            getLog().info("Counter: {}/{}. Next scan will be in: {}", counter, scansCountBeforePause, SharedUtils
-                    .toTimeFormat(getTimeout()));
+            if (isRunningAsync()) {
+                getLog().info("Counter: {}/{}. Next scan will be in: {}", counter, scansCountBeforePause, SharedUtils
+                        .toTimeFormat(getTimeout()));
+            }
         }
     }
 }

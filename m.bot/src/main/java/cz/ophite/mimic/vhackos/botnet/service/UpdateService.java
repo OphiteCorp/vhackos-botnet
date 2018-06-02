@@ -17,7 +17,7 @@ import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
 @Inject
 @EndpointService(IService.SERVICE_UPDATE)
 public final class UpdateService extends Service {
-    
+
     @Autowired
     private TaskModule taskModule;
 
@@ -33,7 +33,6 @@ public final class UpdateService extends Service {
     @Override
     protected void initialize() {
         setTimeout(getConfig().getUpdateTimeout());
-        setInitDelay(0);
     }
 
     @Override
@@ -45,6 +44,8 @@ public final class UpdateService extends Service {
         var tasksResp = taskModule.getTasks();
         getShared().setTaskResponse(tasksResp);
 
-        getLog().info("Profile updated. Next update will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+        if (isRunningAsync()) {
+            getLog().info("Profile updated. Next update will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+        }
     }
 }

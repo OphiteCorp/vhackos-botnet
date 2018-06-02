@@ -62,6 +62,8 @@ public final class MissionService extends Service {
                         .getExperience(), mission.getRewardAmount(), mission.getRewardType());
             }
         }
-        getLog().info("Done. Next check will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+        if (isRunningAsync()) {
+            getLog().info("Done. Next check will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+        }
     }
 }

@@ -7,6 +7,7 @@ import cz.ophite.mimic.vhackos.botnet.api.net.response.*;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.*;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
 import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
+import cz.ophite.mimic.vhackos.botnet.config.ConfigHelper;
 import cz.ophite.mimic.vhackos.botnet.config.ConfigProvider;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
@@ -91,7 +92,7 @@ final class BotnetCommands extends BaseCommand {
     @Command(value = "config", comment = "Get the current configuration")
     private String getConfig() {
         return execute("configuration", am -> {
-            var map = config.asMap();
+            var map = ConfigHelper.asMap(config);
 
             for (var entry : map.entrySet()) {
                 put(am, entry.getKey(), entry.getValue());

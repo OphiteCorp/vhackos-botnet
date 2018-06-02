@@ -16,10 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Základní implementace všech služeb.
@@ -29,16 +28,16 @@ import java.util.concurrent.TimeUnit;
 public abstract class Service implements IService {
 
     public static final String SERVICES_PACKAGE = "cz.ophite.mimic.vhackos.botnet.service";
-    private static final long DEFAULT_INIT_DELAY = 1000;
 
     private static Map<String, IService> services;
 
     private final Botnet botnet;
     private long timeout;
-    private long initDelay = DEFAULT_INIT_DELAY;
+    private long asyncCounter = -1;
     private boolean running;
     private boolean autoResetExecutor = true;
-    private ScheduledExecutorService executor;
+    private ServiceConfig serviceConfig;
+    private ExecutorService executor;
     private Logger log;
 
     @Autowired
@@ -71,26 +70,29 @@ public abstract class Service implements IService {
     }
 
     @Override
-    public final boolean start(ServiceConfig config) {
-        initialize();
+    public final synchronized boolean start(ServiceConfig config) {
+        if (running) {
+            return false;
+        }
+        serviceConfig = config;
 
         if (config.isAsync() && !config.isFirstRunSync()) {
-            if (executor == null || executor.isShutdown()) {
-                validateTimeout();
-                executor = Executors.newScheduledThreadPool(1, new ExecThreadFactory());
-                executor.scheduleAtFixedRate(new Run(config), initDelay, timeout, TimeUnit.MILLISECONDS);
+            if (!running && executor == null || executor.isTerminated()) {
                 running = true;
+                asyncCounter = 1;
+                executor = createAndStartExecutor(config, 0);
                 return true;
             }
         } else {
-            new Run(config).run();
+            running = true;
+            new Run(config, false, 0).run();
             return true;
         }
         return false;
     }
 
     @Override
-    public final boolean start() {
+    public final synchronized boolean start() {
         var config = new ServiceConfig();
         config.setAsync(true);
         config.setFirstRunSync(false);
@@ -99,17 +101,24 @@ public abstract class Service implements IService {
     }
 
     @Override
-    public final boolean stop() {
+    public final synchronized boolean stop() {
         if (executor != null) {
-            if (!executor.isShutdown() && !executor.isTerminated()) {
+            running = false;
+
+            if (!executor.isTerminated()) {
                 log.info("Waiting for finish...");
                 executor.shutdownNow();
                 log.info("Stopped");
-                running = false;
                 return true;
             } else {
                 log.debug("Executor was already stopped");
             }
+        } else if (running) {
+            log.info("Stopped");
+            running = false;
+            return true;
+        } else {
+            log.debug("Service is already stopped");
         }
         return false;
     }
@@ -135,10 +144,6 @@ public abstract class Service implements IService {
         this.timeout = timeout;
     }
 
-    protected final void setInitDelay(long initDelay) {
-        this.initDelay = initDelay;
-    }
-
     protected final boolean isAutoResetExecutor() {
         return autoResetExecutor;
     }
@@ -159,16 +164,21 @@ public abstract class Service implements IService {
         return timeout;
     }
 
+    protected final boolean isRunningAsync() {
+        return (serviceConfig != null && serviceConfig.isAsync());
+    }
+
     /**
      * Uspí vlákno na určitý čas.
      */
-    protected void sleep(long millis) {
+    protected boolean sleep(long millis) {
         try {
             log.debug("Forced timeout: {}ms", millis);
             Thread.sleep(millis);
+            return true;
 
         } catch (InterruptedException e) {
-            log.error("There was an error while sleeping thread", e);
+            return false;
         }
     }
 
@@ -178,11 +188,17 @@ public abstract class Service implements IService {
         }
     }
 
+    private ExecutorService createAndStartExecutor(ServiceConfig config, long prevTimeout) {
+        var executor = Executors.newFixedThreadPool(1, new ExecThreadFactory());
+        executor.submit(new Run(config, true, prevTimeout));
+        return executor;
+    }
+
     /**
      * Uspí vlákno na čas z konfigurace.
      */
-    protected void sleep() {
-        sleep(config.getSleepDelay());
+    protected boolean sleep() {
+        return sleep(config.getSleepDelay());
     }
 
     /**
@@ -206,37 +222,69 @@ public abstract class Service implements IService {
     private class Run implements Runnable {
 
         private final ServiceConfig config;
+        private final boolean async;
+        private final long prevTimeout;
 
-        private Run(ServiceConfig config) {
+        private Run(ServiceConfig config, boolean async, long prevTimeout) {
             this.config = config;
+            this.async = async;
+            this.prevTimeout = prevTimeout;
         }
 
         @Override
         public void run() {
-            log.info("Starting...");
-            try {
-                execute();
-            } catch (ConnectionException e) {
-                throw e;
-            } catch (BotnetException e) {
-                log.error("An unexpected error occurred while processing the service", e);
-            } catch (Exception e) {
-                throw new BotnetCoreException("There was a critical error when calling a service", e);
+            // v případě async volání se při prvním průchodu vytvoří prodleva, protože původní sync volání již proběhlo
+            if (async) {
+                if (asyncCounter == 0) {
+                    sleep(prevTimeout);
+                }
             }
-            log.debug("Finished");
+            do {
+                // initializace služby
+                try {
+                    initialize();
+                    validateTimeout();
+                } catch (Exception e) {
+                    log.error("There was an error initializing the service. The service will be terminated", e);
+                    stop();
+                    break;
+                }
+                log.info("Starting...");
+                try {
+                    execute();
+                } catch (ConnectionException e) {
+                    throw e;
+                } catch (BotnetException e) {
+                    log.error("An unexpected error occurred while processing the service", e);
+                } catch (Exception e) {
+                    log.error("There was a fatal error while processing the service. The service will be stopped", e);
+                    stop();
+                    throw new BotnetCoreException("There was a critical error when calling a service", e);
+                }
+                if (!config.isAsync()) {
+                    log.info("Finished");
+                } else {
+                    log.debug("Finished {}. pass", asyncCounter);
+                }
+                // služba byla spuštěna sync a další volání již má být async
+                if (executor == null && config.isAsync()) {
+                    asyncCounter = 0;
+                    executor = createAndStartExecutor(config, getTimeout());
+                    break; // aktuální run() není async
 
-            if (executor == null && config.isFirstRunSync()) {
-                validateTimeout();
-                executor = Executors.newScheduledThreadPool(1, new ExecThreadFactory());
-                executor.scheduleAtFixedRate(this, timeout, timeout, TimeUnit.MILLISECONDS);
-                running = true;
-
-            } else if (autoResetExecutor && executor != null && !executor.isShutdown()) {
-                executor.shutdownNow();
-                initialize();
-                executor = Executors.newScheduledThreadPool(1, new ExecThreadFactory());
-                executor.scheduleAtFixedRate(this, timeout, timeout, TimeUnit.MILLISECONDS);
-            }
+                } else if (executor != null && autoResetExecutor && !executor.isTerminated()) {
+                    if (!sleep(getTimeout())) {
+                        running = false;
+                    } else {
+                        asyncCounter++;
+                    }
+                } else {
+                    if (executor != null) {
+                        stop();
+                    }
+                    running = false;
+                }
+            } while (running);
         }
     }
 

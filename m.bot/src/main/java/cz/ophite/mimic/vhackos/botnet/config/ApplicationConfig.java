@@ -4,10 +4,12 @@ import cz.ophite.mimic.vhackos.botnet.api.IBotnetConfig;
 import cz.ophite.mimic.vhackos.botnet.api.dto.ProxyData;
 import cz.ophite.mimic.vhackos.botnet.shared.dto.AppStoreType;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Konfigurace aplikace.
@@ -62,7 +64,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @ConfigValue(value = "sys.sleep.delay",
                  comment = "Delay before each server request in milliseconds.\nDefault: between 1-3s",
-                 defaultValue = "(500+(Math.floor(Math.random()*2001)+500))")
+                 defaultValue = "500+(Math.floor(Math.random()*2001)+500)")
     private String sleepDelay;
 
     @ConfigValue(value = "sys.proxy.enable", comment = "Enables the use of a proxy server", defaultValue = "False")
@@ -200,7 +202,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @ConfigValue(value = "service-netscan.count.before.pause",
                  comment = "Number of network scanning before pause.\nDefault: between 30-80",
-                 defaultValue = "(Math.floor(Math.random()*51)+30)")
+                 defaultValue = "Math.floor(Math.random()*51)+30")
     private String sNetworkScanCountBeforePause;
 
     @ConfigValue(value = "service-netscan.pause",
@@ -240,28 +242,6 @@ public final class ApplicationConfig implements IBotnetConfig {
                 }
             }
         }
-    }
-
-    /**
-     * Získá konfiguraci jako mapu.
-     */
-    public Map<String, Object> asMap() {
-        var map = new LinkedHashMap<String, Object>();
-        var fields = getClass().getDeclaredFields();
-
-        for (var field : fields) {
-            if (field.isAnnotationPresent(ConfigValue.class)) {
-                field.setAccessible(true);
-                var a = field.getAnnotation(ConfigValue.class);
-                try {
-                    var value = field.get(this);
-                    map.put(a.value(), value);
-                } catch (Exception e) {
-                    throw new IllegalStateException("An unexpected error has occurred", e);
-                }
-            }
-        }
-        return map;
     }
 
     /**
@@ -312,12 +292,13 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @Override
     public long getSleepDelay() {
-        return ((Double) SharedUtils.eval(sleepDelay)).longValue();
+        return ConfigHelper.getNumbericValue(sleepDelay, Long.class);
     }
 
     @Override
     public ProxyData getProxyData() {
         var enable = Boolean.valueOf(proxyEnable);
+
         if (enable && !proxyHost.isEmpty() && !proxyPort.isEmpty()) {
             var proxy = new ProxyData();
             proxy.setIp(proxyHost);
@@ -336,72 +317,75 @@ public final class ApplicationConfig implements IBotnetConfig {
     }
 
     public boolean isDbEnable() {
-        return Boolean.valueOf(dbEnable);
+        return ConfigHelper.getBoolean(dbEnable);
     }
 
     public long getUpdateTimeout() {
-        return ((Double) SharedUtils.eval(sUpdateTimeout)).longValue();
+        return ConfigHelper.getNumbericValue(sUpdateTimeout, Long.class);
     }
 
     public boolean isMinerEnable() {
-        return Boolean.valueOf(sMinerEnable);
+        return ConfigHelper.getBoolean(sMinerEnable);
     }
 
     public long getMinerTimeout() {
-        return ((Double) SharedUtils.eval(sMinerTimeout)).longValue();
+        return ConfigHelper.getNumbericValue(sMinerTimeout, Long.class);
     }
 
     public boolean isMalwareEnable() {
-        return Boolean.valueOf(sMalwareEnable);
+        return ConfigHelper.getBoolean(sMalwareEnable);
     }
 
     public long getMalwareTimeout() {
-        return ((Double) SharedUtils.eval(sMalwareTimeout)).longValue();
+        return ConfigHelper.getNumbericValue(sMalwareTimeout, Long.class);
     }
 
     public boolean isServerEnable() {
-        return Boolean.valueOf(sServerEnable);
+        return ConfigHelper.getBoolean(sServerEnable);
     }
 
     public long getServerTimeout() {
-        return ((Double) SharedUtils.eval(sServerTimeout)).longValue();
+        return ConfigHelper.getNumbericValue(sServerTimeout, Long.class);
     }
 
     public int getServerUpdateLimit() {
-        return (Integer) SharedUtils.eval(sServerUpdateLimit);
+        return ConfigHelper.getNumbericValue(sServerUpdateLimit, Integer.class);
     }
 
     public int getServerCoreUpdateLimit() {
-        return (Integer) SharedUtils.eval(sServerCoreUpdateLimit);
+        return ConfigHelper.getNumbericValue(sServerCoreUpdateLimit, Integer.class);
     }
 
     public int getSafeNetcoins() {
-        return (Integer) SharedUtils.eval(safeNetcoins);
+        return ConfigHelper.getNumbericValue(safeNetcoins, Integer.class);
     }
 
     public int getSafeBoosters() {
-        return (Integer) SharedUtils.eval(safeBoosters);
+        return ConfigHelper.getNumbericValue(safeBoosters, Integer.class);
     }
 
     public boolean isServerBuyPackagesForNetcoins() {
-        return Boolean.valueOf(sServerBuyPackagesForNetcoins);
+        return ConfigHelper.getBoolean(sServerBuyPackagesForNetcoins);
     }
 
     public boolean isStoreEnable() {
-        return Boolean.valueOf(sStoreEnable);
+        return ConfigHelper.getBoolean(sStoreEnable);
     }
 
     public long getStoreTimeout() {
-        return ((Double) SharedUtils.eval(sStoreTimeout)).longValue();
+        return ConfigHelper.getNumbericValue(sStoreTimeout, Long.class);
     }
 
     public List<AppStoreType> getUpdatedAppsList() {
         var list = sUpdatedAppsList.substring(1, sUpdatedAppsList.length() - 1);
+
         if (list.contains(",")) {
             var tokens = list.split(",");
             var apps = new HashSet<AppStoreType>(tokens.length);
+
             for (var t : tokens) {
                 var type = AppStoreType.getByCode(t.toUpperCase().trim());
+
                 if (type != null) {
                     apps.add(type);
                 }
@@ -412,50 +396,50 @@ public final class ApplicationConfig implements IBotnetConfig {
     }
 
     public boolean isBoosterEnable() {
-        return Boolean.valueOf(sBoosterEnable);
+        return ConfigHelper.getBoolean(sBoosterEnable);
     }
 
     public long getBoosterTimeout() {
-        return ((Double) SharedUtils.eval(sBoosterTimeout)).longValue();
+        return ConfigHelper.getNumbericValue(sBoosterTimeout, Long.class);
     }
 
     public int getBoosterReqTime() {
-        return (Integer) SharedUtils.eval(sBoosterReqTime);
+        return ConfigHelper.getNumbericValue(sBoosterReqTime, Integer.class);
     }
 
     public boolean isMissionEnable() {
-        return Boolean.valueOf(sMissionEnable);
+        return ConfigHelper.getBoolean(sMissionEnable);
     }
 
     public long getMissionTimeout() {
-        return ((Double) SharedUtils.eval(sMissionTimeout)).longValue();
+        return ConfigHelper.getNumbericValue(sMissionTimeout, Long.class);
     }
 
     public boolean isNetworkEnable() {
-        return Boolean.valueOf(sNetworkEnable);
+        return ConfigHelper.getBoolean(sNetworkEnable);
     }
 
     public long getNetworkTimeout() {
-        return ((Double) SharedUtils.eval(sNetworkTimeout)).longValue();
+        return ConfigHelper.getNumbericValue(sNetworkTimeout, Long.class);
     }
 
     public boolean isNetworkScanEnable() {
-        return Boolean.valueOf(sNetworkScanEnable);
+        return ConfigHelper.getBoolean(sNetworkScanEnable);
     }
 
     public long getNetworkScanTimeout() {
-        return ((Double) SharedUtils.eval(sNetworkScanTimeout)).longValue();
+        return ConfigHelper.getNumbericValue(sNetworkScanTimeout, Long.class);
     }
 
     public boolean isFullScreenMode() {
-        return Boolean.valueOf(fullScreenMode);
+        return ConfigHelper.getBoolean(fullScreenMode);
     }
 
     public int getNetworkScanCountBeforePause() {
-        return ((Double) SharedUtils.eval(sNetworkScanCountBeforePause)).intValue();
+        return ConfigHelper.getNumbericValue(sNetworkScanCountBeforePause, Integer.class);
     }
 
     public long getNetworkScanPause() {
-        return ((Double) SharedUtils.eval(sNetworkScanPause)).longValue();
+        return ConfigHelper.getNumbericValue(sNetworkScanPause, Long.class);
     }
 }

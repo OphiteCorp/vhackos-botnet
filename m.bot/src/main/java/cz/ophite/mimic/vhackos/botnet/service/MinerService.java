@@ -42,7 +42,12 @@ public final class MinerService extends Service {
     @Override
     protected void execute() {
         if (!SharedUtils.toBoolean(getShared().getUpdateResponse().getMiner())) {
-            getLog().info("Miner is not available. Next check will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+            if (isRunningAsync()) {
+                getLog().info("Miner is not available. Next check will be in: {}", SharedUtils
+                        .toTimeFormat(getTimeout()));
+            } else {
+                getLog().info("Miner is not available");
+            }
             return;
         }
         var resp = miningModule.getMining();
@@ -71,7 +76,12 @@ public final class MinerService extends Service {
                 return;
         }
         miningModule.start();
-        getLog().info("Miner was started. Next check will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+
+        if (isRunningAsync()) {
+            getLog().info("Miner was started. Next check will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+        } else {
+            getLog().info("Miner was started");
+        }
     }
 
     private MiningResponse tryBuyGpu(MiningResponse resp) {

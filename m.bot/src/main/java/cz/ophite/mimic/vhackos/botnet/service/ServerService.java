@@ -62,7 +62,9 @@ public final class ServerService extends Service {
         resp = processCollectPackages(resp);
         processBuyAndCollectPackages(resp);
 
-        getLog().info("Update complete. Next update will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+        if (isRunningAsync()) {
+            getLog().info("Update complete. Next update will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+        }
     }
 
     private ServerResponse processAntivirus(ServerResponse resp) {

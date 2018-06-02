@@ -53,7 +53,9 @@ public final class StoreService extends Service {
         var freeTasks = getShared().getMaxTaskUpdates() - getShared().getTaskResponse().getUpdateCount();
 
         if (updatedApps.isEmpty() || freeTasks == 0) {
-            getLog().info("Next check will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+            if (isRunningAsync()) {
+                getLog().info("Next check will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+            }
             return;
         }
         var resp = storeModule.getApps();
@@ -81,7 +83,9 @@ public final class StoreService extends Service {
         var tasks = taskModule.getTasks();
         getShared().setTaskResponse(tasks);
 
-        getLog().info("Done. Next check will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+        if (isRunningAsync()) {
+            getLog().info("Done. Next check will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
+        }
     }
 
     private int updateProcess(AppStoreResponse resp, List<App> resultApps, int freeTasks) {

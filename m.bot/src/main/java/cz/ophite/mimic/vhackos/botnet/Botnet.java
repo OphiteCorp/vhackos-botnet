@@ -76,7 +76,7 @@ public final class Botnet implements IBotnet {
         // zkontroluje, případně přihlásí uživatele s novým tokenem
         LOG.info("Getting user '{}' information. Please wait...", config.getUserName());
         var serviceConfig = new ServiceConfig();
-        serviceConfig.setAsync(false);
+        serviceConfig.setAsync(true);
         serviceConfig.setFirstRunSync(true);
         Service.getServices().get(IService.SERVICE_UPDATE).start(serviceConfig);
 
