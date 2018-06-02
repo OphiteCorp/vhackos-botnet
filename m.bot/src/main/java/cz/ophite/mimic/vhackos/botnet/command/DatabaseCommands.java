@@ -91,7 +91,7 @@ public final class DatabaseCommands extends BaseCommand {
                     put(am, (i == 0) ? "IP" : "", out);
                 }
             } else {
-                put(am, "Result", "IP for user ID was not found");
+                put(am, "Result", "There are no records available yet");
             }
         });
     }
