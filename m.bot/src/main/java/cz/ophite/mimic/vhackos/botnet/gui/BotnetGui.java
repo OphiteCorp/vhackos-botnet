@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Grafické rozhraní pro botnet.
@@ -99,6 +101,20 @@ public final class BotnetGui extends JFrame {
         area.setEditable(false);
         area.setBorder(BorderFactory.createEmptyBorder());
         area.setFocusable(false);
+        area.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                area.setFocusable(true);
+                area.requestFocus();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                area.setFocusable(false);
+                tfCommand.requestFocus();
+            }
+        });
 
         var caret = (DefaultCaret) area.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
