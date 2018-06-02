@@ -69,11 +69,10 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String proxyEnable;
 
     @ConfigValue(value = "sys.proxy.host",
-                 comment = "Proxy server IP address. Currently supports only HTTP connections",
-                 defaultValue = "136.243.63.53")
+                 comment = "Proxy server IP address. Currently supports only HTTP connections", canBeEmpty = true)
     private String proxyHost;
 
-    @ConfigValue(value = "sys.proxy.port", comment = "Proxy server port", defaultValue = "3128")
+    @ConfigValue(value = "sys.proxy.port", comment = "Proxy server port", canBeEmpty = true)
     private String proxyPort;
 
     // GUI
