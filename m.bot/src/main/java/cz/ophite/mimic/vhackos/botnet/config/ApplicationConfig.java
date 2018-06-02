@@ -7,7 +7,6 @@ import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -297,7 +296,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @Override
     public ProxyData getProxyData() {
-        var enable = Boolean.valueOf(proxyEnable);
+        var enable = ConfigHelper.getBoolean(proxyEnable);
 
         if (enable && !proxyHost.isEmpty() && !proxyPort.isEmpty()) {
             var proxy = new ProxyData();
@@ -377,22 +376,18 @@ public final class ApplicationConfig implements IBotnetConfig {
     }
 
     public List<AppStoreType> getUpdatedAppsList() {
-        var list = sUpdatedAppsList.substring(1, sUpdatedAppsList.length() - 1);
+        var list = sUpdatedAppsList.substring(1, sUpdatedAppsList.length() - 1).trim();
+        var tokens = list.split(",");
+        var apps = new HashSet<AppStoreType>(tokens.length);
 
-        if (list.contains(",")) {
-            var tokens = list.split(",");
-            var apps = new HashSet<AppStoreType>(tokens.length);
+        for (var t : tokens) {
+            var type = AppStoreType.getByCode(t.toUpperCase().trim());
 
-            for (var t : tokens) {
-                var type = AppStoreType.getByCode(t.toUpperCase().trim());
-
-                if (type != null) {
-                    apps.add(type);
-                }
+            if (type != null) {
+                apps.add(type);
             }
-            return new ArrayList<>(apps);
         }
-        return Collections.emptyList();
+        return new ArrayList<>(apps);
     }
 
     public boolean isBoosterEnable() {

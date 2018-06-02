@@ -73,8 +73,15 @@ public final class Botnet implements IBotnet {
         if (cache != null && getConfig().getUserName().equalsIgnoreCase(cache.getConnectionData().getUserName())) {
             connectionData.set(cache.getConnectionData());
         }
+        // vypíše proxy server
+        var proxy = config.getProxyData();
+        if (proxy != null) {
+            LOG.info("A proxy server is set up. Instead, real IP will be used: {}:{}", proxy.getIp(), proxy.getPort());
+        }
         // zkontroluje, případně přihlásí uživatele s novým tokenem
-        LOG.info("Getting user '{}' information. Please wait...", config.getUserName());
+        {
+            LOG.info("Getting user '{}' information. Please wait...", config.getUserName());
+        }
         var serviceConfig = new ServiceConfig();
         serviceConfig.setAsync(true);
         serviceConfig.setFirstRunSync(true);

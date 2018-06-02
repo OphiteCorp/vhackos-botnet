@@ -153,6 +153,7 @@ public final class OpcodeRequest {
 
         if (proxyData != null) {
             var proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyData.getIp(), proxyData.getPort()));
+            LOG.debug("A proxy with the address will be used: {}", proxy);
             conn = (HttpsURLConnection) url.openConnection(proxy);
         } else {
             conn = (HttpsURLConnection) url.openConnection();
