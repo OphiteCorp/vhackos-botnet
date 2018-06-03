@@ -18,7 +18,7 @@ import java.util.List;
 @Inject
 public final class ApplicationConfig implements IBotnetConfig {
 
-    private static final int AGGRESSIVE_TIME = 150;
+    private static final int AGGRESSIVE_TIME = 250;
     private static final String DEFAULT_USERNAME = "YOUR_USERNAME";
     private static final String DEFAULT_PASSWORD = "YOUR_PASSWORD";
 

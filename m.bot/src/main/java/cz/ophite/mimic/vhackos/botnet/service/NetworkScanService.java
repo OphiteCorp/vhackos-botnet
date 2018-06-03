@@ -154,7 +154,7 @@ public final class NetworkScanService extends Service {
         try {
             bankModule.bruteforce(ip);
         } catch (ServerBusyException e) {
-            getLog().warn("The server is busy. Try another try with the number: {}", attempts);
+            getLog().warn("The server is busy. Current attempt: {}", attempts);
             sleep(5000);
             recursiveBruteIp(ip, ++attempts, max);
         }

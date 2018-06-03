@@ -108,12 +108,10 @@ public final class StoreService extends Service {
                             app.update(newApp);
                             freeTasks--;
                             getLog().info("Purchased '{}' for {} to level {}. Remain money: {}", app.type
-                                    .getAlias(), SharedUtils.toMoneyFormat(app.data.getPrice()), newApp.data
-                                    .getLevel(), SharedUtils.toMoneyFormat(resp.getMoney()));
+                                    .getAlias(), app.data.getPrice(), newApp.data.getLevel(), resp.getMoney());
                         } else {
                             getLog().info("Bank does not have enough money to update app '{}'. Needed: {}. You have: {}", app.type
-                                    .getAlias(), SharedUtils.toMoneyFormat(app.data.getPrice()), SharedUtils
-                                    .toMoneyFormat(resp.getMoney()));
+                                    .getAlias(), app.data.getPrice(), resp.getMoney());
                             throw new OutOfMoneyException();
                         }
                     }
@@ -124,9 +122,8 @@ public final class StoreService extends Service {
                     var newApp = createApp(resp, app.type);
                     app.update(newApp);
                     freeTasks = 0;
-                    getLog().info("Purchased '{}' for {} to level {}. Remain money: {}", app.type
-                            .getAlias(), SharedUtils.toMoneyFormat(app.data.getPrice()), newApp.data
-                            .getLevel(), SharedUtils.toMoneyFormat(resp.getMoney()));
+                    getLog().info("Purchased '{}' for {} to level {}. Remain money: {}", app.type.getAlias(), app.data
+                            .getPrice(), newApp.data.getLevel(), resp.getMoney());
                     break;
                 }
             }

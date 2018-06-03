@@ -71,14 +71,20 @@ public abstract class Module implements IModule {
             log.debug("Sending request '{}->{}' for userName: {}", opcode.getTarget(), opcode
                     .getOpcodeValue(), getConfig().getUserName());
 
-            int attempts = getBotnet().getConfig().getMaxRequestAttempts(); // maximální počet pokusů
+            int maxAttempts = getBotnet().getConfig().getMaxRequestAttempts();
+            int attempts = getBotnet().getConfig().getMaxRequestAttempts();
             Exception prevException = null;
 
             while (attempts > 0) {
                 try {
                     Thread.sleep(getConfig().getSleepDelay());
                     var request = new OpcodeRequest(opcode);
-                    return request.send(this);
+                    var response = request.send(this);
+
+                    if (attempts != maxAttempts) {
+                        log.info("The request to the server was finally sent");
+                    }
+                    return response;
 
                 } catch (InvalidAccessTokenException e) {
                     prevException = e;
@@ -97,7 +103,7 @@ public abstract class Module implements IModule {
                             }
                         } catch (BotnetException be) {
                             attempts--;
-                            log.error("Login failed. Remaining attempts: {}", attempts);
+                            log.error("Login failed. Remaining attempts: {}/{}", attempts, maxAttempts);
                         }
                     } catch (InterruptedException e1) {
                         break;
@@ -105,9 +111,9 @@ public abstract class Module implements IModule {
                 } catch (ConnectionException e) {
                     prevException = e;
                     attempts--;
-                    log.error("Request failed. Remaining attempts: {}", attempts);
+                    log.error("Request failed. Remaining attempts: {}/{}", attempts, maxAttempts);
                     try {
-                        Thread.sleep(getConfig().isAggressiveMode() ? 5000 : 10000);
+                        Thread.sleep(10000);
                     } catch (InterruptedException e1) {
                         break;
                     }
@@ -115,7 +121,7 @@ public abstract class Module implements IModule {
                     if (e.getResponseCode() == 404) {
                         prevException = e;
                         attempts--;
-                        log.error("The server is busy. Remaining attempts: {}", attempts);
+                        log.warn("The server is busy. Remaining attempts: {}/{}", attempts, maxAttempts);
                         try {
                             Thread.sleep(getConfig().isAggressiveMode() ? 5000 : 10000);
                         } catch (InterruptedException e1) {
