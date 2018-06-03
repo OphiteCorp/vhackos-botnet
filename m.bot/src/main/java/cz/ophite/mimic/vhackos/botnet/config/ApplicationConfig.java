@@ -131,7 +131,7 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sServerUpdateLimit;
 
     @ConfigValue(value = "service-server.core.update.limit", comment = "Maximum number of server core updates",
-                 defaultValue = "9999")
+                 defaultValue = "2500")
     private String sServerCoreUpdateLimit;
 
     @ConfigValue(value = "service-server.purchase.packages", comment = "Purchase packages for netcoins",
