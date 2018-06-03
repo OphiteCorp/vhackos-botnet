@@ -49,7 +49,8 @@ public final class HibernateManager {
                 "useLegacyDatetimeCode=false", //
                 "serverTimezone=Europe/Rome", //
                 "useUnicode=true", //
-                "characterEncoding=UTF-8");
+                "characterEncoding=UTF-8", //
+                "useSSL=false");
         var params = "?" + Strings.join(paramsList, '&');
         var connUrl = String.format("jdbc:mysql://%s/%s%s", config.getDbHost(), config.getDbDatabase(), params);
 
@@ -128,8 +129,8 @@ public final class HibernateManager {
             clazz.getConstructor().newInstance();
 
             var simpleConnUrl = String
-                    .format("jdbc:mysql://%s?serverTimezone=Europe/Rome&user=%s&password=%s", config.getDbHost(), config
-                            .getDbUser(), config.getDbPassword());
+                    .format("jdbc:mysql://%s?serverTimezone=Europe/Rome&useSSL=false&user=%s&password=%s", config
+                            .getDbHost(), config.getDbUser(), config.getDbPassword());
             var connection = DriverManager.getConnection(simpleConnUrl);
             connection.close();
 

@@ -73,7 +73,7 @@ public final class TaskModule extends Module {
     /**
      * Zruší bruteforce.
      */
-    public synchronized TaskResponse abortBruteforce(int bruteId) {
+    public synchronized TaskResponse abortBruteforce(long bruteId) {
         var opcode = new AbortBruteOpcode();
         opcode.setBruteforceId(bruteId);
 
@@ -93,7 +93,7 @@ public final class TaskModule extends Module {
     /**
      * Dokončí bruteforce za netcoins.
      */
-    public synchronized TaskResponse finishBruteforceForNetcoins(int bruteId) {
+    public synchronized TaskResponse finishBruteforceForNetcoins(long bruteId) {
         var opcode = new FinishBruteForNetcoinsOpcode();
         opcode.setBruteforceId(bruteId);
 
@@ -103,7 +103,7 @@ public final class TaskModule extends Module {
     /**
      * Odstraní bruteforce z tásků.
      */
-    public synchronized TaskResponse removeBruteforce(int bruteId) {
+    public synchronized TaskResponse removeBruteforce(long bruteId) {
         var opcode = new RemoveBruteOpcode();
         opcode.setBruteforceId(bruteId);
 

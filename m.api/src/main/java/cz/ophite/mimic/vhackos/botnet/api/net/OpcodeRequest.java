@@ -130,7 +130,7 @@ public final class OpcodeRequest {
                     }
                 }
             } else {
-                throw new InvalidResponseCodeException(null, "Failed to get response from vHackOS " + responseCode + " {" + uri + "}");
+                throw new InvalidResponseCodeException(responseCode, "Failed to get response from vHackOS " + responseCode + " {" + uri + "}");
             }
         } catch (IOException e) {
             LOG.error("Something is wrong with processing the request. URI: {}", uri);

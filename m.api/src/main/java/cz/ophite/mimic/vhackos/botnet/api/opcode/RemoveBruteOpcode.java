@@ -15,7 +15,7 @@ public final class RemoveBruteOpcode extends Opcode {
     /**
      * Bruteforce ID.
      */
-    public void setBruteforceId(int bruteId) {
+    public void setBruteforceId(long bruteId) {
         addParam(PARAM_UPDATE_ID, String.valueOf(bruteId));
     }
 

@@ -15,7 +15,7 @@ public final class ConfigHelper {
     /**
      * Převede textovou hodnotu na boolean.
      */
-    public static boolean getBoolean(String value) {
+    static boolean getBoolean(String value) {
         if (value != null && !value.isEmpty()) {
             if ("yes".equalsIgnoreCase(value)) {
                 return true;
@@ -28,7 +28,8 @@ public final class ConfigHelper {
     /**
      * Převede textohou hodnotu na číslo.
      */
-    public static <T> T getNumbericValue(String value, Class<T> target) {
+    static <T> T getNumbericValue(String value, Class<T> target) {
+        value = ConfigValueProcessor.process(value);
         var result = SharedUtils.eval(value);
         var out = result;
 

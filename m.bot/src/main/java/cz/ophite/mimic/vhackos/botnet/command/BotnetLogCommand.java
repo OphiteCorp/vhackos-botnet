@@ -27,7 +27,7 @@ public final class BotnetLogCommand extends BaseCommand {
      * Získá vlastní systémový log.
      */
     @Command(value = "log", comment = "Gets own system log")
-    private String getLog() {
+    private String getSystemLog() {
         return execute("log", am -> {
             var data = logModule.getLog();
 
@@ -41,7 +41,7 @@ public final class BotnetLogCommand extends BaseCommand {
      * Nastaví vlastní systémový log.
      */
     @Command(value = "log set", comment = "Sets own system log")
-    private String setLog(@CommandParam("message") String message) {
+    private String setSystemLog(@CommandParam("message") String message) {
         return execute("log set", am -> {
             logModule.setLog(message);
             put(am, "Result", "The message to the log has been set");
@@ -52,13 +52,14 @@ public final class BotnetLogCommand extends BaseCommand {
      * Získá informace o vzdáleném logu.
      */
     @Command(value = "log remote", comment = "Get the log from the target IP")
-    private String getRemoteLog(@CommandParam("ip") String ip) {
+    private String getRemoteSystemLog(@CommandParam("ip") String ip) {
         return execute("remote log -> " + ip, am -> {
             var data = logModule.getRemoteLog(ip);
 
             for (var i = 0; i < data.size(); i++) {
                 put(am, (i == 0) ? "Log" : "", data.get(i));
             }
+            getLog().info("Adding the log to the database for IP: {}", ip);
             databaseService.addLog(ip, StringUtils.join(data, '\n'));
         });
     }
@@ -67,7 +68,7 @@ public final class BotnetLogCommand extends BaseCommand {
      * Nastaví vzdálený log.
      */
     @Command(value = "log remote set", comment = "Set the log from the target IP")
-    private String setRemoteLog(@CommandParam("ip") String ip, @CommandParam("message") String message) {
+    private String setRemoteSystemLog(@CommandParam("ip") String ip, @CommandParam("message") String message) {
         return execute("remote log set -> " + ip, am -> {
             logModule.setRemoteLog(ip, message);
             put(am, "Result", "The message to the log has been set");

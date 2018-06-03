@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.text.*;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,7 +30,7 @@ public final class BotnetGui extends JFrame {
 
     private static final Logger LOG = LoggerFactory.getLogger(BotnetGui.class);
 
-    private static final int AREA_BUFFER = 1024 * 512;
+    private static final int AREA_BUFFER = 1024 * 256;
 
     private JTextPane area;
     private JPanel bottomPane;
@@ -101,6 +104,7 @@ public final class BotnetGui extends JFrame {
         area.setEditable(false);
         area.setBorder(BorderFactory.createEmptyBorder());
         area.setFocusable(false);
+        area.setEditorKit(new HTMLEditorKit());
         area.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -180,17 +184,20 @@ public final class BotnetGui extends JFrame {
         if (area == null) {
             return;
         }
+        var doc = (HTMLDocument) area.getStyledDocument();
+        // definice klíčových slov
         var keyWord = new SimpleAttributeSet();
         StyleConstants.setForeground(keyWord, c);
         StyleConstants.setBackground(keyWord, getBackground());
+        StyleConstants.setFontFamily(keyWord, font.getFamily());
+        keyWord.addAttribute(StyleConstants.NameAttribute, HTML.Tag.FONT);
 
-        var doc = area.getStyledDocument();
         try {
             if (doc.getLength() > AREA_BUFFER) {
                 doc.remove(0, doc.getLength() - AREA_BUFFER);
             }
+            msg = msg.replaceAll("Application", "<font color=\"red\">$0</font>");
             doc.insertString(doc.getLength(), msg, keyWord);
-            area.setCaretPosition(doc.getLength());
 
         } catch (Exception e) {
             LOG.error("There was an error writing message '" + msg + "' to the GUI log", e);

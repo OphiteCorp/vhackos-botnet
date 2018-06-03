@@ -5,6 +5,7 @@ import cz.ophite.mimic.vhackos.botnet.api.IBotnetConfig;
 import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.ConnectionException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.InvalidAccessTokenException;
+import cz.ophite.mimic.vhackos.botnet.api.exception.InvalidResponseCodeException;
 import cz.ophite.mimic.vhackos.botnet.api.module.CommonModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.OpcodeRequest;
 import cz.ophite.mimic.vhackos.botnet.api.opcode.base.IOpcode;
@@ -83,13 +84,17 @@ public abstract class Module implements IModule {
                     prevException = e;
                     try {
                         log.info("Invalid access token. Getting a new...");
-                        Thread.sleep(5000);
+                        if (!getConfig().isAggressiveMode()) {
+                            Thread.sleep(5000);
+                        }
                         try {
                             var loginData = commonModule.login();
                             log.info("User '{}' was re-logged in", loginData.getUserName());
                             getBotnet().reloginCallback(loginData);
-                            Thread.sleep(3000);
 
+                            if (!getConfig().isAggressiveMode()) {
+                                Thread.sleep(3000);
+                            }
                         } catch (BotnetException be) {
                             attempts--;
                             log.error("Login failed. Remaining attempts: {}", attempts);
@@ -102,9 +107,20 @@ public abstract class Module implements IModule {
                     attempts--;
                     log.error("Request failed. Remaining attempts: {}", attempts);
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(getConfig().isAggressiveMode() ? 5000 : 10000);
                     } catch (InterruptedException e1) {
                         break;
+                    }
+                } catch (InvalidResponseCodeException e) {
+                    if (e.getResponseCode() == 404) {
+                        prevException = e;
+                        attempts--;
+                        log.error("The server is busy. Remaining attempts: {}", attempts);
+                        try {
+                            Thread.sleep(getConfig().isAggressiveMode() ? 5000 : 10000);
+                        } catch (InterruptedException e1) {
+                            break;
+                        }
                     }
                 } catch (InterruptedException e) {
                     break;

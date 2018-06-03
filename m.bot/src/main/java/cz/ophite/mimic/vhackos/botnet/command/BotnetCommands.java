@@ -296,6 +296,7 @@ final class BotnetCommands extends BaseCommand {
             var fields = getFields(data, true);
 
             putRemainings(am, fields, false);
+            getLog().info("Updating an existing IP: {}", data.getIp());
             databaseService.updateScanIp(data.getIp(), data.getUserName(), data.getLevel());
         });
     }
@@ -455,6 +456,7 @@ final class BotnetCommands extends BaseCommand {
                     .leftPad(ip.getLevel().toString(), 3), StringUtils.leftPad(ip.getFirewall().toString(), 5));
 
             put(am, (i == 0) ? name : "", str);
+            getLog().info("Adding a new IP to the database: {}", ip);
             databaseService.addScanIp(ip);
         }
     }
@@ -474,6 +476,7 @@ final class BotnetCommands extends BaseCommand {
                     .leftPad(fUser.toString(), 20), StringUtils.leftPad(fBrute.toString(), 7));
 
             put(am, (i == 0) ? name : "", str);
+            getLog().info("Updating an existing IP: {}", ip.getIp());
             databaseService.updateScanIp(ip.getIp(), ip.getUserName(), null);
         }
         if (ips.isEmpty()) {

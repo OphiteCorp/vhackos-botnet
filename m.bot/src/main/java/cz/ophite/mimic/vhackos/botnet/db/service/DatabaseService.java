@@ -39,13 +39,19 @@ public final class DatabaseService {
     private ScannedIpDao scannedIpDao;
 
     /**
+     * Ověří, zda je aktivní připojení k databázi.
+     */
+    public boolean isDatabaseConnected() {
+        return HibernateManager.isConnected();
+    }
+
+    /**
      * Vyhldá uživatele podle IP.
      */
     public List<UserEntity> searchIp(String ip) {
         if (!HibernateManager.isConnected()) {
             return null;
         }
-        LOG.info("Processing a database query for user IP: {}", ip);
         return userDao.getByIp(ip);
     }
 
@@ -56,7 +62,6 @@ public final class DatabaseService {
         if (!HibernateManager.isConnected()) {
             return Collections.emptyList();
         }
-        LOG.info("Processing a database query for user ID: {}", userId);
         return userDao.getIps(userId);
     }
 
@@ -67,19 +72,17 @@ public final class DatabaseService {
         if (!HibernateManager.isConnected()) {
             return Collections.emptyList();
         }
-        LOG.info("Processing a database query for list of all scanned IP's");
         return scannedIpDao.getScannedIps(orderColumn);
     }
 
     /**
      * Přidá záznam o skenu IP.
      */
-    public void addScanIp(IpScanData scan) {
+    public ScannedIpEntity addScanIp(IpScanData scan) {
         if (!HibernateManager.isConnected()) {
-            return;
+            return null;
         }
-        LOG.info("Processing a database query for scan IP: {}", scan.getIp());
-        scannedIpDao.createOrUpdate(scan.getIp(), scan.getLevel(), scan.getFirewall(), null);
+        return scannedIpDao.createOrUpdate(scan.getIp(), scan.getLevel(), scan.getFirewall(), null);
     }
 
     /**
@@ -89,7 +92,6 @@ public final class DatabaseService {
         if (!HibernateManager.isConnected()) {
             return;
         }
-        LOG.info("Processing a database query for brute IP: {}", ip);
         var user = userDao.getByUserName(userName);
         if (user != null) {
             // uživatel si změnil IP
@@ -153,7 +155,6 @@ public final class DatabaseService {
         if (!HibernateManager.isConnected()) {
             return;
         }
-        LOG.info("Processing a database query for IP log: {}", ip);
         var users = userDao.getByIp(ip);
 
         if (!users.isEmpty()) {
@@ -171,7 +172,7 @@ public final class DatabaseService {
         if (!HibernateManager.isConnected()) {
             return;
         }
-        LOG.info("Processing a database query for invalidate IP: {}", ip);
+        LOG.info("User IP '{}' is no longer valid. Will be set to invalid", ip);
         // odebere IP na uživateli
         var users = userDao.getByIp(ip);
         if (!users.isEmpty()) {
@@ -188,5 +189,24 @@ public final class DatabaseService {
             scan.setValid(false);
             scannedIpDao.update(scan);
         }
+    }
+
+    /**
+     * Aktualizuje jména uživatelů v naskenovaných IP.
+     */
+    public void updateScannedUsers() {
+        var users = userDao.getAll();
+        var i = 0;
+
+        for (var user : users) {
+            var userIps = user.getIps();
+
+            for (var ip : userIps) {
+                updateScanIp(ip, user.getUserName(), null);
+                LOG.info("{}/{} | User Update '{}' with IP: {}", i + 1, users.size(), user.getUserName(), ip);
+            }
+            i++;
+        }
+        LOG.info("The update has been completed");
     }
 }

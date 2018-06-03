@@ -7,7 +7,14 @@ package cz.ophite.mimic.vhackos.botnet.api.exception;
  */
 public final class InvalidResponseCodeException extends BotnetException {
 
-    public InvalidResponseCodeException(String resultCode, String message) {
-        super(resultCode, message);
+    private int responseCode;
+
+    public InvalidResponseCodeException(int responseCode, String message) {
+        super(null, message);
+        this.responseCode = responseCode;
+    }
+
+    public int getResponseCode() {
+        return responseCode;
     }
 }

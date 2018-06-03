@@ -38,4 +38,9 @@ public interface IBotnetConfig {
      * Získá informace o proxy serveru.
      */
     ProxyData getProxyData();
+
+    /**
+     * Je povolen agresivní mód?
+     */
+    boolean isAggressiveMode();
 }

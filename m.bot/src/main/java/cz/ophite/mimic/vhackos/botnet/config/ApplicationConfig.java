@@ -18,6 +18,7 @@ import java.util.List;
 @Inject
 public final class ApplicationConfig implements IBotnetConfig {
 
+    private static final int AGGRESSIVE_TIME = 150;
     private static final String DEFAULT_USERNAME = "YOUR_USERNAME";
     private static final String DEFAULT_PASSWORD = "YOUR_PASSWORD";
 
@@ -63,7 +64,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @ConfigValue(value = "sys.sleep.delay",
                  comment = "Delay before each server request in milliseconds.\nDefault: between 1-3s",
-                 defaultValue = "500+(Math.floor(Math.random()*2001)+500)")
+                 defaultValue = "f_rand(1000,3000)")
     private String sleepDelay;
 
     @ConfigValue(value = "sys.proxy.enable", comment = "Enables the use of a proxy server", defaultValue = "False")
@@ -76,6 +77,11 @@ public final class ApplicationConfig implements IBotnetConfig {
     @ConfigValue(value = "sys.proxy.port", comment = "Proxy server port", canBeEmpty = true)
     private String proxyPort;
 
+    @ConfigValue(value = "sys.aggressive.mode",
+                 comment = "Enables aggressive mode. This mode greatly increases bot activity, but behavior no longer responds to player behavior",
+                 defaultValue = "False")
+    private String aggressiveMode;
+
     // GUI
 
     @ConfigValue(value = "gui.fullscreen.mode", comment = "Expands the application across the desktop",
@@ -86,7 +92,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @ConfigValue(value = "service-update.timeout",
                  comment = "Delay between repeated executing in milliseconds.\nDefault: between 1.5h-3h",
-                 defaultValue = "(60*60+(Math.floor(Math.random()*5401)+1800))*1e3")
+                 defaultValue = "f_rand(5400000,10800000)")
     private String sUpdateTimeout;
 
     // služba - miner
@@ -95,8 +101,8 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sMinerEnable;
 
     @ConfigValue(value = "service-miner.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 1h 10s and 1h 15min",
-                 defaultValue = "(60*60+(Math.floor(Math.random()*891)+10))*1e3")
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 1h 5s and 1h 1min",
+                 defaultValue = "f_rand(3605000,3660000)")
     private String sMinerTimeout;
 
     // služba - malware
@@ -106,8 +112,8 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sMalwareEnable;
 
     @ConfigValue(value = "service-malware.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 10min 10s and 15min",
-                 defaultValue = "(10*60+(Math.floor(Math.random()*291)+10))*1e3")
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 10min 5s and 10min 30s",
+                 defaultValue = "f_rand(605000,630000)")
     private String sMalwareTimeout;
 
     // služba - server
@@ -116,8 +122,8 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sServerEnable;
 
     @ConfigValue(value = "service-server.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 45min 10s and 1h",
-                 defaultValue = "(45*60+(Math.floor(Math.random()*891)+10))*1e3")
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 49min and 51min",
+                 defaultValue = "f_rand(2940000,3060000)")
     private String sServerTimeout;
 
     @ConfigValue(value = "service-server.update.limit", comment = "Maximum number of updates per node",
@@ -139,8 +145,8 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sStoreEnable;
 
     @ConfigValue(value = "service-store.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 2min 10s and 6min",
-                 defaultValue = "(2*60+(Math.floor(Math.random()*231)+10))*1e3")
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 2min and 6min",
+                 defaultValue = "f_rand(120000,360000)")
     private String sStoreTimeout;
 
     @ConfigValue(value = "service-store.updated.apps",
@@ -155,8 +161,8 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sBoosterEnable;
 
     @ConfigValue(value = "service-booster.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 5min 10s and 8min",
-                 defaultValue = "(5*60+(Math.floor(Math.random()*171)+10))*1e3")
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 5min and 8min",
+                 defaultValue = "f_rand(300000,480000)")
     private String sBoosterTimeout;
 
     @ConfigValue(value = "service-booster.req.time",
@@ -172,7 +178,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @ConfigValue(value = "service-mission.timeout",
                  comment = "Delay between repeated executing in milliseconds.\nDefault: between 6h and 10h",
-                 defaultValue = "(6*60*60+(Math.floor(Math.random()*14401)))*1e3")
+                 defaultValue = "f_rand(21600000,36000000)")
     private String sMissionTimeout;
 
     // služba - network
@@ -183,8 +189,8 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sNetworkEnable;
 
     @ConfigValue(value = "service-network.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 50min and 2h",
-                 defaultValue = "(50*60+(Math.floor(Math.random()*4201)))*1e3")
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 50min 5s and 51min",
+                 defaultValue = "f_rand(3005000,3060000)")
     private String sNetworkTimeout;
 
     // služba - netscan
@@ -195,19 +201,24 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sNetworkScanEnable;
 
     @ConfigValue(value = "service-netscan.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 10-15s",
-                 defaultValue = "(5+(Math.floor(Math.random()*11)+5))*1e3")
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 3-10s",
+                 defaultValue = "f_rand(3000,10000)")
     private String sNetworkScanTimeout;
 
     @ConfigValue(value = "service-netscan.count.before.pause",
-                 comment = "Number of network scanning before pause.\nDefault: between 30-80",
-                 defaultValue = "Math.floor(Math.random()*51)+30")
+                 comment = "Number of network scanning before pause.\nDefault: between 2-3",
+                 defaultValue = "f_rand(2,3)")
     private String sNetworkScanCountBeforePause;
 
     @ConfigValue(value = "service-netscan.pause",
-                 comment = "Break interval between the number of scans.\nDefault: between 30min and 1h",
-                 defaultValue = "(Math.floor(Math.random()*1801)+1800)*1e3")
+                 comment = "Break interval between the number of scans in milliseconds.\nDefault: between 20-40s",
+                 defaultValue = "f_rand(20000,40000)")
     private String sNetworkScanPause;
+
+    @ConfigValue(value = "service-netscan.allow.brute",
+                 comment = "Enables brute force IP. This method does not allow access to a bank, but only helps to obtain the user's name",
+                 defaultValue = "True")
+    private String sNetworkScanAllowBrute;
 
     // databáze
 
@@ -291,6 +302,9 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @Override
     public long getSleepDelay() {
+        if (isAggressiveMode()) {
+            return AGGRESSIVE_TIME;
+        }
         return ConfigHelper.getNumbericValue(sleepDelay, Long.class);
     }
 
@@ -435,6 +449,18 @@ public final class ApplicationConfig implements IBotnetConfig {
     }
 
     public long getNetworkScanPause() {
+        if (isAggressiveMode()) {
+            return AGGRESSIVE_TIME;
+        }
         return ConfigHelper.getNumbericValue(sNetworkScanPause, Long.class);
+    }
+
+    public boolean isNetworkScanAllowBrute() {
+        return ConfigHelper.getBoolean(sNetworkScanAllowBrute);
+    }
+
+    @Override
+    public boolean isAggressiveMode() {
+        return ConfigHelper.getBoolean(aggressiveMode);
     }
 }

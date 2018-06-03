@@ -21,6 +21,8 @@ public final class ConfigProvider {
 
     private static final String APPLICATION_CONFIG_FILE = "botnet.properties";
 
+    private static final Pattern PATTERN_REPLACE_VARIABLES = Pattern.compile("\\$\\{(.+?)\\}");
+
     /**
      * Získá konfigurační soubor aplikace.
      */
@@ -236,8 +238,7 @@ public final class ConfigProvider {
     }
 
     private static String replaceVariables(String text) {
-        var p = Pattern.compile("\\$\\{(.+?)\\}");
-        var m = p.matcher(text);
+        var m = PATTERN_REPLACE_VARIABLES.matcher(text);
 
         if (m.find()) {
             for (var i = 0; i < m.groupCount(); i++) {

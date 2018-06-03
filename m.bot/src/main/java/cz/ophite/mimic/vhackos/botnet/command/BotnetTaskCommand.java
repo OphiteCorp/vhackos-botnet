@@ -96,7 +96,7 @@ public final class BotnetTaskCommand extends BaseCommand {
      * Zruší bruteforce.
      */
     @Command(value = "task abort brute", comment = "Abort bruteforce")
-    private String abortBruteforce(@CommandParam("bruteId") int bruteId) {
+    private String abortBruteforce(@CommandParam("bruteId") long bruteId) {
         return execute("task abort bruteforce -> " + bruteId, am -> {
             var data = taskModule.abortBruteforce(bruteId);
             var fields = getFields(data, true);
@@ -120,7 +120,7 @@ public final class BotnetTaskCommand extends BaseCommand {
      * Dokončí bruteforce za netcoins.
      */
     @Command(value = "task finish brute", comment = "Completes bruteforce for netcoins")
-    private String finishBruteforceForNetcoins(@CommandParam("bruteId") int bruteId) {
+    private String finishBruteforceForNetcoins(@CommandParam("bruteId") long bruteId) {
         return execute("task finish bruteforce -> " + bruteId, am -> {
             var data = taskModule.finishBruteforceForNetcoins(bruteId);
             var fields = getFields(data, true);
@@ -132,7 +132,7 @@ public final class BotnetTaskCommand extends BaseCommand {
      * Odstraní bruteforce z tásků.
      */
     @Command(value = "task remove brute", comment = "Remove bruteforce from tasks")
-    private String removeBruteforce(@CommandParam("bruteId") int bruteId) {
+    private String removeBruteforce(@CommandParam("bruteId") long bruteId) {
         return execute("task remove bruteforce -> " + bruteId, am -> {
             var data = taskModule.removeBruteforce(bruteId);
             var fields = getFields(data, true);
@@ -190,6 +190,7 @@ public final class BotnetTaskCommand extends BaseCommand {
                     .leftPad(String.valueOf(percent), 4), StringUtils.leftPad(fState.toString(), 7));
 
             put(am, (i == 0) ? name : "", str);
+            getLog().info("Updating an existing IP: {}", ip.getIp());
             databaseService.updateScanIp(ip.getIp(), ip.getUserName(), null);
         }
         if (ips.isEmpty()) {

@@ -57,7 +57,11 @@ public abstract class BaseCommand {
         }
     }
 
-    protected String execute(String title, ISafeCommand safeCommand) {
+    protected final Logger getLog() {
+        return log;
+    }
+
+    protected final String execute(String title, ISafeCommand safeCommand) {
         var am = createAsciiMaker(title);
         try {
             safeCommand.execute(am);

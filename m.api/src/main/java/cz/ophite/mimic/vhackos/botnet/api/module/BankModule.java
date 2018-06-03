@@ -1,10 +1,7 @@
 package cz.ophite.mimic.vhackos.botnet.api.module;
 
 import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
-import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetException;
-import cz.ophite.mimic.vhackos.botnet.api.exception.BruteforceAlreadyRunningException;
-import cz.ophite.mimic.vhackos.botnet.api.exception.ExploitException;
-import cz.ophite.mimic.vhackos.botnet.api.exception.InvalidAccessTokenException;
+import cz.ophite.mimic.vhackos.botnet.api.exception.*;
 import cz.ophite.mimic.vhackos.botnet.api.module.base.Module;
 import cz.ophite.mimic.vhackos.botnet.api.module.base.ModuleHelper;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.BankResponse;
@@ -24,6 +21,7 @@ import java.util.Map;
 public final class BankModule extends Module {
 
     private static final String ERR_CODE_BRUTEFORCE_IS_ALREADY_EXISTS = "2";
+    private static final String ERR_CODE_BRUTEFORCE_SERVER_IS_BUSY = "3";
 
     protected BankModule(IBotnet botnet) {
         super(botnet);
@@ -59,6 +57,10 @@ public final class BankModule extends Module {
             if (ERR_CODE_BRUTEFORCE_IS_ALREADY_EXISTS.equals(e.getResultCode())) {
                 throw new BruteforceAlreadyRunningException(e
                         .getResultCode(), "Target IP '" + ip + "' already exists in the list");
+            }
+            if (ERR_CODE_BRUTEFORCE_SERVER_IS_BUSY.equals(e.getResultCode())) {
+                throw new ServerBusyException(e
+                        .getResultCode(), "The server is busy and refused to process an IP: " + ip);
             }
             throw e;
         }

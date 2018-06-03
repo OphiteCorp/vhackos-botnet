@@ -75,6 +75,7 @@ public final class DatabaseCommands extends BaseCommand {
         var orderColumn = order;
 
         return execute("DB | scanned IP's list", am -> {
+            getLog().info("Collecting data to retrieve all IPs by column: {}", orderColumn);
             var data = databaseService.getScannedIPs(orderColumn);
 
             if (!data.isEmpty()) {
@@ -93,6 +94,17 @@ public final class DatabaseCommands extends BaseCommand {
             } else {
                 put(am, "Result", "There are no records available yet");
             }
+        });
+    }
+
+    /**
+     * Aktualizuje všechny naskenované uživatele, že se jim pokusí přiřadit jméno z tabulky uživatelů.
+     */
+    @Command(value = "db update scanned", comment = "Updating user names in the scan table")
+    private String updateScannedUsers() {
+        return execute("DB | update scanned IP's", am -> {
+            databaseService.updateScannedUsers();
+            put(am, "State", "Done");
         });
     }
 }
