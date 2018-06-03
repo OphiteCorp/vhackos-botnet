@@ -1,5 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.command;
 
+import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.module.StoreModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.AppStoreResponse;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.AppStoreData;
@@ -28,6 +29,10 @@ public final class BotnetStoreCommand extends BaseCommand {
 
     @Autowired
     private StoreModule storeModule;
+
+    protected BotnetStoreCommand(Botnet botnet) {
+        super(botnet);
+    }
 
     /**
      * Získá informace o aplikacích z obchodu.

@@ -1,5 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.command;
 
+import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.module.MissionsModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.MissionResponse;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.MissionItemData;
@@ -25,6 +26,10 @@ public final class BotnetMissionsCommand extends BaseCommand {
 
     @Autowired
     private MissionsModule missionsModule;
+
+    protected BotnetMissionsCommand(Botnet botnet) {
+        super(botnet);
+    }
 
     /**
      * Zobrazí informace o mineru.

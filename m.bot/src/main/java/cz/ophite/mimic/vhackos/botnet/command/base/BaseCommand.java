@@ -1,5 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.command.base;
 
+import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetCoreException;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.AsciiUtils;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
@@ -18,9 +19,13 @@ import java.util.TreeMap;
  */
 public abstract class BaseCommand {
 
-    private final Logger log;
+    public static final String COMMAND_PACKAGE = "cz.ophite.mimic.vhackos.botnet.command";
 
-    protected BaseCommand() {
+    private final Logger log;
+    private final Botnet botnet;
+
+    protected BaseCommand(Botnet botnet) {
+        this.botnet = botnet;
         log = LoggerFactory.getLogger(getClass());
     }
 
@@ -55,6 +60,10 @@ public abstract class BaseCommand {
                 }
             }
         }
+    }
+
+    protected final Botnet getBotnet() {
+        return botnet;
     }
 
     protected final Logger getLog() {

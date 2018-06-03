@@ -4,6 +4,7 @@ import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
 import cz.ophite.mimic.vhackos.botnet.api.exception.AccountBlockedException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.ConnectionException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.InvalidLoginException;
+import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
 import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
 import cz.ophite.mimic.vhackos.botnet.config.ConfigProvider;
 import cz.ophite.mimic.vhackos.botnet.db.HibernateManager;
@@ -14,6 +15,7 @@ import cz.ophite.mimic.vhackos.botnet.service.base.EndpointService;
 import cz.ophite.mimic.vhackos.botnet.service.base.Service;
 import cz.ophite.mimic.vhackos.botnet.shared.command.*;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.IInjectRule;
+import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.InjectionContext;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
 import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
@@ -210,9 +212,16 @@ public final class Application implements ICommandListener {
         var rules = new HashMap<Class, IInjectRule>();
         rules.put(null, c -> InjectionContext.getConstructor(c, IBotnet.class).newInstance(botnet));
 
+        // služby
         var ref = new Reflections(Service.SERVICES_PACKAGE, new TypeAnnotationsScanner());
         var classes = ref.getTypesAnnotatedWith(EndpointService.class, true);
+        for (var clazz : classes) {
+            rules.put(clazz, c -> InjectionContext.getConstructor(c, Botnet.class).newInstance(botnet));
+        }
 
+        // příkazy
+        ref = new Reflections(BaseCommand.COMMAND_PACKAGE, new TypeAnnotationsScanner());
+        classes = ref.getTypesAnnotatedWith(Inject.class, true);
         for (var clazz : classes) {
             rules.put(clazz, c -> InjectionContext.getConstructor(c, Botnet.class).newInstance(botnet));
         }
@@ -242,7 +251,7 @@ public final class Application implements ICommandListener {
                 }
             }
         }
-        am.add(".q", "Exit botnet");
+        am.add(".q", "Exit Botnet");
         am.addRule();
         var copyRow = am.add(null, "by mimic | v" + IBotnet.VERSION);
         copyRow.getCells().get(1).getContext().setTextAlignment(TextAlignment.RIGHT);

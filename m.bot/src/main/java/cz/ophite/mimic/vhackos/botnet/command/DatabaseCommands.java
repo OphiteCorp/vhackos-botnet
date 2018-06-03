@@ -1,5 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.command;
 
+import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
@@ -18,6 +19,10 @@ public final class DatabaseCommands extends BaseCommand {
 
     @Autowired
     private DatabaseService databaseService;
+
+    protected DatabaseCommands(Botnet botnet) {
+        super(botnet);
+    }
 
     /**
      * Vyhledá v DB všechny uživatele, kteří mají tuto IP.

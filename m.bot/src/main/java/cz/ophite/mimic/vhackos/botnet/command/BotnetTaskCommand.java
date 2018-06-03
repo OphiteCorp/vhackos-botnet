@@ -1,5 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.command;
 
+import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.module.TaskModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.TaskResponse;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.IpBruteDetailData;
@@ -32,6 +33,10 @@ public final class BotnetTaskCommand extends BaseCommand {
     @Autowired
     private TaskModule taskModule;
 
+    protected BotnetTaskCommand(Botnet botnet) {
+        super(botnet);
+    }
+
     /**
      * Získá všechny tásky.
      */
@@ -59,7 +64,7 @@ public final class BotnetTaskCommand extends BaseCommand {
     /**
      * Dokončí všechny tásky podle ID za netcoins.
      */
-    @Command(value = "tasks finish all", comment = "Complete all tasks with NetCoins")
+    @Command(value = "task finish all", comment = "Complete all tasks with NetCoins")
     private String finishAllTask(@CommandParam("taskId") int taskId) {
         return execute("task finish all -> " + taskId, am -> {
             var data = taskModule.finishAllForNetcoins(taskId);

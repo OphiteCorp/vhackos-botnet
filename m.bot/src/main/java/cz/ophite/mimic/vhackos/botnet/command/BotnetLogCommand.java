@@ -1,5 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.command;
 
+import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.module.LogModule;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
@@ -22,6 +23,10 @@ public final class BotnetLogCommand extends BaseCommand {
 
     @Autowired
     private LogModule logModule;
+
+    protected BotnetLogCommand(Botnet botnet) {
+        super(botnet);
+    }
 
     /**
      * Získá vlastní systémový log.

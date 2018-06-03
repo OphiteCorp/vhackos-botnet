@@ -1,5 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.command;
 
+import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.module.ServerModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.ServerResponse;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
@@ -23,6 +24,10 @@ public final class BotnetServerCommand extends BaseCommand {
 
     @Autowired
     private ServerModule serverModule;
+
+    protected BotnetServerCommand(Botnet botnet) {
+        super(botnet);
+    }
 
     /**
      * Získá informace o serveru.

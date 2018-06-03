@@ -1,11 +1,14 @@
 package cz.ophite.mimic.vhackos.botnet.command;
 
+import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
 import cz.ophite.mimic.vhackos.botnet.service.base.IService;
 import cz.ophite.mimic.vhackos.botnet.service.base.Service;
+import cz.ophite.mimic.vhackos.botnet.service.base.ServiceConfig;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandParam;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
+import cz.ophite.mimic.vhackos.botnet.shared.injection.InjectionContext;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,6 +19,10 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Inject
 public final class ServiceCommand extends BaseCommand {
+
+    protected ServiceCommand(Botnet botnet) {
+        super(botnet);
+    }
 
     /**
      * Vypíše dostupné služby.
@@ -51,6 +58,30 @@ public final class ServiceCommand extends BaseCommand {
                 am.add("Success", "Service has been started");
             } else {
                 am.add("Error", "Service is already running");
+            }
+        });
+    }
+
+    /**
+     * Spustí službu.
+     */
+    @Command(value = "service start now", comment = "Start the service one-time")
+    private String startServiceNew(@CommandParam("name") String serviceName) {
+        return execute("Service | start now -> " + serviceName, am -> {
+            var service = getServiceByName(serviceName);
+
+            if (service != null) {
+                var c = service.getClass().getDeclaredConstructor(Botnet.class);
+                c.setAccessible(true);
+                var instance = c.newInstance(getBotnet());
+                InjectionContext.lazyInit(instance);
+                var serviceConfig = new ServiceConfig();
+                serviceConfig.setAsync(false);
+                serviceConfig.setFirstRunSync(true);
+                instance.start(serviceConfig);
+                am.add("Success", "The service has been completed and terminated");
+            } else {
+                am.add("Error", "Service was not found");
             }
         });
     }

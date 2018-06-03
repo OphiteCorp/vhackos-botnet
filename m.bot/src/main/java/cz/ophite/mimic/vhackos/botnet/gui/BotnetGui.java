@@ -196,7 +196,6 @@ public final class BotnetGui extends JFrame {
             if (doc.getLength() > AREA_BUFFER) {
                 doc.remove(0, doc.getLength() - AREA_BUFFER);
             }
-            msg = msg.replaceAll("Application", "<font color=\"red\">$0</font>");
             doc.insertString(doc.getLength(), msg, keyWord);
 
         } catch (Exception e) {

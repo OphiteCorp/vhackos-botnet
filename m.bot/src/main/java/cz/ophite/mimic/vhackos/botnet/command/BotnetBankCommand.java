@@ -1,5 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.command;
 
+import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.dto.ConnectionData;
 import cz.ophite.mimic.vhackos.botnet.api.module.BankModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.BankResponse;
@@ -34,6 +35,10 @@ public final class BotnetBankCommand extends BaseCommand {
 
     @Autowired
     private BankModule bankModule;
+
+    protected BotnetBankCommand(Botnet botnet) {
+        super(botnet);
+    }
 
     /**
      * Získá podorbné informace o vzdálené bance.
