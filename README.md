@@ -72,18 +72,18 @@ Find on WIKI - [**HERE**](https://github.com/OphiteCorp/vhackos-botnet/wiki/FAQ)
 - Bank transaction (thanks to this there is a partial revelation of the hidden IP)
 - System log on the target system
   
-### Project information (v0.8)
+### Project information (v0.9.4)
 ```
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                           211           2867           2162          12069
-XML                             12              7              0           3306
-Maven                            4             24              0            284
-Markdown                         3             20              0             97
-JSON                             1              0              0              9
+Java                           219           3053           2269          13022
+XML                             12              7              0           3654
+Maven                            4             24              0            285
+Markdown                         3             23              0            101
+JSON                             2              0              0             18
 -------------------------------------------------------------------------------
-SUM:                           231           2918           2162          15765
+SUM:                           240           3107           2269          17080
 -------------------------------------------------------------------------------
 ```
 ### A few application images
