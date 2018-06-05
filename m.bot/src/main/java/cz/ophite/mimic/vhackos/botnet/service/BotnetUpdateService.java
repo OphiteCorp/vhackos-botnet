@@ -60,6 +60,8 @@ public final class BotnetUpdateService extends Service {
                 getLog().info("\n" + result + "\n");
 
                 AudioPlayer.play(ResourceHelper.getStream(ResourceHelper.ResourceValue.SOUND_NEW_VERSION));
+            } else {
+                getLog().info("Your Botnet version is up to date ;-)");
             }
             getLog().info("Information about the latest version of Botnet was obtained. Next check will be in: {}", SharedUtils
                     .toTimeFormat(DEFAULT_TIMEOUT));
