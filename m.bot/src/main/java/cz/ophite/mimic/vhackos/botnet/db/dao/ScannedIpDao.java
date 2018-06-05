@@ -26,10 +26,10 @@ public final class ScannedIpDao extends Dao<ScannedIpEntity> {
             entity = new ScannedIpEntity();
             entity.setIp(ip);
             entity.setCreated(new Date());
-            entity.setValid(true);
         } else {
             entity.setUpdated(new Date());
         }
+        entity.setValid(true);
         entity.setLevel(level);
         entity.setFirewall(firewall);
 
@@ -68,6 +68,21 @@ public final class ScannedIpDao extends Dao<ScannedIpEntity> {
             var q = s.createQuery(hql, ScannedIpEntity.class);
             q.setParameter("IP", ip);
             return q.uniqueResult();
+        });
+    }
+
+    /**
+     * Získá všechny naskenované IP bez uživatele.
+     */
+    public List<ScannedIpEntity> getIpsWithoutUser(int limit) {
+        return execute(s -> {
+            var sb = new StringBuilder();
+            sb.append("select sip from {entity} sip ");
+            sb.append("where sip." + ScannedIpEntity.USER_NAME + " is null");
+
+            var q = s.createQuery(query(sb.toString()));
+            q.setMaxResults(limit);
+            return q.list();
         });
     }
 }

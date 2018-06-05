@@ -1,21 +1,16 @@
 package cz.ophite.mimic.vhackos.botnet.command;
 
-import cz.ophite.mimic.vhackos.botnet.Application;
 import cz.ophite.mimic.vhackos.botnet.Botnet;
-import cz.ophite.mimic.vhackos.botnet.api.exception.IpNotExistsException;
 import cz.ophite.mimic.vhackos.botnet.api.module.*;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.*;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.*;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
-import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
-import cz.ophite.mimic.vhackos.botnet.config.ConfigHelper;
-import cz.ophite.mimic.vhackos.botnet.config.ConfigProvider;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
+import cz.ophite.mimic.vhackos.botnet.servicemodule.ServiceModule;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandParam;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
-import cz.ophite.mimic.vhackos.botnet.shared.injection.InjectionContext;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,12 +25,6 @@ import java.util.Map;
  */
 @Inject
 final class BotnetCommands extends BaseCommand {
-
-    @Autowired
-    private ConfigProvider configProvider;
-
-    @Autowired
-    private ApplicationConfig config;
 
     @Autowired
     private DatabaseService databaseService;
@@ -64,45 +53,11 @@ final class BotnetCommands extends BaseCommand {
     @Autowired
     private SdkModule sdkModule;
 
+    @Autowired
+    private ServiceModule serviceModule;
+
     protected BotnetCommands(Botnet botnet) {
         super(botnet);
-    }
-
-    /**
-     * Vypíše logo.
-     */
-    @Command(value = "logo", comment = "Prints the logo")
-    private String logo() {
-        return execute("logo", am -> {
-            am.setTopTheme();
-            put(am, " ", Application.LOGO);
-        });
-    }
-
-    /**
-     * Přenačte konfiguraci aplikace.
-     */
-    @Command(value = "reload", comment = "Forces reloading configuration")
-    private String reloadConfig() {
-        return execute("reload configuration", am -> {
-            var config = configProvider.getAppConfig();
-            InjectionContext.getInstance().get(ApplicationConfig.class).set(config);
-            put(am, "Info", "The configuration has been reloaded");
-        });
-    }
-
-    /**
-     * Získá konfiguraci.
-     */
-    @Command(value = "config", comment = "Get the current configuration")
-    private String getConfig() {
-        return execute("configuration", am -> {
-            var map = ConfigHelper.asMap(config);
-
-            for (var entry : map.entrySet()) {
-                put(am, entry.getKey(), entry.getValue());
-            }
-        });
     }
 
     /**
@@ -201,19 +156,13 @@ final class BotnetCommands extends BaseCommand {
     @Command(value = "exploit", comment = "Exploits the IP address")
     private String exploit(@CommandParam("ip") String ip) {
         return execute("exploit -> " + ip, am -> {
-            try {
-                var data = networkModule.exploit(ip);
-                var fields = getFields(data, true);
+            var data = serviceModule.exploit(ip);
+            var fields = getFields(data, true);
 
-                convertBrutedIps(am, fields.remove(ExploitResponse.P_BRUTED_IPS));
-                put(am, fields.remove(ExploitResponse.P_EXPLOITS));
-                put(am, fields.remove(ExploitResponse.P_CONNECTION_COUNT));
-                putRemainings(am, fields);
-
-            } catch (IpNotExistsException e) {
-                databaseService.invalidIp(ip);
-                throw e;
-            }
+            convertBrutedIps(am, fields.remove(ExploitResponse.P_BRUTED_IPS));
+            put(am, fields.remove(ExploitResponse.P_EXPLOITS));
+            put(am, fields.remove(ExploitResponse.P_CONNECTION_COUNT));
+            putRemainings(am, fields);
         });
     }
 
@@ -297,12 +246,9 @@ final class BotnetCommands extends BaseCommand {
     @Command(value = "remote", comment = "Gets information about the remote system")
     private String getRemote(@CommandParam("ip") String ip) {
         return execute("remote -> " + ip, am -> {
-            var data = remoteModule.getSystemInfo(ip);
+            var data = serviceModule.getSystemInfo(ip);
             var fields = getFields(data, true);
-
             putRemainings(am, fields, false);
-            getLog().info("Updating an existing IP: {}", data.getIp());
-            databaseService.updateScanIp(data.getIp(), data.getUserName(), data.getLevel());
         });
     }
 

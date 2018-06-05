@@ -28,4 +28,9 @@ public @interface Command {
      * Komentář příkazu.
      */
     String comment() default "";
+
+    /**
+     * Je příkaz skrytý v nabídce?
+     */
+    boolean hidden() default false;
 }

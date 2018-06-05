@@ -8,6 +8,7 @@ import cz.ophite.mimic.vhackos.botnet.api.net.response.RemoteBankResponse;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.BankTransactionData;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
+import cz.ophite.mimic.vhackos.botnet.servicemodule.ServiceModule;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandParam;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
@@ -36,6 +37,9 @@ public final class BotnetBankCommand extends BaseCommand {
     @Autowired
     private BankModule bankModule;
 
+    @Autowired
+    private ServiceModule serviceModule;
+
     protected BotnetBankCommand(Botnet botnet) {
         super(botnet);
     }
@@ -58,7 +62,7 @@ public final class BotnetBankCommand extends BaseCommand {
     @Command(value = "bank brute", comment = "It starts breaking the bank")
     private String bruteforce(@CommandParam("ip") String ip) {
         return execute("bank bruteforce -> " + ip, am -> {
-            bankModule.bruteforce(ip);
+            serviceModule.bruteforce(ip);
             put(am, "Result", "Bruteforce was started");
         });
     }

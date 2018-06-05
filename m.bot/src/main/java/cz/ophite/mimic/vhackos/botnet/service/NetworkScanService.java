@@ -1,15 +1,17 @@
 package cz.ophite.mimic.vhackos.botnet.service;
 
 import cz.ophite.mimic.vhackos.botnet.Botnet;
+import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetException;
+import cz.ophite.mimic.vhackos.botnet.api.exception.InvalidAccessTokenException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.ServerBusyException;
-import cz.ophite.mimic.vhackos.botnet.api.module.BankModule;
 import cz.ophite.mimic.vhackos.botnet.api.module.NetworkModule;
 import cz.ophite.mimic.vhackos.botnet.api.module.TaskModule;
-import cz.ophite.mimic.vhackos.botnet.db.entity.ScannedIpEntity;
+import cz.ophite.mimic.vhackos.botnet.api.net.response.NetworkScanResponse;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
 import cz.ophite.mimic.vhackos.botnet.service.base.EndpointService;
 import cz.ophite.mimic.vhackos.botnet.service.base.IService;
 import cz.ophite.mimic.vhackos.botnet.service.base.Service;
+import cz.ophite.mimic.vhackos.botnet.servicemodule.ServiceModule;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
@@ -34,10 +36,10 @@ public final class NetworkScanService extends Service {
     private NetworkModule networkModule;
 
     @Autowired
-    private BankModule bankModule;
+    private TaskModule taskModule;
 
     @Autowired
-    private TaskModule taskModule;
+    private ServiceModule serviceModule;
 
     private volatile Integer scansCountBeforePause;
     private volatile AtomicInteger counter;
@@ -74,20 +76,50 @@ public final class NetworkScanService extends Service {
             return;
         }
         var enableBrute = getConfig().isNetworkScanAllowBrute();
+        List<String> dbIps = null;
 
-        if (enableBrute && brutedIps == null) {
-            brutedIps = prepareListOfBrutedIps();
+        if (enableBrute && getConfig().isNetworkScanPreferDatabase()) {
+            dbIps = databaseService.getScannedIpsWithoutUser(20);
+        }
+        if (dbIps != null && !dbIps.isEmpty()) {
+            getLog().info("{} IPs were obtained from the database and they do not have the assigned user name", dbIps
+                    .size());
+            brutedIps = new ArrayList(20);
+            counter.incrementAndGet();
+            processDatabaseIps(dbIps);
+        } else {
+            if (enableBrute && brutedIps == null) {
+                brutedIps = prepareListOfBrutedIps();
+                sleep();
+            }
+            counter.incrementAndGet();
+            processNetwork(enableBrute);
+        }
+    }
+
+    private void processDatabaseIps(List<String> ips) {
+        for (var ip : ips) {
+            bruteIp(ip);
             sleep();
         }
-        counter.incrementAndGet();
-        var resp = networkModule.scan();
+        processBrutedIps();
+        brutedIps.clear();
+        brutedIps = null;
+
+        var pause = getConfig().getNetworkScanPause();
+        getLog().info("Done. I'm waiting: {}", SharedUtils.toTimeFormat(pause));
+        sleep(pause);
+    }
+
+    private void processNetwork(boolean enableBrute) {
+        var resp = scan();
 
         for (var ip : resp.getIps()) {
             getLog().info("Adding a new IP to the database: {}", ip.getIp());
             var scannedIp = databaseService.addScanIp(ip);
 
             if (enableBrute) {
-                bruteIp(scannedIp);
+                bruteIp(scannedIp.getIp());
             }
         }
         if (counter.get() >= scansCountBeforePause) {
@@ -111,15 +143,33 @@ public final class NetworkScanService extends Service {
         }
     }
 
-    private void bruteIp(ScannedIpEntity scannedIp) {
-        if (brutedIps == null && brutedIps.contains(scannedIp.getIp())) {
+    private NetworkScanResponse scan() {
+        try {
+            return networkModule.scan();
+
+        } catch (InvalidAccessTokenException e) {
+            getLog().warn("An error occurred while scanning the network. The service will automatically restart in 5 seconds", e);
+            stop();
+            SharedUtils.runAsyncProcess(() -> {
+                sleep(5000);
+                start();
+            });
+            throw e;
+        }
+    }
+
+    private void bruteIp(String ip) {
+        if (brutedIps == null && brutedIps.contains(ip)) {
             return;
         }
-        if (recursiveBruteIp(scannedIp.getIp(), 1, 3)) {
-            brutedIps.add(scannedIp.getIp());
-        } else {
-            getLog().warn("It was not possible to break IP because the server was too busy. IP '{}' will be skipped", scannedIp
-                    .getIp());
+        try {
+            if (recursiveBruteIp(ip, 1, 3)) {
+                brutedIps.add(ip);
+            } else {
+                getLog().warn("It was not possible to break IP because the server was too busy. IP '{}' will be skipped", ip);
+            }
+        } catch (BotnetException e) {
+            getLog().warn("There was an error. It will be skipped. Message: {}", e.getMessage());
         }
     }
 
@@ -152,7 +202,8 @@ public final class NetworkScanService extends Service {
             return false;
         }
         try {
-            bankModule.bruteforce(ip);
+            serviceModule.bruteforce(ip);
+
         } catch (ServerBusyException e) {
             getLog().warn("The server is busy. Current attempt: {}", attempts);
             sleep(5000);

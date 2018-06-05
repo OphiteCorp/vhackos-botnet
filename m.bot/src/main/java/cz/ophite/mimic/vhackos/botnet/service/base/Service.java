@@ -14,6 +14,8 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
@@ -30,6 +32,7 @@ public abstract class Service implements IService {
     public static final String SERVICES_PACKAGE = "cz.ophite.mimic.vhackos.botnet.service";
 
     private static Map<String, IService> services;
+    private static List<String> serviceClassNames;
 
     private final Botnet botnet;
     private long timeout;
@@ -67,6 +70,23 @@ public abstract class Service implements IService {
             }
         }
         return services;
+    }
+
+    /**
+     * Získá všechny názvy tříd služeb.
+     */
+    public static synchronized List<String> getServiceClassNames() {
+        if (serviceClassNames == null) {
+            serviceClassNames = new ArrayList<>();
+
+            var ref = new Reflections(SERVICES_PACKAGE, new TypeAnnotationsScanner());
+            var classes = ref.getTypesAnnotatedWith(EndpointService.class, true);
+
+            for (var clazz : classes) {
+                serviceClassNames.add(clazz.getSimpleName());
+            }
+        }
+        return serviceClassNames;
     }
 
     @Override

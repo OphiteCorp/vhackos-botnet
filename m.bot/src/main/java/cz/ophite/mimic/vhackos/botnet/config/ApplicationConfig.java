@@ -88,6 +88,12 @@ public final class ApplicationConfig implements IBotnetConfig {
                  defaultValue = "False")
     private String fullScreenMode;
 
+    // služba - Botnet update
+
+    @ConfigValue(value = "service-botnet-update.enable", comment = "Enable checking the latest version of Botnet",
+                 defaultValue = "True")
+    private String sBotnetUpdateEnable;
+
     // služba - update
 
     @ConfigValue(value = "service-update.timeout",
@@ -161,8 +167,8 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sBoosterEnable;
 
     @ConfigValue(value = "service-booster.timeout",
-                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 5min and 8min",
-                 defaultValue = "f_rand(300000,480000)")
+                 comment = "Delay between repeated executing in milliseconds.\nDefault: between 3min and 6min",
+                 defaultValue = "f_rand(180000,360000)")
     private String sBoosterTimeout;
 
     @ConfigValue(value = "service-booster.req.time",
@@ -219,6 +225,11 @@ public final class ApplicationConfig implements IBotnetConfig {
                  comment = "Enables brute force IP. This method does not allow access to a bank, but only helps to obtain the user's name",
                  defaultValue = "True")
     private String sNetworkScanAllowBrute;
+
+    @ConfigValue(value = "service-netscan.brute.prefer.database",
+                 comment = "Enable if users are to prefer the database without a name before the new scan user",
+                 defaultValue = "True")
+    private String sNetworkScanPreferDatabase;
 
     // databáze
 
@@ -462,5 +473,13 @@ public final class ApplicationConfig implements IBotnetConfig {
     @Override
     public boolean isAggressiveMode() {
         return ConfigHelper.getBoolean(aggressiveMode);
+    }
+
+    public boolean isBotnetUpdateEnable() {
+        return ConfigHelper.getBoolean(sBotnetUpdateEnable);
+    }
+
+    public boolean isNetworkScanPreferDatabase() {
+        return ConfigHelper.getBoolean(sNetworkScanPreferDatabase);
     }
 }

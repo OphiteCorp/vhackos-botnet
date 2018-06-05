@@ -3,6 +3,7 @@ package cz.ophite.mimic.vhackos.botnet.shared.utils;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.util.StringTokenizer;
 
 /**
  * Pomocné metody pro práci s API.
@@ -100,5 +101,37 @@ public final class SharedUtils {
             out = "0s";
         }
         return out;
+    }
+
+    /**
+     * Zalomí dlouhý text.
+     */
+    public static String addLinebreaks(String input, int maxLineLength, String delimiter) {
+        var tok = new StringTokenizer(input, " ");
+        var output = new StringBuilder(input.length());
+        int lineLen = 0;
+
+        while (tok.hasMoreTokens()) {
+            var word = tok.nextToken();
+
+            if (lineLen + word.length() > maxLineLength) {
+                output.append(delimiter);
+                lineLen = 0;
+            }
+            output.append(word).append(" ");
+            lineLen += word.length();
+        }
+        return output.toString();
+    }
+
+    /**
+     * Spustí async proces.
+     */
+    public static void runAsyncProcess(Runnable runnable) {
+        var t = new Thread(runnable);
+        t.setPriority(Thread.MIN_PRIORITY);
+        t.setDaemon(true);
+        t.setName("Anonymous process");
+        t.start();
     }
 }

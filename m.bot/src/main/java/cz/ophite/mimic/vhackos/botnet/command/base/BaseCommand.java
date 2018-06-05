@@ -5,6 +5,7 @@ import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetCoreException;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.AsciiUtils;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
+import de.vandermeer.asciitable.AT_Row;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,20 +30,22 @@ public abstract class BaseCommand {
         log = LoggerFactory.getLogger(getClass());
     }
 
-    protected static void put(AsciiMaker am, Object key, Object value) {
-        am.add(key, fixValue(value));
+    protected static AT_Row put(AsciiMaker am, Object key, Object value) {
+        return am.add(key, fixValue(value));
     }
 
-    protected static void put(AsciiMaker am, Map.Entry<String, FieldData> data) {
+    protected static AT_Row put(AsciiMaker am, Map.Entry<String, FieldData> data) {
         if (data.getValue() != null) {
-            am.add(data.getValue().name, fixValue(data.getValue().value));
+            return am.add(data.getValue().name, fixValue(data.getValue().value));
         }
+        return null;
     }
 
-    protected static void put(AsciiMaker am, FieldData data) {
+    protected static AT_Row put(AsciiMaker am, FieldData data) {
         if (data != null) {
-            am.add(data.name, fixValue(data.value));
+            return am.add(data.name, fixValue(data.value));
         }
+        return null;
     }
 
     protected static void putRemainings(AsciiMaker am, Map<String, FieldData> fields) {

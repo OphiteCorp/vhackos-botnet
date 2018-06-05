@@ -79,9 +79,7 @@ public final class Botnet implements IBotnet {
             LOG.info("A proxy server is set up. Instead, real IP will be used: {}:{}", proxy.getIp(), proxy.getPort());
         }
         // zkontroluje, případně přihlásí uživatele s novým tokenem
-        {
-            LOG.info("Getting user '{}' information. Please wait...", config.getUserName());
-        }
+        LOG.info("Getting user '{}' information. Please wait...", config.getUserName());
         var serviceConfig = new ServiceConfig();
         serviceConfig.setAsync(true);
         serviceConfig.setFirstRunSync(true);
@@ -98,6 +96,9 @@ public final class Botnet implements IBotnet {
     private void initializeServices() {
         var services = Service.getServices();
 
+        if (config.isBotnetUpdateEnable()) {
+            services.get(IService.SERVICE_BOTNET_UPDATE).start();
+        }
         if (config.isMinerEnable()) {
             services.get(IService.SERVICE_MINER).start();
         }

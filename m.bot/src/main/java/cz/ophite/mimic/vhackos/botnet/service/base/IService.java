@@ -16,6 +16,7 @@ public interface IService {
     String SERVICE_MISSION = "mission";
     String SERVICE_NETWORK = "network";
     String SERVICE_NETWORK_SCAN = "netscan";
+    String SERVICE_BOTNET_UPDATE = "botnetupdate";
 
     /**
      * Spustí službu asynchronně.

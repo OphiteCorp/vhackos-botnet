@@ -141,6 +141,8 @@ public final class TaskModule extends Module {
         ModuleHelper.setField(response, dto, TaskResponse.P_LEVEL);
         ModuleHelper.setField(response, dto, TaskResponse.P_NETCOINS);
         ModuleHelper.setField(response, dto, TaskResponse.P_BOOSTERS);
+        ModuleHelper.setField(response, dto, TaskResponse.P_LEVEL_UP_REWARD);
+        ModuleHelper.setField(response, dto, TaskResponse.P_LEVEL_NEW);
         ModuleHelper.setField(response, dto, TaskResponse.P_FINISH_ALL_COSTS);
 
         if (!ModuleHelper.setField(response, dto, TaskResponse.P_BRUTED_IPS, (f, data) -> ModuleHelper

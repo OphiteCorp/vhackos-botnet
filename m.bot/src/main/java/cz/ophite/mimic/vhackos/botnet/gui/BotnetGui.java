@@ -3,7 +3,9 @@ package cz.ophite.mimic.vhackos.botnet.gui;
 import cz.ophite.mimic.vhackos.botnet.Application;
 import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
 import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
+import cz.ophite.mimic.vhackos.botnet.service.base.Service;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandDispatcher;
+import cz.ophite.mimic.vhackos.botnet.utils.ResourceHelper;
 import cz.ophite.mimic.vhackos.botnet.utils.appender.HackedAppender;
 import cz.ophite.mimic.vhackos.botnet.utils.appender.IAppender;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +43,7 @@ public final class BotnetGui extends JFrame {
     public void open() {
         HackedAppender.getInstance().addListener(new AppenderLogic());
 
-        font = getAreaFont();
+        font = getMainFont();
         prepareComponents();
         setVisible(true);
     }
@@ -70,6 +72,11 @@ public final class BotnetGui extends JFrame {
         } else {
             if (config.hasValidCredentials()) {
                 setTitle(getTitle() + " | Account: " + config.getUserName());
+
+                var proxy = config.getProxyData();
+                if (proxy != null) {
+                    setTitle(getTitle() + " | Proxy: " + proxy);
+                }
             }
         }
     }
@@ -121,7 +128,7 @@ public final class BotnetGui extends JFrame {
         });
 
         var caret = (DefaultCaret) area.getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 
         scroll = new JScrollPane(new VerticalScrollPanel(area));
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -166,18 +173,16 @@ public final class BotnetGui extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private static Font getAreaFont() {
-        try {
-            var is = Application.class.getResourceAsStream("/font.ttf");
-            var font = Font.createFont(Font.TRUETYPE_FONT, is);
+    private static Font getMainFont() {
+        var font = ResourceHelper.loadFont();
+
+        if (font != null) {
             font = font.deriveFont(13f);
             LOG.debug("The custom font family '{}' has been loaded", font.getFamily());
-            return font;
-
-        } catch (Exception e) {
-            LOG.error("An error occurred while loading inernal the font", e);
-            return new Font(Font.MONOSPACED, Font.PLAIN, 13);
+        } else {
+            font = new Font(Font.MONOSPACED, Font.PLAIN, 13);
         }
+        return font;
     }
 
     private void appendToPane(String msg, Color c) {
@@ -196,10 +201,46 @@ public final class BotnetGui extends JFrame {
             if (doc.getLength() > AREA_BUFFER) {
                 doc.remove(0, doc.getLength() - AREA_BUFFER);
             }
-            doc.insertString(doc.getLength(), msg, keyWord);
+            smartAppend(doc, msg, keyWord, c);
 
         } catch (Exception e) {
             LOG.error("There was an error writing message '" + msg + "' to the GUI log", e);
+        }
+    }
+
+    private void smartAppend(HTMLDocument doc, String msg, SimpleAttributeSet keyWord, Color color)
+            throws BadLocationException {
+
+        synchronized (LOG) {
+            var services = Service.getServiceClassNames();
+            var serviceLine = false;
+
+            for (var s : services) {
+                var i = msg.indexOf(String.format("[%s]", s));
+
+                if (i >= 0) {
+                    var p1 = msg.substring(0, ++i);
+                    var p2 = msg.substring(i + s.length(), msg.length());
+
+                    doc.insertString(doc.getLength(), p1, keyWord);
+                    StyleConstants.setForeground(keyWord, Color.GREEN);
+                    doc.insertString(doc.getLength(), s, keyWord);
+                    StyleConstants.setForeground(keyWord, color);
+                    doc.insertString(doc.getLength(), p2, keyWord);
+
+                    serviceLine = true;
+                    break;
+                }
+            }
+            if (!serviceLine) {
+                doc.insertString(doc.getLength(), msg, keyWord);
+            }
+            // automaticky bude scrollovat v případě, že je scroll úplně dole
+            var vScroll = scroll.getVerticalScrollBar();
+            var autoScroll = (vScroll.getMaximum() - vScroll.getValue() - vScroll.getVisibleAmount()) < 32;
+            if (autoScroll) {
+                area.setCaretPosition(doc.getLength());
+            }
         }
     }
 

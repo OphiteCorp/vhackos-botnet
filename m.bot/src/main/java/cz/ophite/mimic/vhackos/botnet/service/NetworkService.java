@@ -9,6 +9,7 @@ import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
 import cz.ophite.mimic.vhackos.botnet.service.base.EndpointService;
 import cz.ophite.mimic.vhackos.botnet.service.base.IService;
 import cz.ophite.mimic.vhackos.botnet.service.base.Service;
+import cz.ophite.mimic.vhackos.botnet.servicemodule.ServiceModule;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 
@@ -35,6 +36,9 @@ public final class NetworkService extends Service {
 
     @Autowired
     private LogModule logModule;
+
+    @Autowired
+    private ServiceModule serviceModule;
 
     protected NetworkService(Botnet botnet) {
         super(botnet);

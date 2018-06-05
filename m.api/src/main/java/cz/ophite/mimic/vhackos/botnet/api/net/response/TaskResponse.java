@@ -102,6 +102,16 @@ public final class TaskResponse extends Response {
     private Integer boosters;
     public static final String P_BOOSTERS = "boosters";
 
+    @AsciiRow("Level Up Reward")
+    @ResponseKey("lvlupreward")
+    private Integer levelUpReward;
+    public static final String P_LEVEL_UP_REWARD = "levelUpReward";
+
+    @AsciiRow("Level New")
+    @ResponseKey("lvlnew")
+    private Integer levelNew;
+    public static final String P_LEVEL_NEW = "levelNew";
+
     @AsciiRow("Bruted IPs")
     @ResponseKey(value = "brutes")
     private List<IpBruteDetailData> brutedIps;
@@ -262,5 +272,21 @@ public final class TaskResponse extends Response {
 
     public void setUpdates(List<TaskUpdateData> updates) {
         this.updates = updates;
+    }
+
+    public Integer getLevelUpReward() {
+        return levelUpReward;
+    }
+
+    public void setLevelUpReward(Integer levelUpReward) {
+        this.levelUpReward = levelUpReward;
+    }
+
+    public Integer getLevelNew() {
+        return levelNew;
+    }
+
+    public void setLevelNew(Integer levelNew) {
+        this.levelNew = levelNew;
     }
 }

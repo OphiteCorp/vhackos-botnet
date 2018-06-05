@@ -14,10 +14,7 @@ import cz.ophite.mimic.vhackos.botnet.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Služba pro práci s databází.
@@ -106,6 +103,7 @@ public final class DatabaseService {
         var scan = scannedIpDao.getByIp(ip);
         if (scan != null) {
             scan.setUserName(userName);
+            scan.setValid(true);
 
             if (level != null) {
                 scan.setLevel(level);
@@ -195,6 +193,9 @@ public final class DatabaseService {
      * Aktualizuje jména uživatelů v naskenovaných IP.
      */
     public void updateScannedUsers() {
+        if (!HibernateManager.isConnected()) {
+            return;
+        }
         var users = userDao.getAll();
         var i = 0;
 
@@ -208,5 +209,21 @@ public final class DatabaseService {
             i++;
         }
         LOG.info("The update has been completed");
+    }
+
+    /**
+     * Získá všechny naskenované IP bez uživatele.
+     */
+    public List<String> getScannedIpsWithoutUser(int limit) {
+        if (!HibernateManager.isConnected()) {
+            return Collections.emptyList();
+        }
+        var ips = scannedIpDao.getIpsWithoutUser(limit);
+        var result = new ArrayList<String>(ips.size());
+
+        for (var ip : ips) {
+            result.add(ip.getIp());
+        }
+        return result;
     }
 }

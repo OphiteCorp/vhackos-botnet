@@ -51,8 +51,12 @@ public final class BankModule extends Module {
         opcode.setTargetIp(ip);
 
         try {
-            sendRequest(opcode);
+            var response = sendRequest(opcode);
+            var result = getResultValue(response);
 
+            if (result == null) {
+                throw new IpNotExistsException(null, "The IP address '" + ip + "' you are trying to break already does not exist");
+            }
         } catch (BotnetException e) {
             if (ERR_CODE_BRUTEFORCE_IS_ALREADY_EXISTS.equals(e.getResultCode())) {
                 throw new BruteforceAlreadyRunningException(e

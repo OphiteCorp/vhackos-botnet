@@ -13,19 +13,19 @@ import cz.ophite.mimic.vhackos.botnet.exception.MissingLoginCredentialException;
 import cz.ophite.mimic.vhackos.botnet.gui.BotnetGui;
 import cz.ophite.mimic.vhackos.botnet.service.base.EndpointService;
 import cz.ophite.mimic.vhackos.botnet.service.base.Service;
-import cz.ophite.mimic.vhackos.botnet.shared.command.*;
+import cz.ophite.mimic.vhackos.botnet.shared.command.CommandDispatcher;
+import cz.ophite.mimic.vhackos.botnet.shared.command.CommandInvalidParamsException;
+import cz.ophite.mimic.vhackos.botnet.shared.command.CommandRunner;
+import cz.ophite.mimic.vhackos.botnet.shared.command.ICommandListener;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.IInjectRule;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.InjectionContext;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
-import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 import org.apache.commons.exec.CommandLine;
 import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Parameter;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -150,12 +150,7 @@ public final class Application implements ICommandListener {
 
     @Override
     public void incomingCommand(CommandDispatcher dispatcher, String command) {
-        // vypíše nápovědu
-        if (command.equalsIgnoreCase("help")) {
-            printHelp();
-
-            // ukončí aplikaci
-        } else if (command.equalsIgnoreCase("q")) {
+        if (command.equalsIgnoreCase("q")) {
             dispatcher.shutdown();
             exit(0);
 
@@ -228,37 +223,6 @@ public final class Application implements ICommandListener {
         return rules;
     }
 
-    private static void printHelp() {
-        var runner = CommandRunner.getInstance();
-        var commands = runner.getCommands();
-        var am = new AsciiMaker();
-        am.addRule();
-        am.add(null, "Available commands");
-        am.addRule();
-        am.add(".help", "Displays the help you see now");
-
-        for (var entry : commands.entrySet()) {
-            if (entry.getKey() == null) {
-                for (var cmd : entry.getValue().entrySet()) {
-                    var command = cmd.getKey();
-                    var method = runner.getCommandMethod(command);
-                    var params = (method.getParameterCount() == 0) ? "" : " [" + paramsToString(method
-                            .getParameters()) + "]";
-                    var a = method.getAnnotation(Command.class);
-                    var comment = a.comment().isEmpty() ? "" : a.comment();
-
-                    am.add(String.format(".%s%s", command, params), comment);
-                }
-            }
-        }
-        am.add(".q", "Exit Botnet");
-        am.addRule();
-        var copyRow = am.add(null, "by mimic | v" + IBotnet.VERSION);
-        copyRow.getCells().get(1).getContext().setTextAlignment(TextAlignment.RIGHT);
-        am.addRule();
-        LOG.info("\n" + am.render() + "\n");
-    }
-
     private static void printCommandResult(Object result) {
         // příkaz je typu void a nevrací žádnou hodnotu
         if (result != null && result instanceof Optional) {
@@ -270,25 +234,6 @@ public final class Application implements ICommandListener {
                 LOG.info("Returns: <NULL>");
             }
         }
-    }
-
-    private static String paramsToString(Parameter[] params) {
-        var sb = new StringBuilder();
-        int i = 0;
-
-        for (Parameter p : params) {
-            var name = p.getType().getSimpleName();
-
-            if (p.isAnnotationPresent(CommandParam.class)) {
-                var a = p.getDeclaredAnnotation(CommandParam.class);
-                name = a.value();
-            }
-            sb.append(name);
-            if (i++ < params.length - 1) {
-                sb.append(", ");
-            }
-        }
-        return sb.toString();
     }
 
     private static String getBotnetLogo() {
