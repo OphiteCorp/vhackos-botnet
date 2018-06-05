@@ -27,7 +27,7 @@ import java.util.ArrayList;
 @EndpointService(IService.SERVICE_BOTNET_UPDATE)
 public final class BotnetUpdateService extends Service {
 
-    private static final String UPDATE_URL = "https://github.com/OphiteCorp/vhackos-botnet/blob/master/changelog.chl";
+    private static final String UPDATE_URL = "https://raw.githubusercontent.com/OphiteCorp/vhackos-botnet/master/changelog.chl";
     private static final long DEFAULT_TIMEOUT = 3600000; // 1h
 
     protected BotnetUpdateService(Botnet botnet) {
