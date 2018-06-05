@@ -1,0 +1,21 @@
+{
+  "version": "0.9.5",
+  "download": "https://github.com/OphiteCorp/vhackos-botnet/releases/download/botnetv095/botnet.jar",
+  "discord": "https://discordapp.com/invite/Cdz39vu",
+  "news": [
+    "Added a new \"service start now\" command that will run the service once",
+    "Renaming the \"tasks finish all\" command to \"task finish all\"",
+    "Fixed an error when bruteforce did not detect invalid IP",
+    "Added 2 new values to task information (only appear at new level)",
+    "Updated \".help\" menu",
+    "Added a new \".about\" command that displays the current version information",
+    "A new \".latest\" command has been added to display information about the latest version of Botnet",
+    "Fixed an error when some commands (such as bruteforce) did not change the validity status of IP in the database",
+    "Added a new \"botnetupdate\" service that checks every hour of the latest version of Botnet - can be turned off in\r\n    configuration. Including a sound alert",
+    "The network scanning service now supports the option of IP preference in a database that does not have a user\r\n    before scanning new IPs - again it can be turned off",
+    "If a GUI and a proxy are used, the proxy server is listed in the window title",
+    "Added smart scrolling support to GUI. The automatic scroll turns off if the scroll is not at the end",
+    "Improved network scanning. An automatic restart of the service has been added if an error can not be resolved \r\n    otherwise",
+    "And other minor fixes"
+  ]
+}
