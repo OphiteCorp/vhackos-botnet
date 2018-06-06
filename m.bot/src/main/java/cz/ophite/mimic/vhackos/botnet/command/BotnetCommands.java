@@ -5,6 +5,7 @@ import cz.ophite.mimic.vhackos.botnet.api.module.*;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.*;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.*;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
+import cz.ophite.mimic.vhackos.botnet.db.HibernateManager;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
 import cz.ophite.mimic.vhackos.botnet.servicemodule.ServiceModule;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
@@ -407,8 +408,11 @@ final class BotnetCommands extends BaseCommand {
                     .leftPad(ip.getLevel().toString(), 3), StringUtils.leftPad(ip.getFirewall().toString(), 5));
 
             put(am, (i == 0) ? name : "", str);
-            getLog().info("Adding a new IP to the database: {}", ip);
-            databaseService.addScanIp(ip);
+
+            if (HibernateManager.isConnected()) {
+                getLog().info("Adding a new IP to the database: {}", ip.getIp());
+                databaseService.addScanIp(ip);
+            }
         }
     }
 
@@ -427,8 +431,11 @@ final class BotnetCommands extends BaseCommand {
                     .leftPad(fUser.toString(), 20), StringUtils.leftPad(fBrute.toString(), 7));
 
             put(am, (i == 0) ? name : "", str);
-            getLog().info("Updating an existing IP: {}", ip.getIp());
-            databaseService.updateScanIp(ip.getIp(), ip.getUserName(), null);
+
+            if (HibernateManager.isConnected()) {
+                getLog().info("Updating an existing IP: {}", ip.getIp());
+                databaseService.updateScanIp(ip.getIp(), ip.getUserName(), null);
+            }
         }
         if (ips.isEmpty()) {
             put(am, name, "<none>");

@@ -111,7 +111,7 @@ public abstract class Module implements IModule {
                 } catch (ConnectionException e) {
                     prevException = e;
                     attempts--;
-                    log.error("Request failed. Remaining attempts: {}/{}", attempts, maxAttempts);
+                    log.error("Request failed. Probably failed to establish communication with the server. Remaining attempts: {}/{}", attempts, maxAttempts);
                     try {
                         Thread.sleep(10000);
                     } catch (InterruptedException e1) {

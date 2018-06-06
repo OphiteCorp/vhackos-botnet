@@ -3,6 +3,7 @@ package cz.ophite.mimic.vhackos.botnet.command;
 import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.module.LogModule;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
+import cz.ophite.mimic.vhackos.botnet.db.HibernateManager;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandParam;
@@ -64,8 +65,10 @@ public final class BotnetLogCommand extends BaseCommand {
             for (var i = 0; i < data.size(); i++) {
                 put(am, (i == 0) ? "Log" : "", data.get(i));
             }
-            getLog().info("Adding the log to the database for IP: {}", ip);
-            databaseService.addLog(ip, StringUtils.join(data, '\n'));
+            if (HibernateManager.isConnected()) {
+                getLog().info("Adding the log to the database for IP: {}", ip);
+                databaseService.addLog(ip, StringUtils.join(data, '\n'));
+            }
         });
     }
 

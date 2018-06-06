@@ -99,6 +99,7 @@ public final class NetworkScanService extends Service {
 
     private void processDatabaseIps(List<String> ips) {
         for (var ip : ips) {
+            getLog().info("Getting a user from IP: {}", ip);
             bruteIp(ip);
             sleep();
         }

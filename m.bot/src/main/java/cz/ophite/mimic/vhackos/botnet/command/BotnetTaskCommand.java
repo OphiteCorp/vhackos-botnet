@@ -6,6 +6,7 @@ import cz.ophite.mimic.vhackos.botnet.api.net.response.TaskResponse;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.IpBruteDetailData;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.TaskUpdateData;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
+import cz.ophite.mimic.vhackos.botnet.db.HibernateManager;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandParam;
@@ -195,8 +196,11 @@ public final class BotnetTaskCommand extends BaseCommand {
                     .leftPad(String.valueOf(percent), 4), StringUtils.leftPad(fState.toString(), 7));
 
             put(am, (i == 0) ? name : "", str);
-            getLog().info("Updating an existing IP: {}", ip.getIp());
-            databaseService.updateScanIp(ip.getIp(), ip.getUserName(), null);
+
+            if (HibernateManager.isConnected()) {
+                getLog().info("Updating an existing IP: {}", ip.getIp());
+                databaseService.updateScanIp(ip.getIp(), ip.getUserName(), null);
+            }
         }
         if (ips.isEmpty()) {
             put(am, name, "<none>");

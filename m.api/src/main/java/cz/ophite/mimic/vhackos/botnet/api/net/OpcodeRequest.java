@@ -17,6 +17,7 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
@@ -133,7 +134,9 @@ public final class OpcodeRequest {
                 throw new InvalidResponseCodeException(responseCode, "Failed to get response from vHackOS " + responseCode + " {" + uri + "}");
             }
         } catch (IOException e) {
-            LOG.error("Something is wrong with processing the request. URI: " + uri, e);
+            if (!(e instanceof ConnectException)) {
+                LOG.error("Something is wrong with processing the request. URI: " + uri, e);
+            }
             throw new ConnectionException(null, "An error occurred while processing request: " + uri, e);
         } finally {
             if (conn != null) {

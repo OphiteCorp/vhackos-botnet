@@ -75,7 +75,7 @@ public final class Application implements ICommandListener {
         // do načte všechny třídy, které jsou označené jako lazy (vyžadují např. konfiguraci aplikace)
         InjectionContext.initLazyClasses();
 
-        if (gui != null) {
+        if (!isConsoleMode()) {
             gui.postProcessing(config);
         }
         // vytvoří databázové připojení
@@ -133,6 +133,13 @@ public final class Application implements ICommandListener {
     }
 
     /**
+     * Jedná se o konzolový mód?
+     */
+    public static boolean isConsoleMode() {
+        return (gui == null);
+    }
+
+    /**
      * Ukončí aplikaci.
      */
     private static void exit(int exitCode) {
@@ -141,7 +148,7 @@ public final class Application implements ICommandListener {
         HibernateManager.shutdown();
         LOG.info("Botnet stopped");
 
-        if (gui != null) {
+        if (!isConsoleMode()) {
             gui.close(exitCode);
         } else {
             System.exit(exitCode);
@@ -229,7 +236,11 @@ public final class Application implements ICommandListener {
             LOG.info("Executed!");
         } else {
             if (result != null) {
-                LOG.info("\n" + result.toString() + "\n");
+                if (isConsoleMode()) {
+                    System.out.println(result);
+                } else {
+                    LOG.info("\n" + result.toString() + "\n");
+                }
             } else {
                 LOG.info("Returns: <NULL>");
             }

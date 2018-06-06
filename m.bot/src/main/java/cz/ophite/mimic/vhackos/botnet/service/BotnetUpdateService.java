@@ -1,6 +1,7 @@
 package cz.ophite.mimic.vhackos.botnet.service;
 
 import com.google.gson.Gson;
+import cz.ophite.mimic.vhackos.botnet.Application;
 import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
 import cz.ophite.mimic.vhackos.botnet.dto.BotnetUpdateData;
@@ -57,8 +58,11 @@ public final class BotnetUpdateService extends Service {
                         .getVersion(), data.getDownloadLink());
 
                 var result = CommandRunner.getInstance().run("latest", null);
-                getLog().info("\n" + result + "\n");
-
+                if (Application.isConsoleMode()) {
+                    System.out.println(result);
+                } else {
+                    getLog().info("\n" + result + "\n");
+                }
                 AudioPlayer.play(ResourceHelper.getStream(ResourceHelper.ResourceValue.SOUND_NEW_VERSION));
             } else {
                 getLog().info("Your Botnet version is up to date ;-)");
