@@ -82,4 +82,16 @@ public final class BotnetLogCommand extends BaseCommand {
             put(am, "Result", "The message to the log has been set");
         });
     }
+
+    /**
+     * Nastaví vzdálený log.
+     */
+    @Command(value = "log remote set default", comment = "Set the log from the target IP with the default value")
+    private String setRemoteSystemLog(@CommandParam("ip") String ip) {
+        return execute("remote log set -> " + ip, am -> {
+            var message = getBotnet().getConfig().getMessageLog();
+            logModule.setRemoteLog(ip, message);
+            put(am, "Result", "The message to the log has been set");
+        });
+    }
 }

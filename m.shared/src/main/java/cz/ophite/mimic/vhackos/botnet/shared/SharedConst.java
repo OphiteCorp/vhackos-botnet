@@ -10,5 +10,5 @@ public final class SharedConst {
     /**
      * Je povolený debug režim?
      */
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 }

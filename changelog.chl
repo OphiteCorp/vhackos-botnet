@@ -5,6 +5,7 @@
   "news": [
     "Minor fixes and critical encoding error while console mode",
     "Added Sentry support for better bug fixes",
-    "Added a custom delay configuration to send and receive a response from the server"
+    "Added a custom delay configuration to send and receive a response from the server",
+    "Added 'log remote set default' command, which sets the system log with the value of the config"
   ]
 }
