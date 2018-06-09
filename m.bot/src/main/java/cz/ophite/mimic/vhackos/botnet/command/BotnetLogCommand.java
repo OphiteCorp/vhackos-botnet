@@ -3,13 +3,12 @@ package cz.ophite.mimic.vhackos.botnet.command;
 import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.module.LogModule;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
-import cz.ophite.mimic.vhackos.botnet.db.HibernateManager;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
+import cz.ophite.mimic.vhackos.botnet.servicemodule.ServiceModule;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandParam;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Příkazy kolem logů.
@@ -24,6 +23,9 @@ public final class BotnetLogCommand extends BaseCommand {
 
     @Autowired
     private LogModule logModule;
+
+    @Autowired
+    private ServiceModule serviceModule;
 
     protected BotnetLogCommand(Botnet botnet) {
         super(botnet);
@@ -60,14 +62,10 @@ public final class BotnetLogCommand extends BaseCommand {
     @Command(value = "log remote", comment = "Get the log from the target IP")
     private String getRemoteSystemLog(@CommandParam("ip") String ip) {
         return execute("remote log -> " + ip, am -> {
-            var data = logModule.getRemoteLog(ip);
+            var data = serviceModule.getRemoteLog(ip);
 
             for (var i = 0; i < data.size(); i++) {
                 put(am, (i == 0) ? "Log" : "", data.get(i));
-            }
-            if (HibernateManager.isConnected()) {
-                getLog().info("Adding the log to the database for IP: {}", ip);
-                databaseService.addLog(ip, StringUtils.join(data, '\n'));
             }
         });
     }

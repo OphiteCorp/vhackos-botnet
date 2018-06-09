@@ -4,7 +4,6 @@ import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.InvalidAccessTokenException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.ServerBusyException;
-import cz.ophite.mimic.vhackos.botnet.api.module.NetworkModule;
 import cz.ophite.mimic.vhackos.botnet.api.module.TaskModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.NetworkScanResponse;
 import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
@@ -31,9 +30,6 @@ public final class NetworkScanService extends Service {
 
     @Autowired
     private DatabaseService databaseService;
-
-    @Autowired
-    private NetworkModule networkModule;
 
     @Autowired
     private TaskModule taskModule;
@@ -134,7 +130,7 @@ public final class NetworkScanService extends Service {
                 brutedIps.clear();
                 brutedIps = null;
             }
-            getLog().info("Done. I'm waiting: {}", SharedUtils.toTimeFormat(pause));
+            getLog().info("Done. Waiting: {}", SharedUtils.toTimeFormat(pause));
             sleep(pause);
         } else {
             if (isRunningAsync()) {
@@ -146,7 +142,7 @@ public final class NetworkScanService extends Service {
 
     private NetworkScanResponse scan() {
         try {
-            return networkModule.scan();
+            return serviceModule.scan();
 
         } catch (InvalidAccessTokenException e) {
             getLog().warn("An error occurred while scanning the network. The service will automatically restart in 5 seconds", e);

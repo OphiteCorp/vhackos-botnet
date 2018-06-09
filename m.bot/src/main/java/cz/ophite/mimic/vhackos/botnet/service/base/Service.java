@@ -200,8 +200,10 @@ public abstract class Service implements IService {
      */
     protected boolean sleep(long millis) {
         try {
-            log.debug("Forced timeout: {}ms", millis);
-            Thread.sleep(millis);
+            if (millis > 0) {
+                log.debug("Forced timeout: {}ms", millis);
+                Thread.sleep(millis);
+            }
             return true;
 
         } catch (InterruptedException e) {

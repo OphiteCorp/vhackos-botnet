@@ -79,6 +79,7 @@ public final class DatabaseService {
         if (!HibernateManager.isConnected()) {
             return null;
         }
+        LOG.info("Adding a new IP to the database: {}", scan.getIp());
         return scannedIpDao.createOrUpdate(scan.getIp(), scan.getLevel(), scan.getFirewall(), null);
     }
 
@@ -89,7 +90,9 @@ public final class DatabaseService {
         if (!HibernateManager.isConnected()) {
             return;
         }
+        LOG.info("Updating an existing IP: {}", ip);
         var user = userDao.getByUserName(userName);
+
         if (user != null) {
             // uživatel si změnil IP
             if (!user.getIps().contains(ip)) {
@@ -153,6 +156,7 @@ public final class DatabaseService {
         if (!HibernateManager.isConnected()) {
             return;
         }
+        LOG.info("Adding the log to the database for IP: {}", ip);
         var users = userDao.getByIp(ip);
 
         if (!users.isEmpty()) {

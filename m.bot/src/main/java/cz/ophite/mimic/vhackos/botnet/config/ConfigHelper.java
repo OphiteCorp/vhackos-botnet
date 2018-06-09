@@ -45,6 +45,9 @@ public final class ConfigHelper {
         } else if (out.getClass() != target) {
             if (result instanceof Integer && target == Long.class) {
                 out = Long.valueOf(result.toString());
+
+            } else if (result instanceof Integer && target == Double.class) {
+                out = Double.valueOf(result.toString());
             }
         }
         return (T) out;

@@ -12,46 +12,46 @@ import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiBruteSta
 public final class IpBruteDetailData {
 
     @AsciiRow("Brute ID")
-    @ResponseKey(value = KEY_BRUTE_ID)
+    @ResponseKey(KEY_BRUTE_ID)
     private Long bruteId;
     public static final String P_BRUTE_ID = "bruteId";
     private static final String KEY_BRUTE_ID = "id";
 
     @AsciiRow("IP")
-    @ResponseKey(value = KEY_IP)
+    @ResponseKey(KEY_IP)
     private String ip;
     public static final String P_IP = "ip";
     private static final String KEY_IP = "user_ip";
 
     @AsciiRow("Start")
-    @ResponseKey(value = KEY_START_TIME)
+    @ResponseKey(KEY_START_TIME)
     private Long startTime;
     public static final String P_START_TIME = "startTime";
     private static final String KEY_START_TIME = "start";
 
     @AsciiRow("End")
-    @ResponseKey(value = KEY_END_TIME)
+    @ResponseKey(KEY_END_TIME)
     private Long endTime;
     public static final String P_END_TIME = "endTime";
     private static final String KEY_END_TIME = "end";
 
     @AsciiRow("Current Time")
-    @ResponseKey(value = KEY_CURRENT_TIME)
+    @ResponseKey(KEY_CURRENT_TIME)
     private Long currentTime;
     public static final String P_CURRENT_TIME = "currentTime";
     private static final String KEY_CURRENT_TIME = "now";
 
     @AsciiRow("User")
-    @ResponseKey(value = KEY_USER_NAME)
+    @ResponseKey(KEY_USER_NAME)
     private String userName;
     public static final String P_USER_NAME = "userName";
     private static final String KEY_USER_NAME = "username";
 
     @AsciiRow(value = "State", converter = AsciiBruteStateConverter.class)
-    @ResponseKey("result")
+    @ResponseKey(KEY_RESULT)
     private Integer result;
     public static final String P_RESULT = "result";
-    public static final String KEY_RESULT = "result";
+    private static final String KEY_RESULT = "result";
 
     public Long getBruteId() {
         return bruteId;

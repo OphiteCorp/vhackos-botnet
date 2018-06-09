@@ -56,6 +56,10 @@ public final class ApplicationConfig implements IBotnetConfig {
                  comment = "The number of boosters that not be touched")
     private String safeBoosters;
 
+    @ConfigValue(value = "game.safe.malwares", defaultValue = "20",
+                 comment = "The number of malwares that not be touched")
+    private String safeMalwares;
+
     // maximální počet pokusů na odeslání požadavku na vHack server
 
     @ConfigValue(value = "sys.max.request.attempts",
@@ -203,6 +207,42 @@ public final class ApplicationConfig implements IBotnetConfig {
                  comment = "Delay between repeated executing in milliseconds.\nDefault: between 50min 5s and 51min",
                  defaultValue = "f_rand(3005000,3060000)")
     private String sNetworkTimeout;
+
+    @ConfigValue(value = "service-network.target.level.range",
+                 comment = "Target level range for attack.\nDefault: [1,20]", defaultValue = "[1,20]")
+    private String sNetworkTargetLevelRange;
+
+    @ConfigValue(value = "service-network.max.brute.waiting.time",
+                 comment = "Maximum wait time to complete bruteforce in seconds.\nDefault: 20min",
+                 defaultValue = "1200")
+    private String sNetworkMaxWaitingBruteTime;
+
+    @ConfigValue(value = "service-network.min.bank.amount.for.withdraw",
+                 comment = "How much money must be in the bank to use theft", defaultValue = "250000000")
+    private String sNetworkMinBankAmountForWithdraw;
+
+    @ConfigValue(value = "service-network.user.bank.limit",
+                 comment = "If a player's bank will have more than that amount of money, they will stop stealing money from the target bank",
+                 defaultValue = "250000000000")
+    private String sNetworkUserBankLimit;
+
+    @ConfigValue(value = "service-network.withdraw.percent.amount",
+                 comment = "How much money from the target bank will be transferred to the player's bank. In percent",
+                 defaultValue = "95")
+    private String sNetworkWithdrawPercentAmount;
+
+    @ConfigValue(value = "service-network.keep.brute.by.bank.money",
+                 comment = "Keep bruteforce in the tasks if has more than a certain amount of money in the bank",
+                 defaultValue = "1000000000")
+    private String sNetworkKeepBruteforceByBankMoney;
+
+    @ConfigValue(value = "service-network.stop.attack.by.bank.money",
+                 comment = "Should the attack be stopped if there is enough money in our bank?", defaultValue = "False")
+    private String sNetworkStopAttackByBankMoney;
+
+    @ConfigValue(value = "service-network.withdraw.without.malwares",
+                 comment = "Should the bank be robbed even if malware is not available?", defaultValue = "True")
+    private String sNetworkWithdrawWithoutMalwares;
 
     // služba - netscan
 
@@ -393,6 +433,10 @@ public final class ApplicationConfig implements IBotnetConfig {
         return ConfigHelper.getNumbericValue(safeBoosters, Integer.class);
     }
 
+    public int getSafeMalwares() {
+        return ConfigHelper.getNumbericValue(safeMalwares, Integer.class);
+    }
+
     public boolean isServerBuyPackagesForNetcoins() {
         return ConfigHelper.getBoolean(sServerBuyPackagesForNetcoins);
     }
@@ -491,5 +535,45 @@ public final class ApplicationConfig implements IBotnetConfig {
     @Override
     public int getConnectionTimeout() {
         return ConfigHelper.getNumbericValue(connectionTimeout, Integer.class);
+    }
+
+    public List<Integer> getNetworkTargetLevelRange() {
+        var list = sNetworkTargetLevelRange.substring(1, sNetworkTargetLevelRange.length() - 1).trim();
+        var tokens = list.split(",");
+        var result = new ArrayList<Integer>(tokens.length);
+
+        for (var token : tokens) {
+            var value = Integer.valueOf(token.trim());
+            result.add(value);
+        }
+        return result;
+    }
+
+    public int getNetworkMaxWaitingBruteTime() {
+        return ConfigHelper.getNumbericValue(sNetworkMaxWaitingBruteTime, Integer.class);
+    }
+
+    public long getNetworkMinBankAmountForWithdraw() {
+        return ConfigHelper.getNumbericValue(sNetworkMinBankAmountForWithdraw, Long.class);
+    }
+
+    public long getNetworkUserBankLimit() {
+        return ConfigHelper.getNumbericValue(sNetworkUserBankLimit, Long.class);
+    }
+
+    public long getNetworkKeepBruteforceByBankMoney() {
+        return ConfigHelper.getNumbericValue(sNetworkKeepBruteforceByBankMoney, Long.class);
+    }
+
+    public double getNetworkWithdrawPercentAmount() {
+        return ConfigHelper.getNumbericValue(sNetworkWithdrawPercentAmount, Double.class);
+    }
+
+    public boolean isNetworkStopAttackByBankMoney() {
+        return ConfigHelper.getBoolean(sNetworkStopAttackByBankMoney);
+    }
+
+    public boolean isNetworkWithdrawWithoutMalwares() {
+        return ConfigHelper.getBoolean(sNetworkWithdrawWithoutMalwares);
     }
 }

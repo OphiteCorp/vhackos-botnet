@@ -133,10 +133,6 @@ public abstract class Module implements IModule {
                     }
                 } catch (InterruptedException e) {
                     break;
-
-                } catch (Exception e) {
-                    SentryGuard.log(e);
-                    break;
                 }
             }
             throw new ConnectionException(null, "Could not send request to server", prevException);
