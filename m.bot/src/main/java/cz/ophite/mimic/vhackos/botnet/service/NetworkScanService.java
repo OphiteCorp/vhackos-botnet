@@ -104,7 +104,7 @@ public final class NetworkScanService extends Service {
         brutedIps = null;
 
         var pause = getConfig().getNetworkScanPause();
-        getLog().info("Done. I'm waiting: {}", SharedUtils.toTimeFormat(pause));
+        getLog().info("Done. Waiting: {}", SharedUtils.toTimeFormat(pause));
         sleep(pause);
     }
 
@@ -174,7 +174,6 @@ public final class NetworkScanService extends Service {
         var resp = taskModule.getTasks();
 
         for (var brute : resp.getBrutedIps()) {
-            getLog().info("Updating an existing IP: {}", brute.getIp());
             databaseService.updateScanIp(brute.getIp(), brute.getUserName(), null);
             taskModule.removeBruteforce(brute.getBruteId());
         }
