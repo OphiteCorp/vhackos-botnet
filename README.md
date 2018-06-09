@@ -65,7 +65,8 @@ Find on WIKI - [**HERE**](https://github.com/OphiteCorp/vhackos-botnet/wiki/FAQ)
 - [x] Controls the miner. Collects a reward and starts a miner
 - [x] Automatically completes a mission and collects a daily reward
 - [x] Periodically scans the network and saves the result to the database
-- [ ] Automatic exploit, bruteforce, log change and bank widthdraw
+- [x] Automatic exploit, bruteforce, log change and bank widthdraw
+- [x] Automatic checking of botnet updates
 
 ### What is stored in the database
 - Network scanning (user name and UID, IP, level, firewall)

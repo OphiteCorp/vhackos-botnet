@@ -7,6 +7,7 @@
     "Added Sentry support for better bug fixes",
     "Added a custom delay configuration to send and receive a response from the server",
     "Added 'log remote set default' command, which sets the system log with the value of the config",
-    "Finished network service for automatic exploit and bruteforce/withdraw of the target bank"
+    "Finished network service for automatic exploit and bruteforce/withdraw of the target bank",
+    "Customize the buffer size for the GUI window"
   ]
 }
