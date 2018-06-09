@@ -9,7 +9,6 @@ import cz.ophite.mimic.vhackos.botnet.api.opcode.base.IOpcode;
 import cz.ophite.mimic.vhackos.botnet.api.opcode.base.OpcodeTargetType;
 import cz.ophite.mimic.vhackos.botnet.shared.json.Json;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.HashUtils;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,7 +124,6 @@ public final class OpcodeRequest {
                                     break;
 
                                 default:
-                                    SentryGuard.logDebug(String.format("Result value: %s. Request: %s", result, uri));
                                     LOG.debug("Returns {} - ???", result);
                                     break;
                             }

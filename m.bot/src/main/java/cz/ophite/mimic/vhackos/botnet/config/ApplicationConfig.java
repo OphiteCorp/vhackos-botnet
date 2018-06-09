@@ -63,7 +63,7 @@ public final class ApplicationConfig implements IBotnetConfig {
     // maximální počet pokusů na odeslání požadavku na vHack server
 
     @ConfigValue(value = "sys.max.request.attempts",
-                 comment = "The maximum number of attempts to send the request to the server", defaultValue = "3")
+                 comment = "The maximum number of attempts to send the request to the server", defaultValue = "5")
     private String maxRequestAttempts;
 
     @ConfigValue(value = "sys.sleep.delay",
