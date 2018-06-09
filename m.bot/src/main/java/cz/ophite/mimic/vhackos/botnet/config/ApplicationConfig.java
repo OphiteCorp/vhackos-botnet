@@ -97,6 +97,11 @@ public final class ApplicationConfig implements IBotnetConfig {
                  defaultValue = "False")
     private String fullScreenMode;
 
+    @ConfigValue(value = "gui.area.buffer.size",
+                 comment = "Buffer size for logging. Higher, the greater the demands on system resources.\nDefault: 262144",
+                 defaultValue = "256*1024")
+    private String guiAreaBufferSize;
+
     // služba - Botnet update
 
     @ConfigValue(value = "service-botnet-update.enable", comment = "Enable checking the latest version of Botnet",
@@ -575,5 +580,9 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     public boolean isNetworkWithdrawWithoutMalwares() {
         return ConfigHelper.getBoolean(sNetworkWithdrawWithoutMalwares);
+    }
+
+    public int getGuiAreaBufferSize() {
+        return ConfigHelper.getNumbericValue(guiAreaBufferSize, Integer.class);
     }
 }

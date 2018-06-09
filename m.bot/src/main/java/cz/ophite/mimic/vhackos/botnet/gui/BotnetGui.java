@@ -33,13 +33,13 @@ public final class BotnetGui extends JFrame {
 
     private static final Logger LOG = LoggerFactory.getLogger(BotnetGui.class);
 
-    private static final int AREA_BUFFER = 1024 * 256;
-
     private JTextPane area;
     private JPanel bottomPane;
     private JScrollPane scroll;
     private JFormattedTextField tfCommand;
     private Font font;
+
+    private int bufferSize = 256 * 1024; // výchozí
 
     public void open() {
         HackedAppender.getInstance().addListener(new AppenderLogic());
@@ -61,6 +61,8 @@ public final class BotnetGui extends JFrame {
     }
 
     public void postProcessing(ApplicationConfig config) {
+        bufferSize = config.getGuiAreaBufferSize();
+
         if (config.isFullScreenMode()) {
             dispose();
 
@@ -199,8 +201,8 @@ public final class BotnetGui extends JFrame {
         keyWord.addAttribute(StyleConstants.NameAttribute, HTML.Tag.FONT);
 
         try {
-            if (doc.getLength() > AREA_BUFFER) {
-                doc.remove(0, doc.getLength() - AREA_BUFFER);
+            if (doc.getLength() > bufferSize) {
+                doc.remove(0, doc.getLength() - bufferSize);
             }
             smartAppend(doc, msg, keyWord, c);
 
