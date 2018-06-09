@@ -82,6 +82,11 @@ public final class ApplicationConfig implements IBotnetConfig {
                  defaultValue = "False")
     private String aggressiveMode;
 
+    @ConfigValue(value = "sys.connection.timeout",
+                 comment = "Delay for sending and retrieving a server response in milliseconds.\nDefault: 30000",
+                 defaultValue = "30000")
+    private String connectionTimeout;
+
     // GUI
 
     @ConfigValue(value = "gui.fullscreen.mode", comment = "Expands the application across the desktop",
@@ -481,5 +486,10 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     public boolean isNetworkScanPreferDatabase() {
         return ConfigHelper.getBoolean(sNetworkScanPreferDatabase);
+    }
+
+    @Override
+    public int getConnectionTimeout() {
+        return ConfigHelper.getNumbericValue(connectionTimeout, Integer.class);
     }
 }

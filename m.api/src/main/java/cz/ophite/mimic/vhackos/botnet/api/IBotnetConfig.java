@@ -43,4 +43,9 @@ public interface IBotnetConfig {
      * Je povolen agresivní mód?
      */
     boolean isAggressiveMode();
+
+    /**
+     * Prodleva pro odeslání a čtení požadavku.
+     */
+    int getConnectionTimeout();
 }

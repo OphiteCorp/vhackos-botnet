@@ -10,6 +10,7 @@ import cz.ophite.mimic.vhackos.botnet.api.module.CommonModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.OpcodeRequest;
 import cz.ophite.mimic.vhackos.botnet.api.opcode.base.IOpcode;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +106,7 @@ public abstract class Module implements IModule {
                             attempts--;
                             log.error("Login failed. Remaining attempts: {}/{}", attempts, maxAttempts);
                         }
-                    } catch (InterruptedException e1) {
+                    } catch (InterruptedException ex) {
                         break;
                     }
                 } catch (ConnectionException e) {
@@ -114,7 +115,7 @@ public abstract class Module implements IModule {
                     log.error("Request failed. Probably failed to establish communication with the server. Remaining attempts: {}/{}", attempts, maxAttempts);
                     try {
                         Thread.sleep(10000);
-                    } catch (InterruptedException e1) {
+                    } catch (InterruptedException ex) {
                         break;
                     }
                 } catch (InvalidResponseCodeException e) {
@@ -124,11 +125,17 @@ public abstract class Module implements IModule {
                         log.warn("The server is busy. Remaining attempts: {}/{}", attempts, maxAttempts);
                         try {
                             Thread.sleep(getConfig().isAggressiveMode() ? 5000 : 10000);
-                        } catch (InterruptedException e1) {
+                        } catch (InterruptedException ex) {
                             break;
                         }
+                    } else {
+                        SentryGuard.log(e);
                     }
                 } catch (InterruptedException e) {
+                    break;
+
+                } catch (Exception e) {
+                    SentryGuard.log(e);
                     break;
                 }
             }

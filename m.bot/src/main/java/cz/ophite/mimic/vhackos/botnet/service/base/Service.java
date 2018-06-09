@@ -9,6 +9,7 @@ import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
 import cz.ophite.mimic.vhackos.botnet.dto.BotnetSharedData;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.InjectionContext;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.slf4j.Logger;
@@ -286,6 +287,7 @@ public abstract class Service implements IService {
                     log.error("An unexpected error occurred while processing the service", e);
 
                 } catch (Exception e) {
+                    SentryGuard.log(e);
                     log.error("There was a fatal error while processing the service. The service will be stopped", e);
                     stop();
                     throw new BotnetCoreException("There was a critical error when calling a service", e);

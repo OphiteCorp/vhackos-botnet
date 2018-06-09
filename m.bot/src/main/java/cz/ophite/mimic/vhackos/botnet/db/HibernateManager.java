@@ -3,6 +3,7 @@ package cz.ophite.mimic.vhackos.botnet.db;
 import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
 import cz.ophite.mimic.vhackos.botnet.db.entity.UserEntity;
 import cz.ophite.mimic.vhackos.botnet.db.exception.DatabaseConnectionException;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import org.apache.logging.log4j.util.Strings;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -91,6 +92,7 @@ public final class HibernateManager {
             LOG.info("Session factory for hibernate was created");
 
         } catch (Exception e) {
+            SentryGuard.log(e);
             LOG.error("An error occurred while creating a session factory for hibernate", e);
             shutdown();
         }

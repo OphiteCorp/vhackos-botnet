@@ -1,5 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.utils;
 
+import cz.ophite.mimic.vhackos.botnet.shared.SharedConst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,7 @@ public final class AudioPlayer {
      * Spustí přehrávání.
      */
     public static void play(InputStream stream) {
-        if (stream == null) {
+        if (stream == null || SharedConst.DEBUG) {
             return;
         }
         var t = new Thread(new AudioProcess(stream));

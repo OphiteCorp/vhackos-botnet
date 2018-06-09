@@ -4,6 +4,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.Response;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.ResponseKey;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.*;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -362,8 +363,10 @@ public final class ModuleHelper {
                         if (mapper != null) {
                             value = mapper.convert(field, value);
                         } else {
-                            throw new IllegalStateException("This is not a primitive data type '" + type
+                            var ex = new IllegalStateException("This is not a primitive data type '" + type
                                     .getTypeName() + "'. Custom mapper is not set");
+                            SentryGuard.log(ex);
+                            throw ex;
                         }
                     }
                     field.set(dto, value);
@@ -376,6 +379,7 @@ public final class ModuleHelper {
         } catch (NoSuchFieldException e) {
             throw new IllegalStateException("Field '" + fieldName + "' in the '" + dto.getClass()
                     .getSimpleName() + "' instance does " + "not exist", e);
+
         } catch (IllegalAccessException e) {
             throw new RuntimeException("An unexpected error has occurred", e);
         }
@@ -390,8 +394,11 @@ public final class ModuleHelper {
             List<String> respKeyList = getAvailableResponseClassKeys(responseClass);
 
             if (!respKeyList.contains(responseKey)) {
-                LOG.warn("Missing fields mapping in '{}'. Undefined response parameter is: {}", responseClass
-                        .getSimpleName(), responseKey);
+                var msg = String
+                        .format("Missing fields mapping in '%s'. Undefined response parameter is: %s", responseClass
+                                .getSimpleName(), responseKey);
+                LOG.warn(msg);
+                SentryGuard.logWarning(msg);
                 return 1;
             }
             return 0;
@@ -412,8 +419,11 @@ public final class ModuleHelper {
                 }
             }
             if (!undefinedKeys.isEmpty()) {
-                LOG.error("Missing fields mapping in '{}'. Undefined response parameters are: {}", responseClass
-                        .getSimpleName(), undefinedKeys);
+                var msg = String
+                        .format("Missing fields mapping in '%s'. Undefined response parameter is: %s", responseClass
+                                .getSimpleName(), undefinedKeys);
+                LOG.warn(msg);
+                SentryGuard.logWarning(msg);
             }
             return undefinedKeys.size();
         }

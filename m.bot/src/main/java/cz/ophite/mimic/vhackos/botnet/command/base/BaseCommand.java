@@ -3,6 +3,7 @@ package cz.ophite.mimic.vhackos.botnet.command.base;
 import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetCoreException;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.AsciiUtils;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
 import de.vandermeer.asciitable.AT_Row;
@@ -84,6 +85,7 @@ public abstract class BaseCommand {
             put(am, "Error", StringUtils.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());
 
         } catch (Exception e) {
+            SentryGuard.log(e);
             log.error("There was an error processing the command: " + title, e);
             am = createAsciiMaker(title);
             put(am, "Error", StringUtils.isEmpty(e.getMessage()) ? e.toString() : e.getMessage());

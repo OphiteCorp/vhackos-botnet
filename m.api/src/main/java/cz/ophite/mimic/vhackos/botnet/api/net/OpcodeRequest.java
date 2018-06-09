@@ -9,6 +9,7 @@ import cz.ophite.mimic.vhackos.botnet.api.opcode.base.IOpcode;
 import cz.ophite.mimic.vhackos.botnet.api.opcode.base.OpcodeTargetType;
 import cz.ophite.mimic.vhackos.botnet.shared.json.Json;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.HashUtils;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +82,8 @@ public final class OpcodeRequest {
         LOG.trace("Target URI: {}", uri);
 
         try {
-            conn = createConnection(uri, getUserAgent(module), module.getBotnet().getConfig().getProxyData());
+            var config = module.getBotnet().getConfig();
+            conn = createConnection(uri, getUserAgent(module), config.getProxyData(), config.getConnectionTimeout());
             var responseCode = conn.getResponseCode();
 
             if (responseCode == 200) {
@@ -111,7 +113,8 @@ public final class OpcodeRequest {
                                     throw new InvalidRequestException("10", "The server returned error 10, this might mean the robot is outdated, bug ocurred or invalid request");
 
                                 case "1":
-                                    throw new AccountBlockedException("1", "Your account with username '" + module
+                                    var login = module.getBotnet().getConfig().getUserName();
+                                    throw new AccountBlockedException("1", login, "Your account with username '" + module
                                             .getBotnet().getConfig().getUserName() + "' " + "was blocked");
 
                                 case "36":
@@ -122,6 +125,7 @@ public final class OpcodeRequest {
                                     break;
 
                                 default:
+                                    SentryGuard.logDebug(String.format("Result value: %s. Request: %s", result, uri));
                                     LOG.debug("Returns {} - ???", result);
                                     break;
                             }
@@ -150,7 +154,9 @@ public final class OpcodeRequest {
     /**
      * Vytvoří HTTPS připojení.
      */
-    private HttpsURLConnection createConnection(String uri, String userAgent, ProxyData proxyData) throws IOException {
+    private HttpsURLConnection createConnection(String uri, String userAgent, ProxyData proxyData, int connTimeout)
+            throws IOException {
+
         var url = new URL(uri);
         HttpsURLConnection conn;
 
@@ -163,8 +169,8 @@ public final class OpcodeRequest {
         }
         conn.setRequestProperty("User-Agent", userAgent);
         conn.setRequestProperty("Accept-Encoding", "gzip");
-        conn.setConnectTimeout(30000);
-        conn.setReadTimeout(30000);
+        conn.setConnectTimeout(connTimeout);
+        conn.setReadTimeout(connTimeout);
         return conn;
     }
 

@@ -13,6 +13,7 @@ import cz.ophite.mimic.vhackos.botnet.service.base.Service;
 import cz.ophite.mimic.vhackos.botnet.service.base.ServiceConfig;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.json.Json;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,6 +85,8 @@ public final class Botnet implements IBotnet {
         serviceConfig.setAsync(true);
         serviceConfig.setFirstRunSync(true);
         Service.getServices().get(IService.SERVICE_UPDATE).start(serviceConfig);
+        SentryGuard.setBotnetUser(config.getUserName());
+        SentryGuard.log("Botnet was launched under the user: " + config.getUserName());
 
         // spustí služby
         initializeServices();

@@ -7,7 +7,14 @@ package cz.ophite.mimic.vhackos.botnet.api.exception;
  */
 public final class AccountBlockedException extends BotnetException {
 
-    public AccountBlockedException(String resultCode, String message) {
+    private final String userName;
+
+    public AccountBlockedException(String resultCode, String userName, String message) {
         super(resultCode, message);
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }

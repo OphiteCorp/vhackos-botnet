@@ -5,6 +5,7 @@ import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
 import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
 import cz.ophite.mimic.vhackos.botnet.service.base.Service;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandDispatcher;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import cz.ophite.mimic.vhackos.botnet.utils.ResourceHelper;
 import cz.ophite.mimic.vhackos.botnet.utils.appender.HackedAppender;
 import cz.ophite.mimic.vhackos.botnet.utils.appender.IAppender;
@@ -204,6 +205,7 @@ public final class BotnetGui extends JFrame {
             smartAppend(doc, msg, keyWord, c);
 
         } catch (Exception e) {
+            SentryGuard.logError("Error writing GUI record", new Object[]{ msg, e.toString() });
             LOG.error("There was an error writing message '" + msg + "' to the GUI log", e);
         }
     }

@@ -20,6 +20,7 @@ import cz.ophite.mimic.vhackos.botnet.shared.command.ICommandListener;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.IInjectRule;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.InjectionContext;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import org.apache.commons.exec.CommandLine;
 import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -50,6 +51,9 @@ public final class Application implements ICommandListener {
     public static void main(String[] args) {
         var time = System.currentTimeMillis();
         var useGui = !(args != null && args.length > 0 && "-console".equalsIgnoreCase(args[0]));
+
+        // init sentry pro logování
+        SentryGuard.init(IBotnet.VERSION);
 
         if (useGui) {
             gui = new BotnetGui();
@@ -115,6 +119,7 @@ public final class Application implements ICommandListener {
             exit(ERROR_CODE_MISSING_LOGIN_CREDENTIAL);
 
         } catch (AccountBlockedException e) {
+            SentryGuard.logError("Your account has been blocked: " + e.getUserName());
             LOG.error("Your game account has been blocked. Try it later");
             exit(1);
 
