@@ -198,7 +198,6 @@ public final class BotnetTaskCommand extends BaseCommand {
             put(am, (i == 0) ? name : "", str);
 
             if (HibernateManager.isConnected()) {
-                getLog().info("Updating an existing IP: {}", ip.getIp());
                 databaseService.updateScanIp(ip.getIp(), ip.getUserName(), null);
             }
         }

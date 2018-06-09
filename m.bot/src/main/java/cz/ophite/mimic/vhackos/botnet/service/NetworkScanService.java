@@ -112,7 +112,6 @@ public final class NetworkScanService extends Service {
         var resp = scan();
 
         for (var ip : resp.getIps()) {
-            getLog().info("Adding a new IP to the database: {}", ip.getIp());
             var scannedIp = databaseService.addScanIp(ip);
 
             if (enableBrute) {
