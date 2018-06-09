@@ -247,6 +247,7 @@ public final class NetworkService extends Service {
                         .toTimeFormat(leftTime * 1000));
                 workData.taskResponse = taskModule.abortBruteforce(ip.getBruteId());
                 sleep();
+                break;
             }
             if (leftTime > maxWaitTime) {
                 maxWaitTime = leftTime;

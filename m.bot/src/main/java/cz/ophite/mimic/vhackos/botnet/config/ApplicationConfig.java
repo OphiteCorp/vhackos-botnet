@@ -44,7 +44,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // zpráva ponechaná v logu cílového systému
 
-    @ConfigValue(value = "game.message.left.in.log", defaultValue = "I did not take the money!<br>by Ophite.botnet",
+    @ConfigValue(value = "game.message.left.in.log", defaultValue = "I did not take the money!<br>by OphiteCorp.Botnet",
                  comment = "The message will be left in the remote system log. Use <br> for a new line")
     private String messageLog;
 
