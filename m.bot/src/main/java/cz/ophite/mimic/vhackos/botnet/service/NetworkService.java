@@ -93,6 +93,9 @@ public final class NetworkService extends Service {
         var targetIps = targets.stream().map(IpScanData::getIp).collect(Collectors.toList());
 
         for (var ip : targetIps) {
+            if (workData.exploitsLeft == 0) {
+                break;
+            }
             getLog().info("IP: {} - an attack begins", ip);
             sleep();
             tryExploitTarget(ip, workData);
