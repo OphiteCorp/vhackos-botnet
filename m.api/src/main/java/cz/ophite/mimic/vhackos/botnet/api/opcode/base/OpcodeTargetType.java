@@ -101,7 +101,15 @@ public enum OpcodeTargetType {
     /**
      * Správa misí.
      */
-    MISSIONS("missions");
+    MISSIONS("missions"),
+    /**
+     * Správa crew.
+     */
+    CREW("crew"),
+    /**
+     * Profil crew.
+     */
+    CREW_PROFILE("crewprofile");
 
     private final String code; // název php souboru
 
