@@ -37,6 +37,7 @@ public final class BotnetLogCommand extends BaseCommand {
     @Command(value = "log", comment = "Gets own system log")
     private String getSystemLog() {
         return execute("log", am -> {
+            am.setInsideTheme();
             var data = logModule.getLog();
 
             for (var i = 0; i < data.size(); i++) {
@@ -57,11 +58,24 @@ public final class BotnetLogCommand extends BaseCommand {
     }
 
     /**
+     * Nastaví vlastní systémový log.
+     */
+    @Command(value = "log set default", comment = "Sets own system log with the default value")
+    private String setSystemLog() {
+        return execute("log set", am -> {
+            var message = getBotnet().getConfig().getMessageLog();
+            logModule.setLog(message);
+            put(am, "Result", "The message to the log has been set");
+        });
+    }
+
+    /**
      * Získá informace o vzdáleném logu.
      */
     @Command(value = "log remote", comment = "Get the log from the target IP")
     private String getRemoteSystemLog(@CommandParam("ip") String ip) {
         return execute("remote log -> " + ip, am -> {
+            am.setInsideTheme();
             var data = serviceModule.getRemoteLog(ip);
 
             for (var i = 0; i < data.size(); i++) {

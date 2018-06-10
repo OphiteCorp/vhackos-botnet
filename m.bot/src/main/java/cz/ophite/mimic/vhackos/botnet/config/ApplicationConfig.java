@@ -44,26 +44,28 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // zpráva ponechaná v logu cílového systému
 
-    @ConfigValue(value = "game.message.left.in.log", defaultValue = "I did not take the money!<br>by OphiteCorp.Botnet",
+    @ConfigValue(value = "game.message.left.in.log",
+                 defaultValue = "\"█████████████████████████████<br>█ Hacked by OphiteCorp.Botnet<br>█████████████████████████████<br>████████████████████████████<br>███████████████████████████<br>██████████████████████████<br>█████████████████████████<br>████████████████████████<br>███████████████████████<br>██████████████████████<br>█████████████████████<br>████████████████████<br>███████████████████<br>██████████████████<br>█████████████████<br>████████████████<br>███████████████<br>██████████████<br>█████████████<br>████████████<br>███████████<br>██████████<br>█████████<br>████████<br>███████<br>██████<br>█████<br>████<br>███<br>██<br>█\"",
                  comment = "The message will be left in the remote system log. Use <br> for a new line")
     private String messageLog;
 
     @ConfigValue(value = "game.safe.netcoins", defaultValue = "5000",
-                 comment = "The number of netcoins that not be touched")
+                 comment = "The number of netcoins that not be touched.\nDefault: 5000")
     private String safeNetcoins;
 
     @ConfigValue(value = "game.safe.boosters", defaultValue = "20",
-                 comment = "The number of boosters that not be touched")
+                 comment = "The number of boosters that not be touched.\nDefault: 20")
     private String safeBoosters;
 
     @ConfigValue(value = "game.safe.malwares", defaultValue = "20",
-                 comment = "The number of malwares that not be touched")
+                 comment = "The number of malwares that not be touched.\nDefault: 20")
     private String safeMalwares;
 
     // maximální počet pokusů na odeslání požadavku na vHack server
 
     @ConfigValue(value = "sys.max.request.attempts",
-                 comment = "The maximum number of attempts to send the request to the server", defaultValue = "5")
+                 comment = "The maximum number of attempts to send the request to the server.\nDefault: 5",
+                 defaultValue = "5")
     private String maxRequestAttempts;
 
     @ConfigValue(value = "sys.sleep.delay",
@@ -71,7 +73,8 @@ public final class ApplicationConfig implements IBotnetConfig {
                  defaultValue = "f_rand(1000,3000)")
     private String sleepDelay;
 
-    @ConfigValue(value = "sys.proxy.enable", comment = "Enables the use of a proxy server", defaultValue = "False")
+    @ConfigValue(value = "sys.proxy.enable", comment = "Enables the use of a proxy server.\nDefault: False",
+                 defaultValue = "False")
     private String proxyEnable;
 
     @ConfigValue(value = "sys.proxy.host",
@@ -82,7 +85,7 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String proxyPort;
 
     @ConfigValue(value = "sys.aggressive.mode",
-                 comment = "Enables aggressive mode. This mode greatly increases bot activity, but behavior no longer responds to player behavior",
+                 comment = "Enables aggressive mode. This mode greatly increases bot activity, but behavior no longer responds to player behavior.\nDefault: False",
                  defaultValue = "False")
     private String aggressiveMode;
 
@@ -93,7 +96,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // GUI
 
-    @ConfigValue(value = "gui.fullscreen.mode", comment = "Expands the application across the desktop",
+    @ConfigValue(value = "gui.fullscreen.mode", comment = "Expands the application across the desktop.\nDefault: False",
                  defaultValue = "False")
     private String fullScreenMode;
 
@@ -104,8 +107,8 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // služba - Botnet update
 
-    @ConfigValue(value = "service-botnet-update.enable", comment = "Enable checking the latest version of Botnet",
-                 defaultValue = "True")
+    @ConfigValue(value = "service-botnet-update.enable",
+                 comment = "Enable checking the latest version of Botnet.\nDefault: True", defaultValue = "True")
     private String sBotnetUpdateEnable;
 
     // služba - update
@@ -117,7 +120,8 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // služba - miner
 
-    @ConfigValue(value = "service-miner.enable", comment = "Enable netcoins mining service", defaultValue = "False")
+    @ConfigValue(value = "service-miner.enable", comment = "Enable netcoins mining service.\nDefault: False",
+                 defaultValue = "False")
     private String sMinerEnable;
 
     @ConfigValue(value = "service-miner.timeout",
@@ -127,7 +131,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // služba - malware
 
-    @ConfigValue(value = "service-malware.enable", comment = "Enable malware production service",
+    @ConfigValue(value = "service-malware.enable", comment = "Enable malware production service.\nDefault: False",
                  defaultValue = "False")
     private String sMalwareEnable;
 
@@ -138,7 +142,8 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // služba - server
 
-    @ConfigValue(value = "service-server.enable", comment = "Enable server control", defaultValue = "False")
+    @ConfigValue(value = "service-server.enable", comment = "Enable server control.\nDefault: False",
+                 defaultValue = "False")
     private String sServerEnable;
 
     @ConfigValue(value = "service-server.timeout",
@@ -146,21 +151,21 @@ public final class ApplicationConfig implements IBotnetConfig {
                  defaultValue = "f_rand(2940000,3060000)")
     private String sServerTimeout;
 
-    @ConfigValue(value = "service-server.update.limit", comment = "Maximum number of updates per node",
+    @ConfigValue(value = "service-server.update.limit", comment = "Maximum number of updates per node.\nDefault: 2500",
                  defaultValue = "2500")
     private String sServerUpdateLimit;
 
-    @ConfigValue(value = "service-server.core.update.limit", comment = "Maximum number of server core updates",
-                 defaultValue = "2500")
+    @ConfigValue(value = "service-server.core.update.limit",
+                 comment = "Maximum number of server core updates.\nDefault: 2500", defaultValue = "2500")
     private String sServerCoreUpdateLimit;
 
-    @ConfigValue(value = "service-server.purchase.packages", comment = "Purchase packages for netcoins",
-                 defaultValue = "True")
+    @ConfigValue(value = "service-server.purchase.packages",
+                 comment = "Purchase packages for netcoins.\nDefault: False", defaultValue = "False")
     private String sServerBuyPackagesForNetcoins;
 
     // služba - store
 
-    @ConfigValue(value = "service-store.enable", comment = "Enables shop control to purchase apps",
+    @ConfigValue(value = "service-store.enable", comment = "Enables shop control to purchase apps.\nDefault: False",
                  defaultValue = "False")
     private String sStoreEnable;
 
@@ -170,14 +175,14 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sStoreTimeout;
 
     @ConfigValue(value = "service-store.updated.apps",
-                 comment = "List of applications to update separated by a comma\nSupported applications are: ${cz.ophite.mimic.vhackos.botnet.shared.dto.AppStoreType.UPDATABLE_APP_CODES}",
+                 comment = "List of applications to update separated by a comma\nSupported applications are: ${cz.ophite.mimic.vhackos.botnet.shared.dto.AppStoreType.UPDATABLE_APP_CODES}\nExample: If you only want Firewall and BankProtect, it's like: [FW,BP]",
                  defaultValue = "[${cz.ophite.mimic.vhackos.botnet.shared.dto.AppStoreType.UPDATABLE_APP_CODES}]")
     private String sUpdatedAppsList;
 
     // služba - booster
 
-    @ConfigValue(value = "service-booster.enable", comment = "Enables use of boosters for active tasks",
-                 defaultValue = "False")
+    @ConfigValue(value = "service-booster.enable",
+                 comment = "Enables use of boosters for active tasks.\nDefault: False", defaultValue = "False")
     private String sBoosterEnable;
 
     @ConfigValue(value = "service-booster.timeout",
@@ -186,14 +191,15 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sBoosterTimeout;
 
     @ConfigValue(value = "service-booster.req.time",
-                 comment = "Required task time for booster use. If at least one task time is greater than this value, then boost will be used\nTime is in seconds. Default: 15min",
+                 comment = "Required task time for booster use. If at least one task time is greater than this value, then boost will be used. Time is in seconds.\nDefault: 15min",
                  defaultValue = "900")
     private String sBoosterReqTime;
 
     // služba - mission
 
     @ConfigValue(value = "service-mission.enable",
-                 comment = "Enables automatic completion of missions and picking up rewards", defaultValue = "False")
+                 comment = "Enables automatic completion of missions and picking up rewards.\nDefault: False",
+                 defaultValue = "False")
     private String sMissionEnable;
 
     @ConfigValue(value = "service-mission.timeout",
@@ -204,7 +210,7 @@ public final class ApplicationConfig implements IBotnetConfig {
     // služba - network
 
     @ConfigValue(value = "service-network.enable",
-                 comment = "Enable exploit, target bank hack, and cash withdrawal from the bank",
+                 comment = "Enable exploit, target bank hack, and cash withdrawal from the bank.\nDefault: False",
                  defaultValue = "False")
     private String sNetworkEnable;
 
@@ -223,36 +229,39 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sNetworkMaxWaitingBruteTime;
 
     @ConfigValue(value = "service-network.min.bank.amount.for.withdraw",
-                 comment = "How much money must be in the bank to use theft", defaultValue = "250000000")
+                 comment = "How much money must be in the bank to use theft.\nDefault: 250000000",
+                 defaultValue = "250000000")
     private String sNetworkMinBankAmountForWithdraw;
 
     @ConfigValue(value = "service-network.user.bank.limit",
-                 comment = "If a player's bank will have more than that amount of money, they will stop stealing money from the target bank",
+                 comment = "If a player's bank will have more than that amount of money, they will stop stealing money from the target bank.\nDefault: 250000000000",
                  defaultValue = "250000000000")
     private String sNetworkUserBankLimit;
 
     @ConfigValue(value = "service-network.withdraw.percent.amount",
-                 comment = "How much money from the target bank will be transferred to the player's bank. In percent",
+                 comment = "How much money from the target bank will be transferred to the player's bank. In percent.\nDefault: 95",
                  defaultValue = "95")
     private String sNetworkWithdrawPercentAmount;
 
     @ConfigValue(value = "service-network.keep.brute.by.bank.money",
-                 comment = "Keep bruteforce in the tasks if has more than a certain amount of money in the bank",
+                 comment = "Keep bruteforce in the tasks if has more than a certain amount of money in the bank.\nDefault: 1000000000",
                  defaultValue = "1000000000")
     private String sNetworkKeepBruteforceByBankMoney;
 
     @ConfigValue(value = "service-network.stop.attack.by.bank.money",
-                 comment = "Should the attack be stopped if there is enough money in our bank?", defaultValue = "False")
+                 comment = "Should the attack be stopped if there is enough money in our bank?\nDefault: False",
+                 defaultValue = "False")
     private String sNetworkStopAttackByBankMoney;
 
     @ConfigValue(value = "service-network.withdraw.without.malwares",
-                 comment = "Should the bank be robbed even if malware is not available?", defaultValue = "True")
+                 comment = "Should the bank be robbed even if malware is not available?\nDefault: True",
+                 defaultValue = "True")
     private String sNetworkWithdrawWithoutMalwares;
 
     // služba - netscan
 
     @ConfigValue(value = "service-netscan.enable",
-                 comment = "Enable network scanning and data storage in the database\nFor this service, you need to have a configured database, otherwise it does not make sense to turn it on",
+                 comment = "Enable network scanning and data storage in the database\nFor this service, you need to have a configured database, otherwise it does not make sense to turn it on.\nDefault: False",
                  defaultValue = "False")
     private String sNetworkScanEnable;
 
@@ -272,30 +281,32 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String sNetworkScanPause;
 
     @ConfigValue(value = "service-netscan.allow.brute",
-                 comment = "Enables brute force IP. This method does not allow access to a bank, but only helps to obtain the user's name",
+                 comment = "Enables brute force IP. This method does not allow access to a bank, but only helps to obtain the user's name.\nDefault: True",
                  defaultValue = "True")
     private String sNetworkScanAllowBrute;
 
     @ConfigValue(value = "service-netscan.brute.prefer.database",
-                 comment = "Enable if users are to prefer the database without a name before the new scan user",
+                 comment = "Enable if users are to prefer the database without a name before the new scan user.\nDefault: True",
                  defaultValue = "True")
     private String sNetworkScanPreferDatabase;
 
     // databáze
 
-    @ConfigValue(value = "db.enable", comment = "Enable database storage", defaultValue = "False")
+    @ConfigValue(value = "db.enable", comment = "Enable database storage.\nDefault: False", defaultValue = "False")
     private String dbEnable;
 
-    @ConfigValue(value = "db.host", comment = "IP server running MySQL", defaultValue = "127.0.0.1:3306")
+    @ConfigValue(value = "db.host", comment = "IP server running MySQL.\nDefault: 127.0.0.1:3306",
+                 defaultValue = "127.0.0.1:3306")
     private String dbHost;
 
-    @ConfigValue(value = "db.user", comment = "Login a database user", defaultValue = "root")
+    @ConfigValue(value = "db.user", comment = "Login a database user.\nDefault: root", defaultValue = "root")
     private String dbUser;
 
     @ConfigValue(value = "db.password", comment = "The database user password")
     private String dbPassword;
 
-    @ConfigValue(value = "db.database", comment = "Database name for data storage", defaultValue = "vhackbotnet")
+    @ConfigValue(value = "db.database", comment = "Database name for data storage.\nDefault: vhackbotnet",
+                 defaultValue = "vhackbotnet")
     private String dbDatabase;
 
     /**
@@ -353,7 +364,10 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @Override
     public String getMessageLog() {
-        return messageLog;
+        var msg = messageLog.replaceAll("\"(.+?)\"", "$1");
+        msg = msg.replaceAll("<br>", "\n");
+        msg = msg.replaceAll(" ", " ");
+        return msg;
     }
 
     @Override

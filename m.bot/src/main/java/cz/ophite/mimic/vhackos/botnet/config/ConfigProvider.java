@@ -6,6 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -20,6 +23,7 @@ public final class ConfigProvider {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigProvider.class);
 
     private static final String APPLICATION_CONFIG_FILE = "botnet.properties";
+    private static final Charset CHARSET = Charset.forName("UTF-16");
 
     private static final Pattern PATTERN_REPLACE_VARIABLES = Pattern.compile("\\$\\{(.+?)\\}");
 
@@ -50,9 +54,10 @@ public final class ConfigProvider {
      * Načte konfiguraci ze souboru.
      */
     private ApplicationConfig loadConfigProperties(File file) {
-        try (var fis = new FileInputStream(file)) {
+        try {
+            var content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())), CHARSET);
             var prop = new Properties();
-            prop.load(fis);
+            prop.load(new StringReader(content));
             LOG.debug("Properties file '{}' was loaded", file.getName());
             var config = mapToConfiguration(prop);
             LOG.debug("{} file was successfully loaded", ApplicationConfig.class.getSimpleName());
@@ -68,18 +73,19 @@ public final class ConfigProvider {
      * Vytvoří nový konfigurační soubor.
      */
     private void createNewConfigFile(File file, Map<String, List<ConfigData>> configData) {
-        try (var bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
+        try (var bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), CHARSET))) {
             LOG.info("Creating (configuration) properties file: {}", file.getName());
 
-            bw.write("# The Ophite.botnet configuration file for mobile game vHackOS");
+            bw.write("# The OphiteCorp.Botnet configuration file for mobile game vHackOS");
             bw.newLine();
             bw.write("# by mimic | © 2018");
-            bw.newLine();
-            bw.write("# ================================================================");
             bw.newLine();
             bw.newLine();
 
             for (var entry : configData.entrySet()) {
+                bw.write("# =======================================================================================================");
+                bw.newLine();
+                bw.newLine();
                 bw.write(String.format("[%s]", entry.getKey()));
                 bw.newLine();
                 bw.newLine();
@@ -117,32 +123,29 @@ public final class ConfigProvider {
             LOG.debug("Start checking the configuration file and eventually merge");
             var missingKeys = new ArrayList<ConfigData>();
             var current = prepareConfigData();
-            Properties prop;
+            var content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())), CHARSET);
+            var prop = new Properties();
+            prop.load(new StringReader(content));
 
-            try (var fis = new FileInputStream(file)) {
-                prop = new Properties();
-                prop.load(fis);
-
-                for (var entry : prop.entrySet()) {
-                    if (isCategory(entry.getKey().toString())) {
-                        prop.remove(entry.getKey());
-                    }
+            for (var entry : prop.entrySet()) {
+                if (isCategory(entry.getKey().toString())) {
+                    prop.remove(entry.getKey());
                 }
-                var names = prop.stringPropertyNames();
+            }
+            var names = prop.stringPropertyNames();
 
-                for (var data : current.values()) {
-                    for (var cd : data) {
-                        var found = false;
+            for (var data : current.values()) {
+                for (var cd : data) {
+                    var found = false;
 
-                        for (var name : names) {
-                            if (name.equals(cd.key)) {
-                                found = true;
-                                break;
-                            }
+                    for (var name : names) {
+                        if (name.equals(cd.key)) {
+                            found = true;
+                            break;
                         }
-                        if (!found) {
-                            missingKeys.add(cd);
-                        }
+                    }
+                    if (!found) {
+                        missingKeys.add(cd);
                     }
                 }
             }

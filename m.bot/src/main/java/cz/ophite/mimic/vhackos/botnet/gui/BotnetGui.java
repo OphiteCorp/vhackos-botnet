@@ -189,62 +189,62 @@ public final class BotnetGui extends JFrame {
     }
 
     private void appendToPane(String msg, Color c) {
-        if (area == null) {
-            return;
-        }
-        var doc = (HTMLDocument) area.getStyledDocument();
-        // definice klíčových slov
-        var keyWord = new SimpleAttributeSet();
-        StyleConstants.setForeground(keyWord, c);
-        StyleConstants.setBackground(keyWord, getBackground());
-        StyleConstants.setFontFamily(keyWord, font.getFamily());
-        keyWord.addAttribute(StyleConstants.NameAttribute, HTML.Tag.FONT);
-
-        try {
-            if (doc.getLength() > bufferSize) {
-                doc.remove(0, doc.getLength() - bufferSize);
+        synchronized (LOG) {
+            if (area == null) {
+                return;
             }
-            smartAppend(doc, msg, keyWord, c);
+            var doc = (HTMLDocument) area.getStyledDocument();
+            // definice klíčových slov
+            var keyWord = new SimpleAttributeSet();
+            StyleConstants.setForeground(keyWord, c);
+            StyleConstants.setBackground(keyWord, getBackground());
+            StyleConstants.setFontFamily(keyWord, font.getFamily());
+            keyWord.addAttribute(StyleConstants.NameAttribute, HTML.Tag.FONT);
 
-        } catch (Exception e) {
-            SentryGuard.logError("Error writing GUI record", new Object[]{ msg, e.toString() });
-            LOG.error("There was an error writing message '" + msg + "' to the GUI log", e);
+            try {
+                if (doc.getLength() > bufferSize) {
+                    doc.remove(0, doc.getLength() - bufferSize);
+                }
+                smartAppend(doc, msg, keyWord, c);
+
+            } catch (Exception e) {
+                SentryGuard.logError("Error writing GUI record", new Object[]{ msg, e.toString() });
+                LOG.error("There was an error writing message '" + msg + "' to the GUI log", e);
+            }
         }
     }
 
     private void smartAppend(HTMLDocument doc, String msg, SimpleAttributeSet keyWord, Color color)
             throws BadLocationException {
 
-        synchronized (LOG) {
-            var services = Service.getServiceClassNames();
-            var serviceLine = false;
+        var services = Service.getServiceClassNames();
+        var serviceLine = false;
 
-            for (var s : services) {
-                var i = msg.indexOf(String.format("[%s]", s));
+        for (var s : services) {
+            var i = msg.indexOf(String.format("[%s]", s));
 
-                if (i >= 0) {
-                    var p1 = msg.substring(0, ++i);
-                    var p2 = msg.substring(i + s.length(), msg.length());
+            if (i >= 0) {
+                var p1 = msg.substring(0, ++i);
+                var p2 = msg.substring(i + s.length(), msg.length());
 
-                    doc.insertString(doc.getLength(), p1, keyWord);
-                    StyleConstants.setForeground(keyWord, Color.GREEN);
-                    doc.insertString(doc.getLength(), s, keyWord);
-                    StyleConstants.setForeground(keyWord, color);
-                    doc.insertString(doc.getLength(), p2, keyWord);
+                doc.insertString(doc.getLength(), p1, keyWord);
+                StyleConstants.setForeground(keyWord, Color.GREEN);
+                doc.insertString(doc.getLength(), s, keyWord);
+                StyleConstants.setForeground(keyWord, color);
+                doc.insertString(doc.getLength(), p2, keyWord);
 
-                    serviceLine = true;
-                    break;
-                }
+                serviceLine = true;
+                break;
             }
-            if (!serviceLine) {
-                doc.insertString(doc.getLength(), msg, keyWord);
-            }
-            // automaticky bude scrollovat v případě, že je scroll úplně dole
-            var vScroll = scroll.getVerticalScrollBar();
-            var autoScroll = (vScroll.getMaximum() - vScroll.getValue() - vScroll.getVisibleAmount()) < 32;
-            if (autoScroll) {
-                area.setCaretPosition(doc.getLength());
-            }
+        }
+        if (!serviceLine) {
+            doc.insertString(doc.getLength(), msg, keyWord);
+        }
+        // automaticky bude scrollovat v případě, že je scroll úplně dole
+        var vScroll = scroll.getVerticalScrollBar();
+        var autoScroll = (vScroll.getMaximum() - vScroll.getValue() - vScroll.getVisibleAmount()) < 32;
+        if (autoScroll) {
+            area.setCaretPosition(doc.getLength());
         }
     }
 

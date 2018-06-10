@@ -43,7 +43,7 @@ public class LogModule extends Module {
      */
     public synchronized void setLog(String log) {
         var opcode = new UpdateLogOpcode();
-        opcode.setLog(log);
+        opcode.setLog(fixLog(log));
 
         try {
             sendRequest(opcode);
@@ -78,7 +78,7 @@ public class LogModule extends Module {
     public synchronized void setRemoteLog(String ip, String log) {
         var opcode = new UpdateRemoteLogOpcode();
         opcode.setTargetIp(ip);
-        opcode.setLog(log);
+        opcode.setLog(fixLog(log));
 
         try {
             var response = sendRequest(opcode);
@@ -103,5 +103,11 @@ public class LogModule extends Module {
             list.add(line.replace((char) 32, (char) 160));
         }
         return list;
+    }
+
+    private static String fixLog(String log) {
+        log = log.replaceAll("<br>", "\n");
+        log = log.replaceAll(" ", " ");
+        return log;
     }
 }

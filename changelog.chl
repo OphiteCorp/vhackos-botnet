@@ -1,13 +1,10 @@
 {
-  "version": "0.9.6",
-  "download": "https://github.com/OphiteCorp/vhackos-botnet/releases/download/botnetv096/botnet.jar",
+  "version": "0.9.7",
+  "download": "https://github.com/OphiteCorp/vhackos-botnet/releases/download/botnetv097/botnet.jar",
   "discord": "https://discordapp.com/invite/Cdz39vu",
   "news": [
-    "Minor fixes and critical encoding error while console mode",
-    "Added Sentry support for better bug fixes",
-    "Added a custom delay configuration to send and receive a response from the server",
-    "Added 'log remote set default' command, which sets the system log with the value of the config",
-    "Finished network service for automatic exploit and bruteforce/withdraw of the target bank",
-    "Customize the buffer size for the GUI window"
+    "A new 'log set default' command has been added to set up a custom log according to the configuration",
+    "Fixed new lines in the custom log for the system log",
+    "Modified configuration file + added support for UTF-16"
   ]
 }

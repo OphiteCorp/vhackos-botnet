@@ -296,7 +296,7 @@ public final class NetworkService extends Service {
                     case SUCCESS:
                         getLog().info("IP: {} - open the bank", ip.getIp());
                         var targetBank = bankModule.getRemoteBank(ip.getIp());
-                        getLog().info("IP: {} - the bank has {} money", ip.getIp(), targetBank.getTotal());
+                        getLog().info("IP: {} - the bank has {} money", ip.getIp(), targetBank.getMoney());
                         sleep(1000);
 
                         for (var trans : targetBank.getTransactions()) {
@@ -304,7 +304,7 @@ public final class NetworkService extends Service {
                         }
                         // pokud má smysl vykrást peníze z banky
                         if (workData.playerBankResponse.getTotal() < getConfig().getNetworkUserBankLimit() && targetBank
-                                .getTotal() >= getConfig().getNetworkMinBankAmountForWithdraw()) {
+                                .getMoney() >= getConfig().getNetworkMinBankAmountForWithdraw()) {
 
                             var withdrawPercent = (getConfig().getNetworkWithdrawPercentAmount() > 100) ? 100. : Math
                                     .max(getConfig().getNetworkWithdrawPercentAmount(), 0);
@@ -325,7 +325,7 @@ public final class NetworkService extends Service {
                                     }
                                 }
                                 if (canWithdraw) {
-                                    var amount = (long) ((withdrawPercent / 100.) * targetBank.getTotal());
+                                    var amount = (long) ((withdrawPercent / 100.) * targetBank.getMoney());
                                     var resp = bankModule.withdraw(ip.getIp(), amount);
 
                                     if (resp.getTransactionsCount() > 0) {
@@ -357,7 +357,7 @@ public final class NetworkService extends Service {
                                             }
                                         }
                                         // cílová banka má hodně peněz, které by šlo ještě v budoucnu použít
-                                        if (targetBank.getTotal() > getConfig().getNetworkKeepBruteforceByBankMoney()) {
+                                        if (targetBank.getMoney() > getConfig().getNetworkKeepBruteforceByBankMoney()) {
                                             getLog().info("IP: {} - the bank contained more money than normal and brutal force would be left", ip
                                                     .getIp());
                                             removeBrute = false;
@@ -372,7 +372,7 @@ public final class NetworkService extends Service {
                             }
                         } else {
                             // banka má méně peněz, něž je minimální množství pro krádež, takže bruteforce ostraníme
-                            if (targetBank.getTotal() < getConfig().getNetworkMinBankAmountForWithdraw()) {
+                            if (targetBank.getMoney() < getConfig().getNetworkMinBankAmountForWithdraw()) {
                                 getLog().info("IP: {} - the target bank has too low money and the bruteforce will be removed", ip
                                         .getIp());
                             }
