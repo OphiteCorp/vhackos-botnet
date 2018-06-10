@@ -352,7 +352,7 @@ public final class NetworkService extends Service {
                                                         .getMalwares() > getConfig().getSafeMalwares()) {
 
                                                     bankModule.useMalware(ip.getIp());
-                                                    getLog().info("IP: {} - malware to hide IP was used. The remaining number of malwares: ", ip
+                                                    getLog().info("IP: {} - malware to hide IP was used. The remaining number of malwares: {}", ip
                                                             .getIp(), malwareResp.getMalwares() - 1);
                                                 } else {
                                                     getLog().warn("IP: {} - no malware to hide IP!", ip.getIp());

@@ -9,6 +9,7 @@ import cz.ophite.mimic.vhackos.botnet.api.opcode.base.IOpcode;
 import cz.ophite.mimic.vhackos.botnet.api.opcode.base.OpcodeTargetType;
 import cz.ophite.mimic.vhackos.botnet.shared.json.Json;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.HashUtils;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,7 +138,9 @@ public final class OpcodeRequest {
             }
         } catch (IOException e) {
             if (!(e instanceof ConnectException)) {
-                LOG.error("Something is wrong with processing the request. URI: " + uri, e);
+                SentryGuard.log(e);
+                LOG.debug("Sending a request to the server failed", e);
+                LOG.error("Something is wrong with processing the request. URI: " + uri);
             }
             throw new ConnectionException(null, "An error occurred while processing request: " + uri, e);
         } finally {
