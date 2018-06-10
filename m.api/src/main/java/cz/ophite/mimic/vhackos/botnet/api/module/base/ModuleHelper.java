@@ -263,6 +263,53 @@ public final class ModuleHelper {
     }
 
     /**
+     * Překonvertuje data do infromací o členu crew.
+     */
+    public static List<CrewMemberData> convertToCrewMemberData(Object data) {
+        var out = new ArrayList<CrewMemberData>();
+        var list = ((ArrayList) data);
+
+        for (var item : list) {
+            var entries = ((LinkedTreeMap<String, Object>) item).entrySet();
+            var member = new CrewMemberData();
+
+            for (var entry : entries) {
+                checkResponseIntegrity(entry.getKey(), CrewMemberData.class);
+                setField(entry, member, CrewMemberData.P_USER_ID);
+                setField(entry, member, CrewMemberData.P_POSITION);
+                setField(entry, member, CrewMemberData.P_USER_NAME);
+                setField(entry, member, CrewMemberData.P_LEVEL);
+                setField(entry, member, CrewMemberData.P_LAST_ONLINE);
+            }
+            out.add(member);
+        }
+        return out;
+    }
+
+    /**
+     * Překonvertuje data do infromací o zprávě v crew.
+     */
+    public static List<CrewMessageData> convertToCrewMessageData(Object data) {
+        var out = new ArrayList<CrewMessageData>();
+        var list = ((ArrayList) data);
+
+        for (var item : list) {
+            var entries = ((LinkedTreeMap<String, Object>) item).entrySet();
+            var message = new CrewMessageData();
+
+            for (var entry : entries) {
+                checkResponseIntegrity(entry.getKey(), CrewMessageData.class);
+                setField(entry, message, CrewMessageData.P_USER_ID);
+                setField(entry, message, CrewMessageData.P_MESSAGE);
+                setField(entry, message, CrewMessageData.P_USER_NAME);
+                setField(entry, message, CrewMessageData.P_TIME);
+            }
+            out.add(message);
+        }
+        return out;
+    }
+
+    /**
      * Překonvertuje data do seznamu SKU.
      */
     public static List<String> convertToSKUsData(Object data) {

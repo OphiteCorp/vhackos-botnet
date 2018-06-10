@@ -32,7 +32,10 @@ public abstract class BaseCommand {
     }
 
     protected static AT_Row put(AsciiMaker am, Object key, Object value) {
-        return am.add(key, fixValue(value));
+        if (value != null) {
+            return am.add(key, fixValue(value));
+        }
+        return null;
     }
 
     protected static AT_Row put(AsciiMaker am, Map.Entry<String, FieldData> data) {

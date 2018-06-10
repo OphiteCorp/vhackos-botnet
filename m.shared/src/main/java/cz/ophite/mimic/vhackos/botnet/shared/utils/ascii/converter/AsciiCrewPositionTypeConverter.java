@@ -1,23 +1,22 @@
 package cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter;
 
+import cz.ophite.mimic.vhackos.botnet.shared.dto.CrewPositionType;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.IAsciiConverter;
 
 /**
- * Převede čas v milisekundách na čitelný formát.
+ * Převede hodnotu pozice v crew na typ.
  *
  * @author mimic
  */
 @Inject
-public final class AsciiElapsedTimeConverter implements IAsciiConverter {
+public final class AsciiCrewPositionTypeConverter implements IAsciiConverter {
 
     @Override
     public Object convert(Object value) {
         if (value == null) {
             return null;
         }
-        long time = (long) value;
-        return SharedUtils.toTimeFormat(time);
+        return CrewPositionType.getbyPosition((int) value).getAlias();
     }
 }

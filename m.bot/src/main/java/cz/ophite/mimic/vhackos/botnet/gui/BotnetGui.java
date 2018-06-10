@@ -39,7 +39,7 @@ public final class BotnetGui extends JFrame {
     private JFormattedTextField tfCommand;
     private Font font;
 
-    private int bufferSize = 256 * 1024; // výchozí
+    private int bufferSize = 128 * 1024; // výchozí
 
     public void open() {
         HackedAppender.getInstance().addListener(new AppenderLogic());

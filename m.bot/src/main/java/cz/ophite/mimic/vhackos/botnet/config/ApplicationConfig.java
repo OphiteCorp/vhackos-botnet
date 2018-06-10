@@ -45,7 +45,7 @@ public final class ApplicationConfig implements IBotnetConfig {
     // zpráva ponechaná v logu cílového systému
 
     @ConfigValue(value = "game.message.left.in.log",
-                 defaultValue = "\"█████████████████████████████<br>█ Hacked by OphiteCorp.Botnet<br>█████████████████████████████<br>████████████████████████████<br>███████████████████████████<br>██████████████████████████<br>█████████████████████████<br>████████████████████████<br>███████████████████████<br>██████████████████████<br>█████████████████████<br>████████████████████<br>███████████████████<br>██████████████████<br>█████████████████<br>████████████████<br>███████████████<br>██████████████<br>█████████████<br>████████████<br>███████████<br>██████████<br>█████████<br>████████<br>███████<br>██████<br>█████<br>████<br>███<br>██<br>█\"",
+                 defaultValue = "████████████████████<br>▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒<br>ʸᵒᵘ ʰᵃᵛᵉ ᵇᵉᵉⁿ ʰᵃᶜᵏᵉᵈ<br>▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒<br>████████████████████<br>by OphiteCorp.Botnet",
                  comment = "The message will be left in the remote system log. Use <br> for a new line")
     private String messageLog;
 
@@ -102,7 +102,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @ConfigValue(value = "gui.area.buffer.size",
                  comment = "Buffer size for logging. Higher, the greater the demands on system resources.\nDefault: 262144",
-                 defaultValue = "256*1024")
+                 defaultValue = "128*1024")
     private String guiAreaBufferSize;
 
     // služba - Botnet update

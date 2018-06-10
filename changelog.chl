@@ -10,6 +10,9 @@
     "Fixed an error when the user did not have access to the target bank (network service)",
     "Added automatic shopping of app menus you do not already have",
     "Added a new '.crew profile' command to get information for crew by ID",
+    "Added a new '.crew' command to get information about current crew",
+    "Added a new '.crew msg XYZ' command to send a crew message",
+    "Added a new '.crew leave' command to leave crew",
     "Other minor fixes"
   ]
 }
