@@ -298,6 +298,8 @@ public final class NetworkService extends Service {
                         getLog().info("IP: {} - establish a connection with a remote system", ip.getIp());
                         serviceModule.getSystemInfo(ip.getIp());
                         getLog().info("IP: {} - open the bank", ip.getIp());
+                        sleep(1000);
+
                         var targetBank = bankModule.getRemoteBank(ip.getIp());
                         getLog().info("IP: {} - the bank has {} money", ip.getIp(), targetBank.getMoney());
                         sleep(1000);
