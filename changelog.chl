@@ -5,6 +5,9 @@
   "news": [
     "A new 'log set default' command has been added to set up a custom log according to the configuration",
     "Fixed new lines in the custom log for the system log",
-    "Modified configuration file + added support for UTF-16"
+    "Modified configuration file + added support for UTF-16",
+    "Fixed 100% withdraw from target bank",
+    "Fixed an error when the user did not have access to the target bank (network service)",
+    "Other minor fixes"
   ]
 }

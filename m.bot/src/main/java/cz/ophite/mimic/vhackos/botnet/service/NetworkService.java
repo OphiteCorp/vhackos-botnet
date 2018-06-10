@@ -3,6 +3,7 @@ package cz.ophite.mimic.vhackos.botnet.service;
 import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.exception.ExploitException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.IpNotExistsException;
+import cz.ophite.mimic.vhackos.botnet.api.exception.RemoteException;
 import cz.ophite.mimic.vhackos.botnet.api.module.*;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.BankResponse;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.MalwareKitResponse;
@@ -294,6 +295,8 @@ public final class NetworkService extends Service {
                         break;
 
                     case SUCCESS:
+                        getLog().info("IP: {} - establish a connection with a remote system", ip.getIp());
+                        serviceModule.getSystemInfo(ip.getIp());
                         getLog().info("IP: {} - open the bank", ip.getIp());
                         var targetBank = bankModule.getRemoteBank(ip.getIp());
                         getLog().info("IP: {} - the bank has {} money", ip.getIp(), targetBank.getMoney());
@@ -385,6 +388,12 @@ public final class NetworkService extends Service {
                         }
                         break;
                 }
+            } catch (RemoteException e) {
+                getLog().error("IP: {} - unable to establish remote host connection.", ip.getIp());
+                sleep();
+                workData.taskResponse = taskModule.removeBruteforce(ip.getBruteId());
+                sleep();
+
             } catch (ExploitException e) {
                 // může nastat u starých bruteforce IP, který již expirovali nebo jejich IP není již platná
                 getLog().error("IP: {} - insufficient permissions to access the system or invalid IP", ip.getIp());
