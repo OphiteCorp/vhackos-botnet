@@ -50,7 +50,7 @@ public final class HibernateManager {
                 "useLegacyDatetimeCode=false", //
                 "serverTimezone=Europe/Rome", //
                 "useUnicode=true", //
-                "characterEncoding=UTF-16", //
+                "characterEncoding=UTF-8", //
                 "useSSL=false");
         var params = "?" + Strings.join(paramsList, '&');
         var connUrl = String.format("jdbc:mysql://%s/%s%s", config.getDbHost(), config.getDbDatabase(), params);
