@@ -9,7 +9,7 @@ import cz.ophite.mimic.vhackos.botnet.shared.dto.AppStoreType;
  *
  * @author mimic
  */
-public final class BuyAppOpcode extends Opcode {
+public class BuyAppOpcode extends Opcode {
 
     private static final String PARAM_APP_CODE = "appcode";
 

@@ -7,6 +7,7 @@ import cz.ophite.mimic.vhackos.botnet.api.net.response.AppStoreResponse;
 import cz.ophite.mimic.vhackos.botnet.api.opcode.AppStoreOpcode;
 import cz.ophite.mimic.vhackos.botnet.api.opcode.BuyAllAppOpcode;
 import cz.ophite.mimic.vhackos.botnet.api.opcode.BuyAppOpcode;
+import cz.ophite.mimic.vhackos.botnet.api.opcode.BuyMenuAppOpcode;
 import cz.ophite.mimic.vhackos.botnet.shared.dto.AppStoreType;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 
@@ -39,6 +40,17 @@ public final class StoreModule extends Module {
      */
     public synchronized AppStoreResponse buyApp(AppStoreType app) {
         var opcode = new BuyAppOpcode();
+        opcode.setApp(app);
+
+        var response = sendRequest(opcode);
+        return createAppStoreResponse(response);
+    }
+
+    /**
+     * Zakoupí menu aplikaci v obchodě.
+     */
+    public synchronized AppStoreResponse buyMenuApp(AppStoreType app) {
+        var opcode = new BuyMenuAppOpcode();
         opcode.setApp(app);
 
         var response = sendRequest(opcode);

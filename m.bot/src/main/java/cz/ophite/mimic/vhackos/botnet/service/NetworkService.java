@@ -389,7 +389,7 @@ public final class NetworkService extends Service {
                         break;
                 }
             } catch (RemoteException e) {
-                getLog().error("IP: {} - unable to establish remote host connection.", ip.getIp());
+                getLog().error("IP: {} - unable to establish remote host connection", ip.getIp());
                 sleep();
                 workData.taskResponse = taskModule.removeBruteforce(ip.getBruteId());
                 sleep();

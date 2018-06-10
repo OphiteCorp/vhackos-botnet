@@ -8,6 +8,7 @@
     "Modified configuration file + added support for UTF-16",
     "Fixed 100% withdraw from target bank",
     "Fixed an error when the user did not have access to the target bank (network service)",
+    "Added automatic shopping of app menus you do not already have",
     "Other minor fixes"
   ]
 }
