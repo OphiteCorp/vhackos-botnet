@@ -2,6 +2,7 @@ package cz.ophite.mimic.vhackos.botnet.command;
 
 import cz.ophite.mimic.vhackos.botnet.Application;
 import cz.ophite.mimic.vhackos.botnet.Botnet;
+import cz.ophite.mimic.vhackos.botnet.Constants;
 import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
 import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
@@ -27,16 +28,22 @@ public final class ApplicationCommand extends BaseCommand {
 
     private static final String CMD_HELP = "help";
     private static final String CMD_HELP_COMMENT = "Displays the help you see now";
+
     private static final String CMD_ABOUT = "about";
     private static final String CMD_ABOUT_COMMENT = "Gets information about the current version";
+
     private static final String CMD_LATEST = "latest";
     private static final String CMD_LATEST_COMMENT = "Gets a list of changes in the latest version of Botnet";
+
     private static final String CMD_CONFIG = "config";
     private static final String CMD_CONFIG_COMMENT = "Get the current configuration";
+
     private static final String CMD_RELOAD = "reload";
     private static final String CMD_RELOAD_COMMENT = "Forces reloading configuration";
+
     private static final String CMD_LOGO = "logo";
     private static final String CMD_LOGO_COMMENT = "Prints the logo";
+
     private static final String CMD_EXIT = "q";
     private static final String CMD_EXIT_COMMENT = "Exit Botnet";
 
@@ -87,7 +94,7 @@ public final class ApplicationCommand extends BaseCommand {
             put(am, "." + CMD_EXIT, CMD_EXIT_COMMENT);
             am.addRule();
 
-            var copyRow = put(am, null, "by mimic | v" + IBotnet.VERSION);
+            var copyRow = put(am, null, "by " + Constants.AUTHOR + " | v" + IBotnet.VERSION);
             copyRow.getCells().get(1).getContext().setTextAlignment(TextAlignment.RIGHT);
         });
     }
@@ -154,6 +161,10 @@ public final class ApplicationCommand extends BaseCommand {
                 } else {
                     put(am, "News", "No news found");
                 }
+                if (data.getNotice() != null && !data.getNotice().isEmpty()) {
+                    am.addRule();
+                    put(am, "Notice", data.getNotice());
+                }
             }
         });
     }
@@ -166,11 +177,11 @@ public final class ApplicationCommand extends BaseCommand {
         return execute("about", am -> {
             put(am, "Version", "v" + IBotnet.VERSION);
             put(am, "Game API", IBotnet.REST_API_VERSION);
-            put(am, "Author", "mimic");
-            put(am, "Year", "2018");
+            put(am, "Author", Constants.AUTHOR);
+            put(am, "Year", Constants.YEAR);
             am.addRule();
-            put(am, "Discord", "https://discordapp.com/invite/Cdz39vu");
-            put(am, "GitHub", "https://github.com/OphiteCorp/vhackos-botnet");
+            put(am, "Discord", Constants.DISCORD);
+            put(am, "GitHub", Constants.REPOSITORY);
         });
     }
 

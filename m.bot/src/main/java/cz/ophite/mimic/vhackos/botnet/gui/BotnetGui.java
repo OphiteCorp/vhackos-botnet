@@ -1,6 +1,7 @@
 package cz.ophite.mimic.vhackos.botnet.gui;
 
 import cz.ophite.mimic.vhackos.botnet.Application;
+import cz.ophite.mimic.vhackos.botnet.Constants;
 import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
 import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
 import cz.ophite.mimic.vhackos.botnet.service.base.Service;
@@ -89,7 +90,7 @@ public final class BotnetGui extends JFrame {
         var width = (int) (0.8 * gd.getDisplayMode().getWidth());
         var height = (int) (0.8 * gd.getDisplayMode().getHeight());
 
-        setTitle(String.format("vHack OS - Botnet v%s | by mimic", IBotnet.VERSION));
+        setTitle(String.format("vHack OS - Botnet v%s | by " + Constants.AUTHOR, IBotnet.VERSION));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(width, height));
         setFont(font);

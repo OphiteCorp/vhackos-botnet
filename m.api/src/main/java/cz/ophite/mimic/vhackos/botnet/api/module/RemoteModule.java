@@ -50,6 +50,7 @@ public final class RemoteModule extends Module {
             ModuleHelper.setField(response, dto, RemoteSystemResponse.P_JOBS);
             ModuleHelper.setField(response, dto, RemoteSystemResponse.P_COMMUNITY);
             ModuleHelper.setField(response, dto, RemoteSystemResponse.P_INTERNET_CONNECTION);
+            ModuleHelper.setField(response, dto, RemoteSystemResponse.P_REMOTE_CREW);
 
             return dto;
 

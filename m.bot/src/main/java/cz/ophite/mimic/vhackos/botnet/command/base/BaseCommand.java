@@ -1,6 +1,7 @@
 package cz.ophite.mimic.vhackos.botnet.command.base;
 
 import cz.ophite.mimic.vhackos.botnet.Botnet;
+import cz.ophite.mimic.vhackos.botnet.Constants;
 import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetCoreException;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.AsciiUtils;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
@@ -21,7 +22,7 @@ import java.util.TreeMap;
  */
 public abstract class BaseCommand {
 
-    public static final String COMMAND_PACKAGE = "cz.ophite.mimic.vhackos.botnet.command";
+    public static final String COMMAND_PACKAGE = Constants.BASE_PACKAGE + ".command";
 
     private final Logger log;
     private final Botnet botnet;

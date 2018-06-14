@@ -11,6 +11,7 @@ import cz.ophite.mimic.vhackos.botnet.service.base.Service;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandRunner;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.Version;
 import cz.ophite.mimic.vhackos.botnet.utils.AudioPlayer;
 import cz.ophite.mimic.vhackos.botnet.utils.ResourceHelper;
 
@@ -49,7 +50,8 @@ public final class BotnetUpdateService extends Service {
     protected void execute() {
         try (var in = new BufferedReader(new InputStreamReader(new URL(UPDATE_URL).openStream(), "UTF-8"))) {
             var data = new Gson().fromJson(in, BotnetUpdateData.class);
-            data.setNewVersionAvailable(!data.getVersion().equalsIgnoreCase(IBotnet.VERSION));
+            var version = Version.create(data.getVersion());
+            data.setNewVersionAvailable(IBotnet.VERSION.isInputHigher(version));
             reformatNews(data);
             getShared().setUpdateData(data);
 

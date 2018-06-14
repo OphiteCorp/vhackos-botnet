@@ -53,14 +53,14 @@ public final class Application implements ICommandListener {
         var useGui = !(args != null && args.length > 0 && "-console".equalsIgnoreCase(args[0]));
 
         // init sentry pro logování
-        SentryGuard.init(IBotnet.VERSION);
+        SentryGuard.init(IBotnet.VERSION, Constants.BASE_PACKAGE);
 
         if (useGui) {
             gui = new BotnetGui();
             gui.open();
         }
         LOG.info(LOGO);
-        LOG.info("The botnet starting...");
+        LOG.info("The botnet starting in version: v" + IBotnet.VERSION);
 
         // vytvoří instanci aplikace a botnetu
         final var app = new Application();
@@ -68,7 +68,7 @@ public final class Application implements ICommandListener {
 
         // vytvoří dependency injection
         var injectRules = prepareInjectRules();
-        InjectionContext.initialize(new String[]{ "cz.ophite.mimic.vhackos.botnet" }, injectRules);
+        InjectionContext.initialize(new String[]{ Constants.BASE_PACKAGE }, injectRules);
         InjectionContext.lazyInit(botnet);
         var context = InjectionContext.getInstance();
 

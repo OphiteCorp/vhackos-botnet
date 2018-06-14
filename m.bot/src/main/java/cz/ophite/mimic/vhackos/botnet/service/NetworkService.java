@@ -17,6 +17,7 @@ import cz.ophite.mimic.vhackos.botnet.servicemodule.ServiceModule;
 import cz.ophite.mimic.vhackos.botnet.shared.dto.BruteState;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.SentryGuard;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
 import cz.ophite.mimic.vhackos.botnet.utils.Utils;
 
@@ -225,7 +226,7 @@ public final class NetworkService extends Service {
         } catch (Exception e) {
             getLog().error("There was an exploit error. IP: " + ip, e);
         } finally {
-            clearSystemLog(ip);
+            clearSystemLog(ip, null);
         }
         return false;
     }
@@ -260,16 +261,21 @@ public final class NetworkService extends Service {
     /**
      * Vyčistí systémový log na cílovém systému.
      */
-    private boolean clearSystemLog(String ip) {
+    private void clearSystemLog(String ip, Long transferredMoney) {
         try {
-            logModule.setRemoteLog(ip, getConfig().getMessageLog());
+            var msg = getConfig().getMessageLog();
+
+            if (transferredMoney != null) {
+                var money = SharedUtils.toMoneyFormat(transferredMoney).replace("$", "\\$");
+                msg = msg.replaceAll("(?i)\\{\\{MONEY\\}\\}", money);
+            }
+            logModule.setRemoteLog(ip, msg);
             getLog().info("IP: {} - the system log has been set", ip);
-            return true;
 
         } catch (Exception e) {
-            // nic
+            SentryGuard.log(e);
+            getLog().warn("IP: {} - there was an error deleting the log. Log not deleted!", ip);
         }
-        return false;
     }
 
     /**
@@ -307,6 +313,8 @@ public final class NetworkService extends Service {
                         for (var trans : targetBank.getTransactions()) {
                             databaseService.addTransaction(trans);
                         }
+                        Long transferredMoney = null;
+
                         // pokud má smysl vykrást peníze z banky
                         if (workData.playerBankResponse.getTotal() < getConfig().getNetworkUserBankLimit() && targetBank
                                 .getMoney() >= getConfig().getNetworkMinBankAmountForWithdraw()) {
@@ -333,7 +341,7 @@ public final class NetworkService extends Service {
                                     var amount = (long) ((withdrawPercent / 100.) * targetBank.getMoney());
                                     var resp = bankModule.withdraw(ip.getIp(), amount);
 
-                                    if (resp.getTransactionsCount() > 0) {
+                                    if (SharedUtils.toBoolean(resp.getWithdraw()) && resp.getTransactionsCount() > 0) {
                                         // naše krádež by měla být jako první v seznamu
                                         var currTransaction = resp.getTransactions().get(0);
 
@@ -342,6 +350,7 @@ public final class NetworkService extends Service {
                                                 .equals(getShared().getUpdateResponse().getUid())) {
                                             getLog().info("IP: {} - {} money was transferred to your bank", ip
                                                     .getIp(), amount);
+                                            transferredMoney = amount;
 
                                             // pokude náš IPSP je příliž nízký a je vidět naše IP, tak se jí pomocí
                                             // malware pokusíme skrýt
@@ -383,7 +392,7 @@ public final class NetworkService extends Service {
                             }
                         }
                         // vyčistí logy a případně smaže bruteforce
-                        clearSystemLog(ip.getIp());
+                        clearSystemLog(ip.getIp(), transferredMoney);
                         if (removeBrute) {
                             sleep();
                             workData.taskResponse = taskModule.removeBruteforce(ip.getBruteId());
@@ -404,7 +413,7 @@ public final class NetworkService extends Service {
                 sleep();
 
             } catch (Exception e) {
-                clearSystemLog(ip.getIp());
+                clearSystemLog(ip.getIp(), null);
                 sleep();
             }
         }

@@ -23,7 +23,18 @@ public final class BotnetUpdateData {
     @SerializedName("news")
     private List<String> news;
 
+    @SerializedName("notice")
+    private String notice;
+
     private transient boolean newVersionAvailable;
+
+    public String getNotice() {
+        return notice;
+    }
+
+    public void setNotice(String notice) {
+        this.notice = notice;
+    }
 
     public String getVersion() {
         return version;

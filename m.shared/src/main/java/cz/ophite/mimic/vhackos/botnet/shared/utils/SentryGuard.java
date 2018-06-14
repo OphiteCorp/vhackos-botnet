@@ -2,6 +2,7 @@ package cz.ophite.mimic.vhackos.botnet.shared.utils;
 
 import com.sun.security.auth.module.NTSystem;
 import cz.ophite.mimic.vhackos.botnet.shared.SharedConst;
+import io.sentry.DefaultSentryClientFactory;
 import io.sentry.SentryClient;
 import io.sentry.SentryClientFactory;
 import io.sentry.event.Event;
@@ -27,13 +28,16 @@ public final class SentryGuard {
     /**
      * Vytvoření sentry.
      */
-    public static void init(String botnetVersion) {
+    public static void init(Version botnetVersion, String mainPackage) {
         if (ENABLE) {
-            sentry = SentryClientFactory.sentryClient(DSN);
+            final var dsn = DSN + "?stacktrace.app.packages=" + mainPackage;
+
+            var factory = new DefaultSentryClientFactory();
+            sentry = SentryClientFactory.sentryClient(dsn, factory);
 
             var ntSystem = new NTSystem();
             sentry.addTag("server_user", ntSystem.getName());
-            sentry.addTag("botnet_version", botnetVersion);
+            sentry.addTag("botnet_version", botnetVersion.toString());
             sentry.addTag("server_os", System.getProperty("os.name"));
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {

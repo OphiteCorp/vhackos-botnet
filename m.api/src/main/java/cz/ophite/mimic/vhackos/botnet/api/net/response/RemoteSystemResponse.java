@@ -67,6 +67,19 @@ public final class RemoteSystemResponse extends Response {
     private String internetConnection;
     public static final String P_INTERNET_CONNECTION = "internetConnection";
 
+    @AsciiRow("Remote Crew")
+    @ResponseKey("remoteCrew")
+    private String remoteCrew;
+    public static final String P_REMOTE_CREW = "remoteCrew";
+
+    public String getRemoteCrew() {
+        return remoteCrew;
+    }
+
+    public void setRemoteCrew(String remoteCrew) {
+        this.remoteCrew = remoteCrew;
+    }
+
     public String getRemoteIp() {
         return remoteIp;
     }

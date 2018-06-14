@@ -2,6 +2,7 @@ package cz.ophite.mimic.vhackos.botnet.api;
 
 import cz.ophite.mimic.vhackos.botnet.api.dto.ConnectionData;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.LoginResponse;
+import cz.ophite.mimic.vhackos.botnet.shared.utils.Version;
 
 /**
  * Rozhraní pro botnet.
@@ -13,12 +14,12 @@ public interface IBotnet {
     /**
      * Verze Botnetu.
      */
-    String VERSION = "0.9.8";
+    Version VERSION = Version.create("0.9.8");
 
     /**
      * Verze REST API pro vHackOS.
      */
-    int REST_API_VERSION = 16; // 1.45+
+    int REST_API_VERSION = 17;
 
     /**
      * Konfigurace botnetu.

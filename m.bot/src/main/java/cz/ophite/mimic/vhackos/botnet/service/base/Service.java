@@ -1,6 +1,7 @@
 package cz.ophite.mimic.vhackos.botnet.service.base;
 
 import cz.ophite.mimic.vhackos.botnet.Botnet;
+import cz.ophite.mimic.vhackos.botnet.Constants;
 import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetCoreException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.ConnectionException;
@@ -30,7 +31,7 @@ import java.util.concurrent.ThreadFactory;
  */
 public abstract class Service implements IService {
 
-    public static final String SERVICES_PACKAGE = "cz.ophite.mimic.vhackos.botnet.service";
+    public static final String SERVICES_PACKAGE = Constants.BASE_PACKAGE + ".service";
 
     private static Map<String, IService> services;
     private static List<String> serviceClassNames;
@@ -274,6 +275,7 @@ public abstract class Service implements IService {
                     initialize();
                     validateTimeout();
                 } catch (Exception e) {
+                    SentryGuard.log(e);
                     log.error("There was an error initializing the service. The service will be terminated", e);
                     stop();
                     break;
@@ -286,6 +288,7 @@ public abstract class Service implements IService {
                     throw e;
 
                 } catch (BotnetException e) {
+                    SentryGuard.log(e);
                     log.error("An unexpected error occurred while processing the service", e);
 
                 } catch (Exception e) {
