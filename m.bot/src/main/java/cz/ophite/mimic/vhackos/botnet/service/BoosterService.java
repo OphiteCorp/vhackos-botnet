@@ -42,7 +42,7 @@ public final class BoosterService extends Service {
         var resp = taskModule.getTasks();
         getShared().setTaskResponse(resp);
 
-        if (resp.getBoosters() <= getConfig().getSafeBoosters() || resp.getUpdates().isEmpty()) {
+        if (resp == null || resp.getBoosters() <= getConfig().getSafeBoosters() || resp.getUpdates().isEmpty()) {
             printEndMessage(resp);
             return;
         }

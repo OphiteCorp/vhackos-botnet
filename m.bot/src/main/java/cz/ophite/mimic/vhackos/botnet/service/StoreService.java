@@ -50,7 +50,7 @@ public final class StoreService extends Service {
     @Override
     protected void execute() {
         var updatedApps = getConfig().getUpdatedAppsList();
-        var freeTasks = getShared().getMaxTaskUpdates() - getShared().getTaskResponse().getUpdateCount();
+        var freeTasks = getFreeTasks();
 
         if (updatedApps.isEmpty() || freeTasks == 0) {
             if (isRunningAsync()) {
@@ -131,6 +131,15 @@ public final class StoreService extends Service {
         return freeTasks;
     }
 
+    private int getFreeTasks() {
+        if (getShared().getTaskResponse() == null) {
+            var resp = taskModule.getTasks();
+            getShared().setTaskResponse(resp);
+            sleep();
+        }
+        return getShared().getMaxTaskUpdates() - getShared().getTaskResponse().getUpdateCount();
+    }
+
     private App createApp(AppStoreResponse resp, AppStoreType type) {
         var list = getAppList(resp);
         for (var app : list) {
@@ -145,11 +154,15 @@ public final class StoreService extends Service {
         var list = new ArrayList<App>();
 
         for (var app : getConfig().getUpdatedAppsList()) {
-            var a = new App();
-            a.type = app;
-            a.data = resp.getApps().stream().filter(p -> AppStoreType.getById(p.getAppId()) == app)
-                    .collect(Collectors.toList()).get(0);
-            list.add(a);
+            var result = resp.getApps().stream().filter(p -> AppStoreType.getById(p.getAppId()) == app)
+                    .collect(Collectors.toList());
+
+            if (!result.isEmpty()) {
+                var a = new App();
+                a.type = app;
+                a.data = result.get(0);
+                list.add(a);
+            }
         }
         list.sort(Comparator.comparing(o -> o.data.getLevel()));
 

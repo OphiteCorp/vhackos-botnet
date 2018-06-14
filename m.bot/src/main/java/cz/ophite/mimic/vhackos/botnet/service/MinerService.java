@@ -85,11 +85,14 @@ public final class MinerService extends Service {
     }
 
     private MiningResponse tryBuyGpu(MiningResponse resp) {
-        if (resp.getGpuCount() < MAX_GPU_COUNT && resp.getNetCoins() >= resp.getNewGpuCosts()) {
-            getLog().info("Buying {} GPU for {} netcoins", resp.getGpuCount() + 1, resp.getNewGpuCosts());
-            resp = miningModule.buyGpu();
-            getLog().info("Next GPU was bought. You have {} netcoins left", resp.getNetCoins());
-            sleep();
+        // uživatel již má všechny GPU, takže cost přestane nechodit v odpovědi
+        if (resp.getNewGpuCosts() != null) {
+            if (resp.getGpuCount() < MAX_GPU_COUNT && resp.getNetCoins() >= resp.getNewGpuCosts()) {
+                getLog().info("Buying {} GPU for {} netcoins", resp.getGpuCount() + 1, resp.getNewGpuCosts());
+                resp = miningModule.buyGpu();
+                getLog().info("Next GPU was bought. You have {} netcoins left", resp.getNetCoins());
+                sleep();
+            }
         }
         return resp;
     }

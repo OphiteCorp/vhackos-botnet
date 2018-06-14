@@ -50,8 +50,9 @@ public final class UpdateService extends Service {
         getShared().setTaskResponse(tasksResp);
 
         // zakoupí aplikace, které se zobrazují v navigaci (v menu) a které nelze dále vylepšovat
-        buyMenuApplications(updateResp.getLevel(), updateResp.getMoney());
-
+        if (updateResp != null) {
+            buyMenuApplications(updateResp.getLevel(), updateResp.getMoney());
+        }
         if (isRunningAsync()) {
             getLog().info("Profile updated. Next update will be in: {}", SharedUtils.toTimeFormat(getTimeout()));
         }

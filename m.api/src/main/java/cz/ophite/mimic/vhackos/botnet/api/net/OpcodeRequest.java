@@ -18,10 +18,7 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.URL;
+import java.net.*;
 import java.util.Map;
 
 /**
@@ -100,6 +97,12 @@ public final class OpcodeRequest {
                             .getOpcodeValue(), uri, response);
                     responseMap = Json.toMap(response);
 
+                    // z nějakého důvodu vrací response místo mapy číselnou hodnotu
+                    if (responseMap.size() == 1 && responseMap.containsKey(null)) {
+                        var value = responseMap.get(null);
+                        LOG.error("Invalid server response. Value: {}", value);
+                        throw new InvalidResponseCodeException(responseCode, "Invalid server response. The server returned one value '" + value + "' instead of the expected one. URI: " + uri);
+                    }
                     if (responseMap.containsKey("result")) {
                         var result = (String) responseMap.get("result");
 
@@ -133,16 +136,25 @@ public final class OpcodeRequest {
                         }
                     }
                 }
+            } else if (responseCode == 503) {
+                throw new ConnectionException("Remote service is unavailable: URI: " + uri);
+
             } else {
                 throw new InvalidResponseCodeException(responseCode, "Failed to get response from vHackOS " + responseCode + " {" + uri + "}");
             }
+        } catch (UnknownHostException e) {
+            throw new ConnectionException(null, "Target server is not available. URI: " + uri, e);
+
+        } catch (SocketTimeoutException e) {
+            throw new ConnectionException(null, "Response timeout expired. URI: " + uri, e);
+
         } catch (IOException e) {
             if (!(e instanceof ConnectException)) {
                 SentryGuard.log(e);
                 LOG.debug("Sending a request to the server failed", e);
                 LOG.error("Something is wrong with processing the request. URI: " + uri);
             }
-            throw new ConnectionException(null, "An error occurred while processing request: " + uri, e);
+            throw new ConnectionException(null, "An error occurred while processing request. URI: " + uri, e);
         } finally {
             if (conn != null) {
                 LOG.debug("Closing connection for opcode: {}->{}", opcode.getTarget(), opcode.getOpcodeValue());

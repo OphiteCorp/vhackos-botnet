@@ -328,11 +328,11 @@ public final class ServerService extends Service {
     private static int getFreePieces(ServerResponse resp, ServerNodeType nodeType) {
         switch (nodeType) {
             case ANTIVIRUS:
-                return resp.getAvFreePieces();
+                return (resp.getAvFreePieces() != null) ? resp.getAvFreePieces() : 0;
             case FIREWALL:
-                return resp.getFwFreePieces();
+                return (resp.getFwFreePieces() != null) ? resp.getFwFreePieces() : 0;
             case SERVER:
-                return resp.getServerFreePieces();
+                return (resp.getServerFreePieces() != null) ? resp.getServerFreePieces() : 0;
         }
         return 0;
     }

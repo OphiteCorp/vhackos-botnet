@@ -8,6 +8,7 @@ import com.google.gson.internal.LinkedTreeMap;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,7 +22,15 @@ public final class JsonDeserializeMapStrategy implements JsonDeserializer<Map<St
     public Map<String, Object> deserialize(JsonElement jsonElement, Type type,
             JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 
-        return (Map<String, Object>) read(jsonElement);
+        var value = read(jsonElement);
+
+        if (value instanceof Map) {
+            return (Map<String, Object>) value;
+        } else {
+            var map = new HashMap<String, Object>();
+            map.put(null, value);
+            return map;
+        }
     }
 
     private Object read(JsonElement jsonElement) {

