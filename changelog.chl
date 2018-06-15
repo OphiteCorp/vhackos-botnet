@@ -10,7 +10,8 @@
     "The log message can now contain the key '{{MONEY}}', which dynamically inserts the amount that was stolen from the
     bank",
     "Botnet update information now can also contain important update information",
-    "Add the option to automatically complete the application update using netcoins"
+    "Add the option to automatically complete the application update using netcoins",
+    "Added new commands to delete a game account. The first is '.account delete UID TOKEN PWD' and the second '.account delete self'"
   ],
   "notice": ""
 }

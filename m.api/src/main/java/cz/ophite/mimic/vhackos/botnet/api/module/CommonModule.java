@@ -3,15 +3,13 @@ package cz.ophite.mimic.vhackos.botnet.api.module;
 import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
 import cz.ophite.mimic.vhackos.botnet.api.exception.BotnetException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.RegisterException;
+import cz.ophite.mimic.vhackos.botnet.api.exception.UserAccountNotExistsException;
 import cz.ophite.mimic.vhackos.botnet.api.module.base.Module;
 import cz.ophite.mimic.vhackos.botnet.api.module.base.ModuleHelper;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.LeaderboardsResponse;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.LoginResponse;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.UpdateResponse;
-import cz.ophite.mimic.vhackos.botnet.api.opcode.LeaderboardsOpcode;
-import cz.ophite.mimic.vhackos.botnet.api.opcode.LoginOpcode;
-import cz.ophite.mimic.vhackos.botnet.api.opcode.RegisterOpcode;
-import cz.ophite.mimic.vhackos.botnet.api.opcode.UpdateOpcode;
+import cz.ophite.mimic.vhackos.botnet.api.opcode.*;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.HashUtils;
 
@@ -137,6 +135,32 @@ public final class CommonModule extends Module {
         ModuleHelper.setField(response, dto, UpdateResponse.P_INTERNET_CONNECTION);
 
         return dto;
+    }
+
+    /**
+     * Smaže účet uživatele.
+     */
+    public synchronized void deleteAccount(String uid, String accessToken, String password) {
+        var opcode = new DeleteAccountOpcode();
+        opcode.setUid(uid);
+        opcode.setAccessToken(accessToken);
+        opcode.setLanguage(getBotnet().getConnectionData().getLang());
+        opcode.setPasswordHash(HashUtils.toHexMd5(password));
+
+        var response = sendRequest(opcode);
+        var result = response.get(null);
+
+        if (result == null) {
+            throw new UserAccountNotExistsException(null, "User account has not been found");
+        }
+    }
+
+    /**
+     * Smaže aktuální účet uživatele.
+     */
+    public synchronized void deleteAccount() {
+        var connData = getBotnet().getConnectionData();
+        deleteAccount(String.valueOf(connData.getUid()), connData.getAccessToken(), getConfig().getPassword());
     }
 
     /**

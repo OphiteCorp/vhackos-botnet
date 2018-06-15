@@ -109,7 +109,11 @@ public enum OpcodeTargetType {
     /**
      * Profil crew.
      */
-    CREW_PROFILE("crewprofile");
+    CREW_PROFILE("crewprofile"),
+    /**
+     * Umožní smazat účet uživatele.
+     */
+    DELETE_ACCOUNT("deleteAccount");
 
     private final String code; // název php souboru
 

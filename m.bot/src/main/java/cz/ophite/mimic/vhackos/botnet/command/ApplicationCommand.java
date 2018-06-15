@@ -32,7 +32,7 @@ public final class ApplicationCommand extends BaseCommand {
     private static final String CMD_ABOUT = "about";
     private static final String CMD_ABOUT_COMMENT = "Gets information about the current version";
 
-    private static final String CMD_LATEST = "latest";
+    public static final String CMD_LATEST = "latest";
     private static final String CMD_LATEST_COMMENT = "Gets a list of changes in the latest version of Botnet";
 
     private static final String CMD_CONFIG = "config";
@@ -44,7 +44,7 @@ public final class ApplicationCommand extends BaseCommand {
     private static final String CMD_LOGO = "logo";
     private static final String CMD_LOGO_COMMENT = "Prints the logo";
 
-    private static final String CMD_EXIT = "q";
+    public static final String CMD_EXIT = "q";
     private static final String CMD_EXIT_COMMENT = "Exit Botnet";
 
     @Autowired

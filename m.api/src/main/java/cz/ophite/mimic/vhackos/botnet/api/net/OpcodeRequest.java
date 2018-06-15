@@ -19,6 +19,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.*;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -97,11 +98,15 @@ public final class OpcodeRequest {
                             .getOpcodeValue(), uri, response);
                     responseMap = Json.toMap(response);
 
-                    // z nějakého důvodu vrací response místo mapy číselnou hodnotu
-                    if (responseMap.size() == 1 && responseMap.containsKey(null)) {
+                    // v některých případech může být null (např. smazání neexistujícího účtu)
+                    if (responseMap == null) {
+                        responseMap = new HashMap<>();
+                        responseMap.put(null, null);
+
+                        // z nějakého důvodu vrací response místo mapy číselnou hodnotu
+                    } else if (responseMap.size() == 1 && responseMap.containsKey(null)) {
                         var value = responseMap.get(null);
-                        LOG.error("Invalid server response. Value: {}", value);
-                        throw new InvalidResponseCodeException(responseCode, "Invalid server response. The server returned one value '" + value + "' instead of the expected one. URI: " + uri);
+                        LOG.debug("Strange server response. Value: {}", value);
                     }
                     if (responseMap.containsKey("result")) {
                         var result = (String) responseMap.get("result");

@@ -9,6 +9,7 @@ import cz.ophite.mimic.vhackos.botnet.db.service.DatabaseService;
 import cz.ophite.mimic.vhackos.botnet.servicemodule.ServiceModule;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandParam;
+import cz.ophite.mimic.vhackos.botnet.shared.command.CommandRunner;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
@@ -83,6 +84,32 @@ final class BotnetCommands extends BaseCommand {
             var data = commonModule.register(userName, password, email);
             var fields = getFields(data, true);
             putRemainings(am, fields, false);
+        });
+    }
+
+    /**
+     * Smaže účet uživatele.
+     */
+    @Command(value = "account delete", comment = "Forever deletes user account")
+    private String deleteAccount(@CommandParam("uid") String uid, @CommandParam("accessToken") String accessToken,
+            @CommandParam("password") String password) {
+
+        return execute("delete account", am -> {
+            commonModule.deleteAccount(uid, accessToken, password);
+            put(am, "Result", "Account has been successfully deleted");
+        });
+    }
+
+    /**
+     * Smaže účet uživatele.
+     */
+    @Command(value = "account delete self", comment = "Forever deletes the current user's account")
+    private String deleteAccount() {
+
+        return execute("delete account self", am -> {
+            commonModule.deleteAccount();
+            put(am, "Result", "Account has been successfully deleted");
+            CommandRunner.getInstance().run(ApplicationCommand.CMD_EXIT, null);
         });
     }
 

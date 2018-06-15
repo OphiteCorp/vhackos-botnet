@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import cz.ophite.mimic.vhackos.botnet.Application;
 import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
+import cz.ophite.mimic.vhackos.botnet.command.ApplicationCommand;
 import cz.ophite.mimic.vhackos.botnet.dto.BotnetUpdateData;
 import cz.ophite.mimic.vhackos.botnet.service.base.EndpointService;
 import cz.ophite.mimic.vhackos.botnet.service.base.IService;
@@ -59,7 +60,7 @@ public final class BotnetUpdateService extends Service {
                 getLog().warn("Attention! A new version v{} of Botnet is available. To download, go to this link: {}", data
                         .getVersion(), data.getDownloadLink());
 
-                var result = CommandRunner.getInstance().run("latest", null);
+                var result = CommandRunner.getInstance().run(ApplicationCommand.CMD_LATEST, null);
                 if (Application.isConsoleMode()) {
                     System.out.println(result);
                 } else {
