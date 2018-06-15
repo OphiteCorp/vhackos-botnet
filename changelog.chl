@@ -1,5 +1,5 @@
 {
-  "version": "0.9.8",
+  "version": "0.9.7",
   "download": "https://github.com/OphiteCorp/vhackos-botnet/releases/download/botnetv098/botnet.jar",
   "discord": "https://discordapp.com/invite/Cdz39vu",
   "news": [
@@ -7,8 +7,7 @@
     "Correcting a many errors that have occurred",
     "Information about the remote system now includes the name of the crew",
     "A new log message that is left in the remote system log",
-    "The log message can now contain the key '{{MONEY}}', which dynamically inserts the amount that was stolen from the
-    bank",
+    "The log message can now contain the key '{{MONEY}}', which dynamically inserts the amount that was stolen from the bank",
     "Botnet update information now can also contain important update information",
     "Add the option to automatically complete the application update using netcoins",
     "Added new commands to delete a game account. The first is '.account delete UID TOKEN PWD' and the second '.account delete self'"
