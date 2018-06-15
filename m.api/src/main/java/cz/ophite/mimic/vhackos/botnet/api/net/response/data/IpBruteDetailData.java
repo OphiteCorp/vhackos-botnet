@@ -1,8 +1,8 @@
 package cz.ophite.mimic.vhackos.botnet.api.net.response.data;
 
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.ResponseKey;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiBruteStateConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiBruteStateConverter;
 
 /**
  * Informace o IP, která je na seznamu "brute" IP mezi tásky.

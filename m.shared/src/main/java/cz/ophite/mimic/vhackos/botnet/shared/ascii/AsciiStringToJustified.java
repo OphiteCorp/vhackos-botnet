@@ -1,4 +1,4 @@
-package cz.ophite.mimic.vhackos.botnet.shared.utils.ascii;
+package cz.ophite.mimic.vhackos.botnet.shared.ascii;
 
 import de.vandermeer.skb.interfaces.transformers.IsTransformer;
 import org.apache.commons.lang3.StringUtils;
@@ -31,8 +31,7 @@ public interface AsciiStringToJustified extends IsTransformer<String, StrBuilder
     @Override
     default StrBuilder transform(String s) {
         IsTransformer.super.transform(s);
-        StrBuilder ret = (this.getBuilderForAppend() == null) ? new StrBuilder(this.getLength()) : this
-                .getBuilderForAppend();
+        StrBuilder ret = (getBuilderForAppend() == null) ? new StrBuilder(getLength()) : getBuilderForAppend();
 
         String[] ar = StringUtils.split((s == null) ? "" : s);
         int length = 0;
@@ -41,31 +40,31 @@ public interface AsciiStringToJustified extends IsTransformer<String, StrBuilder
         }
 
         int l = ((ar.length - 1) == 0) ? 1 : (ar.length - 1);
-        int first = ((this.getLength() - length) / l) * (ar.length - 1);
+        int first = ((getLength() - length) / l) * (ar.length - 1);
         // oprava podmínky, protože pokud vstupní string je prázdný, tak to skončí v nekonečné smyčce, protože first
         // je větší než 0, ale ar je 0
         while (first > 0 && ar.length > 0) {
             for (int i = 0; i < ar.length - 1; i++) {
                 if (first != 0) {
-                    ar[i] += this.getInnerWsChar();
+                    ar[i] += getInnerWsChar();
                     first--;
                 }
             }
         }
 
-        int second = (this.getLength() - length) % l;
+        int second = (getLength() - length) % l;
         // oprava podmínky, protože pokud vstupní string je prázdný, tak to skončí v nekonečné smyčce, protože second
         // je větší než 0, ale ar je 0
         while (second > 0 && ar.length - 2 > 0) {
             for (int i = ar.length - 2; i > 0; i--) {
                 if (second != 0) {
-                    ar[i] += this.getInnerWsChar();
+                    ar[i] += getInnerWsChar();
                     second--;
                 }
             }
         }
         ret.append(StringUtils.join(ar));
-        while (ret.length() < this.getLength()) {
+        while (ret.length() < getLength()) {
             ret.append(' ');
         }
         return ret;

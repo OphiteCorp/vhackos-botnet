@@ -1,4 +1,4 @@
-package cz.ophite.mimic.vhackos.botnet.shared.utils.ascii;
+package cz.ophite.mimic.vhackos.botnet.shared.ascii;
 
 /**
  * Rozhraní, kterí pouze definuje převodník pro správnou instanci.

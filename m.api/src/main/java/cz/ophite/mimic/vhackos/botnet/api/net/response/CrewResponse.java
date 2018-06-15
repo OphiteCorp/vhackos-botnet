@@ -4,9 +4,9 @@ import cz.ophite.mimic.vhackos.botnet.api.net.response.base.Response;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.ResponseKey;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.CrewMemberData;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.CrewMessageData;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiBooleanConverter;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiElapsedTimeConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiBooleanConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiElapsedTimeConverter;
 
 import java.util.List;
 

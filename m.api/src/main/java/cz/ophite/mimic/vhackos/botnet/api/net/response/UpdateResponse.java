@@ -2,11 +2,11 @@ package cz.ophite.mimic.vhackos.botnet.api.net.response;
 
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.Response;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.ResponseKey;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiBooleanConverter;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiDateConverter;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiElapsedSecondsTimeConverter;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiMoneyConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiBooleanConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiDateConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiElapsedSecondsTimeConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiMoneyConverter;
 
 /**
  * Odpověď serveru na požadavek získání dat o uživateli.

@@ -1,4 +1,4 @@
-package cz.ophite.mimic.vhackos.botnet.shared.utils.ascii;
+package cz.ophite.mimic.vhackos.botnet.shared.ascii;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

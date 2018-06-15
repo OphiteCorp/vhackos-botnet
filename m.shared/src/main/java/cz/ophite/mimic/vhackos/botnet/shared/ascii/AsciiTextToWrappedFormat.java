@@ -1,4 +1,4 @@
-package cz.ophite.mimic.vhackos.botnet.shared.utils.ascii;
+package cz.ophite.mimic.vhackos.botnet.shared.ascii;
 
 import de.vandermeer.skb.interfaces.transformers.IsTransformer;
 import org.apache.commons.lang3.StringUtils;

@@ -1,9 +1,9 @@
 package cz.ophite.mimic.vhackos.botnet.api.net.response.data;
 
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.ResponseKey;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiCrewPositionTypeConverter;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiElapsedSecondsTimeConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiCrewPositionTypeConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiElapsedSecondsTimeConverter;
 
 /**
  * Informace o členu v crew.

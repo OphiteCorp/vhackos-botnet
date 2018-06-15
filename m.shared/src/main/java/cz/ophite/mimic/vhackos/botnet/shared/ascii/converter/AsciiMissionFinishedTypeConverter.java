@@ -1,8 +1,8 @@
-package cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter;
+package cz.ophite.mimic.vhackos.botnet.shared.ascii.converter;
 
 import cz.ophite.mimic.vhackos.botnet.shared.dto.MissionFinishedType;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.IAsciiConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.IAsciiConverter;
 
 /**
  * Získá název stavu mise podle kódu.

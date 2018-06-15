@@ -4,8 +4,8 @@ import cz.ophite.mimic.vhackos.botnet.api.net.response.base.Response;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.ResponseKey;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.IpBruteData;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.IpScanData;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiBooleanConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiBooleanConverter;
 
 import java.util.List;
 

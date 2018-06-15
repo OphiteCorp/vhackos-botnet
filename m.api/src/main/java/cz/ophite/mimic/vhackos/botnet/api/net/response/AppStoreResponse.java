@@ -3,9 +3,9 @@ package cz.ophite.mimic.vhackos.botnet.api.net.response;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.Response;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.ResponseKey;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.AppStoreData;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiBooleanConverter;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiMoneyConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiBooleanConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiMoneyConverter;
 
 import java.util.List;
 

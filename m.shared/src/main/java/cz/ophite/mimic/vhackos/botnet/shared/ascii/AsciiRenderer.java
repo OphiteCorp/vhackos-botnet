@@ -1,4 +1,4 @@
-package cz.ophite.mimic.vhackos.botnet.shared.utils.ascii;
+package cz.ophite.mimic.vhackos.botnet.shared.ascii;
 
 import de.vandermeer.asciitable.*;
 import de.vandermeer.asciithemes.TA_GridConfig;

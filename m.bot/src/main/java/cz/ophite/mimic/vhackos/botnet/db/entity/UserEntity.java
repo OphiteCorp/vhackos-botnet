@@ -1,7 +1,7 @@
 package cz.ophite.mimic.vhackos.botnet.db.entity;
 
 import cz.ophite.mimic.vhackos.botnet.db.entity.base.PersistentEntity;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;

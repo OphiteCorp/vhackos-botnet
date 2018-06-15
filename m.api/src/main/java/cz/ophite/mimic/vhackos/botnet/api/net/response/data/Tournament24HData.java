@@ -1,7 +1,7 @@
 package cz.ophite.mimic.vhackos.botnet.api.net.response.data;
 
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.ResponseKey;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
 
 /**
  * Informace o položce v 24H turnaji v leaderboards.

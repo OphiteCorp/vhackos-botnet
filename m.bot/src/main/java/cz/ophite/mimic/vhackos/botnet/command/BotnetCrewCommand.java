@@ -7,13 +7,13 @@ import cz.ophite.mimic.vhackos.botnet.api.net.response.CrewResponse;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.CrewMemberData;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.CrewMessageData;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiMaker;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandParam;
 import cz.ophite.mimic.vhackos.botnet.shared.dto.CrewPositionType;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;

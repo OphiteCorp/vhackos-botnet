@@ -2,10 +2,10 @@ package cz.ophite.mimic.vhackos.botnet.api.net.response;
 
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.Response;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.base.ResponseKey;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiBooleanConverter;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiElapsedSecondsTimeConverter;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiServerNodeTypeConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiBooleanConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiElapsedSecondsTimeConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiServerNodeTypeConverter;
 
 /**
  * Informace o serveru.

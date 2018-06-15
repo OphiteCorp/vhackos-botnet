@@ -5,8 +5,8 @@ import cz.ophite.mimic.vhackos.botnet.api.net.response.base.ResponseKey;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.LeaderboardCrewData;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.LeaderboardData;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.data.Tournament24HData;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.converter.AsciiElapsedSecondsTimeConverter;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.converter.AsciiElapsedSecondsTimeConverter;
 
 import java.util.List;
 

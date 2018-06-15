@@ -4,12 +4,12 @@ import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.module.ServerModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.ServerResponse;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiMaker;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.command.CommandParam;
 import cz.ophite.mimic.vhackos.botnet.shared.dto.ServerNodeType;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;

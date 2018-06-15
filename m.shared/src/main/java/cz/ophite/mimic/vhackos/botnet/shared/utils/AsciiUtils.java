@@ -1,9 +1,9 @@
 package cz.ophite.mimic.vhackos.botnet.shared.utils;
 
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiMaker;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiRow;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.IAsciiConverter;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.InjectionContext;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiRow;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.IAsciiConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

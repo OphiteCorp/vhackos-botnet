@@ -1,4 +1,4 @@
-package cz.ophite.mimic.vhackos.botnet.shared.utils.ascii;
+package cz.ophite.mimic.vhackos.botnet.shared.ascii;
 
 import de.vandermeer.asciitable.AT_Cell;
 import de.vandermeer.asciitable.AT_ColumnWidthCalculator;
@@ -22,8 +22,8 @@ public final class AsciiCWC implements AT_ColumnWidthCalculator {
     private int[] maxWidths = new int[0];
 
     public AsciiCWC add(final int minWidth, final int maxWidth) {
-        this.minWidths = ArrayUtils.add(this.minWidths, minWidth);
-        this.maxWidths = ArrayUtils.add(this.maxWidths, maxWidth);
+        minWidths = ArrayUtils.add(minWidths, minWidth);
+        maxWidths = ArrayUtils.add(maxWidths, maxWidth);
         return this;
     }
 

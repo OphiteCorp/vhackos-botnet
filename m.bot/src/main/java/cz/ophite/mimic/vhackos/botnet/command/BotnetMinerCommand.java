@@ -4,10 +4,10 @@ import cz.ophite.mimic.vhackos.botnet.Botnet;
 import cz.ophite.mimic.vhackos.botnet.api.module.MiningModule;
 import cz.ophite.mimic.vhackos.botnet.api.net.response.MiningResponse;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
+import cz.ophite.mimic.vhackos.botnet.shared.ascii.AsciiMaker;
 import cz.ophite.mimic.vhackos.botnet.shared.command.Command;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
-import cz.ophite.mimic.vhackos.botnet.shared.utils.ascii.AsciiMaker;
 
 import java.util.Map;
 
