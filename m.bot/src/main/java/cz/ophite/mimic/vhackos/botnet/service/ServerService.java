@@ -279,6 +279,10 @@ public final class ServerService extends Service {
         if (getConfig().isServerBuyPackagesForNetcoins()) {
             if (resp.getPacksBought() < MAX_BOUGHT_PACKAGES) {
                 var netcoins = getShared().getUpdateResponse().getNetCoins();
+
+                if (netcoins <= getConfig().getSafeNetcoins()) {
+                    return resp;
+                }
                 var left = MAX_BOUGHT_PACKAGES - resp.getPacksBought();
                 var x10Left = left / 10;
 

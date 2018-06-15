@@ -15,7 +15,7 @@ public final class TaskBoostOpcode extends Opcode {
     /**
      * Task ID.
      */
-    public void setTaskId(int taskId) {
+    public void setTaskId(long taskId) {
         addParam(PARAM_UPDATE_ID, String.valueOf(taskId));
     }
 

@@ -7,6 +7,7 @@ import cz.ophite.mimic.vhackos.botnet.api.net.response.data.TaskUpdateData;
 import cz.ophite.mimic.vhackos.botnet.service.base.EndpointService;
 import cz.ophite.mimic.vhackos.botnet.service.base.IService;
 import cz.ophite.mimic.vhackos.botnet.service.base.Service;
+import cz.ophite.mimic.vhackos.botnet.shared.dto.AppStoreType;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Autowired;
 import cz.ophite.mimic.vhackos.botnet.shared.injection.Inject;
 import cz.ophite.mimic.vhackos.botnet.shared.utils.SharedUtils;
@@ -43,6 +44,9 @@ public final class BoosterService extends Service {
         getShared().setTaskResponse(resp);
 
         if (resp == null || resp.getBoosters() <= getConfig().getSafeBoosters() || resp.getUpdates().isEmpty()) {
+            if (resp != null) {
+                resp = finishForNetcoins(resp);
+            }
             printEndMessage(resp);
             return;
         }
@@ -57,6 +61,7 @@ public final class BoosterService extends Service {
             seconds = data.getEnd() - data.getNow();
             getLog().info("Boost used. The longest time is now: {}", SharedUtils.toTimeFormat(seconds * 1000));
         }
+        resp = finishForNetcoins(resp);
         printEndMessage(resp);
     }
 
@@ -71,6 +76,31 @@ public final class BoosterService extends Service {
             }
         }
         return data;
+    }
+
+    private TaskResponse finishForNetcoins(TaskResponse resp) {
+        if (getConfig().isBoosterUseNetcoins()) {
+            if (resp.getUpdateCount() > 0) {
+                if (resp.getNetCoins() <= getConfig().getSafeNetcoins()) {
+                    return resp;
+                }
+                var updates = resp.getUpdates();
+
+                for (var update : updates) {
+                    var remaining = update.getEnd() - update.getNow();
+
+                    if (remaining <= getConfig().getBoosterMaxTimeForNetcoins()) {
+                        sleep();
+                        resp = taskModule.finishForNetcoins(update.getTaskId());
+
+                        var type = AppStoreType.getById(update.getAppId());
+                        getLog().info("The '{}' update was finished with netcoins. Remaining netcoins: {}", type
+                                .getAlias(), resp.getNetCoins());
+                    }
+                }
+            }
+        }
+        return resp;
     }
 
     private void printEndMessage(TaskResponse resp) {

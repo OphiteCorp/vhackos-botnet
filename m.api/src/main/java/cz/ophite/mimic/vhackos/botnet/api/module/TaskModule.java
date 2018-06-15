@@ -33,7 +33,7 @@ public final class TaskModule extends Module {
     /**
      * Dokončí tásk za netcoins pro dané ID.
      */
-    public synchronized TaskResponse finishForNetcoins(int taskId) {
+    public synchronized TaskResponse finishForNetcoins(long taskId) {
         var opcode = new TaskFinishForNetCoinsOpcode();
         opcode.setTaskId(taskId);
 
@@ -43,7 +43,7 @@ public final class TaskModule extends Module {
     /**
      * Dokončí všechny tásky za netcoins pro dané ID.
      */
-    public synchronized TaskResponse finishAllForNetcoins(int taskId) {
+    public synchronized TaskResponse finishAllForNetcoins(long taskId) {
         var opcode = new TasksFinishForNetCoinsOpcode();
         opcode.setTaskId(taskId);
 
@@ -53,7 +53,7 @@ public final class TaskModule extends Module {
     /**
      * Použije boost na tásk.
      */
-    public synchronized TaskResponse boostTask(int taskId) {
+    public synchronized TaskResponse boostTask(long taskId) {
         var opcode = new TaskBoostOpcode();
         opcode.setTaskId(taskId);
 
@@ -63,7 +63,7 @@ public final class TaskModule extends Module {
     /**
      * Použije 5x boost na tásk.
      */
-    public synchronized TaskResponse boost5xTask(int taskId) {
+    public synchronized TaskResponse boost5xTask(long taskId) {
         var opcode = new TaskBoost5xOpcode();
         opcode.setTaskId(taskId);
 
@@ -83,7 +83,7 @@ public final class TaskModule extends Module {
     /**
      * Zruší aktualizaci tásku.
      */
-    public synchronized TaskResponse abortTask(int taskId) {
+    public synchronized TaskResponse abortTask(long taskId) {
         var opcode = new AbortTaskOpcode();
         opcode.setTaskId(taskId);
 

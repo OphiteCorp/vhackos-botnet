@@ -90,8 +90,8 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String aggressiveMode;
 
     @ConfigValue(value = "sys.connection.timeout",
-                 comment = "Delay for sending and retrieving a server response in milliseconds.\nDefault: 30000",
-                 defaultValue = "30000")
+                 comment = "Delay for sending and retrieving a server response in milliseconds.\nDefault: 30s",
+                 defaultValue = "30*1000")
     private String connectionTimeout;
 
     // GUI
@@ -101,7 +101,7 @@ public final class ApplicationConfig implements IBotnetConfig {
     private String fullScreenMode;
 
     @ConfigValue(value = "gui.area.buffer.size",
-                 comment = "Buffer size for logging. Higher, the greater the demands on system resources.\nDefault: 262144",
+                 comment = "Buffer size for logging. Higher, the greater the demands on system resources.\nDefault: 128KB",
                  defaultValue = "128*1024")
     private String guiAreaBufferSize;
 
@@ -192,8 +192,17 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @ConfigValue(value = "service-booster.req.time",
                  comment = "Required task time for booster use. If at least one task time is greater than this value, then boost will be used. Time is in seconds.\nDefault: 15min",
-                 defaultValue = "900")
+                 defaultValue = "15*60")
     private String sBoosterReqTime;
+
+    @ConfigValue(value = "service-booster.use.netcoins",
+                 comment = "Enables the purchase of applications for netcoins.\nDefault: False", defaultValue = "False")
+    private String sBoosterUseNetcoins;
+
+    @ConfigValue(value = "service-booster.max.time.for.netcoins",
+                 comment = "Maximum remaining time to buy for netcoins in seconds.\nDefault: 10min",
+                 defaultValue = "10*60")
+    private String sBoosterMaxTimeForNetcoins;
 
     // služba - mission
 
@@ -225,7 +234,7 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     @ConfigValue(value = "service-network.max.brute.waiting.time",
                  comment = "Maximum wait time to complete bruteforce in seconds.\nDefault: 20min",
-                 defaultValue = "1200")
+                 defaultValue = "20*60")
     private String sNetworkMaxWaitingBruteTime;
 
     @ConfigValue(value = "service-network.min.bank.amount.for.withdraw",
@@ -598,5 +607,13 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     public int getGuiAreaBufferSize() {
         return ConfigHelper.getNumbericValue(guiAreaBufferSize, Integer.class);
+    }
+
+    public boolean isBoosterUseNetcoins() {
+        return ConfigHelper.getBoolean(sBoosterUseNetcoins);
+    }
+
+    public int getBoosterMaxTimeForNetcoins() {
+        return ConfigHelper.getNumbericValue(sBoosterMaxTimeForNetcoins, Integer.class);
     }
 }

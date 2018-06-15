@@ -9,7 +9,8 @@
     "A new log message that is left in the remote system log",
     "The log message can now contain the key '{{MONEY}}', which dynamically inserts the amount that was stolen from the
     bank",
-    "Botnet update information now can also contain important update information"
+    "Botnet update information now can also contain important update information",
+    "Add the option to automatically complete the application update using netcoins"
   ],
   "notice": ""
 }
