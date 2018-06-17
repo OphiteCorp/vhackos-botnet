@@ -5,7 +5,12 @@ For the game server, Botnet behaves like a human, so when the settings are corre
 
 ## Join [Discord](https://discord.gg/Cdz39vu) for help, advice, chat, and more
 
-## Download latest [**HERE**](https://github.com/OphiteCorp/vhackos-botnet/releases) (with changelog)
+## Download latest [**HERE**](https://github.com/OphiteCorp/vhackos-botnet/releases/tag/botnetv098) (with changelog)
+
+***
+
+## The Future of Botnet
+### My development on Botnet has ended and the development has taken over another division that has been developed by more people. Updates to Botnet will continue, but without my participation. Who would be interested in using Botnet, then come to the discord. Thanks.
 
 ***
 
