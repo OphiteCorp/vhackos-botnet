@@ -117,11 +117,27 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>1_central</id>
+            <url>http://central.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>2_google</id>
+            <url>https://maven.google.com</url>
+        </repository>
+    </repositories>
+
     <pluginRepositories>
         <pluginRepository>
-            <id>central</id>
-            <name>Central Repository</name>
-            <url>http://central.maven.org/maven2</url>
+            <id>1_central</id>
+            <name>Maven Plugin Repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>2_spring_io</id>
+            <name>Spring IO Repository</name>
+            <url>http://repo.spring.io/plugins-release</url>
         </pluginRepository>
     </pluginRepositories>
 

@@ -23,7 +23,7 @@ public final class ConfigProvider {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigProvider.class);
 
     private static final String APPLICATION_CONFIG_FILE = "botnet.properties";
-    private static final Charset CHARSET = Charset.forName("UTF-16");
+    private static final Charset CHARSET = Charset.forName("UTF-8");
 
     private static final Pattern PATTERN_REPLACE_VARIABLES = Pattern.compile("\\$\\{(.+?)\\}");
 

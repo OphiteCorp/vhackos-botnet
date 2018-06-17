@@ -44,9 +44,8 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     // zpráva ponechaná v logu cílového systému
 
-    @ConfigValue(value = "game.message.left.in.log",
-                 defaultValue = "█████████<br>█▄█████▄█<br>█▼▼▼▼▼<br>█$$$$$$$$$$$$$$$$$$$$$<br>█▲▲▲▲▲<br>█████████<br>_██____██__________________<br>===========================<br>Starting Bruteforce<br>===========================<br>  0%  █ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒<br> 10%  █ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒<br> 20%  █ █ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒<br> 30%  █ █ █ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒<br> 40%  █ █ █ █ ▒ ▒ ▒ ▒ ▒ ▒ ▒<br> 50%  █ █ █ █ █ ▒ ▒ ▒ ▒ ▒ ▒<br> 60%  █ █ █ █ █ █ ▒ ▒ ▒ ▒ ▒<br> 70%  █ █ █ █ █ █ █ ▒ ▒ ▒ ▒<br> 80%  █ █ █ █ █ █ █ █ ▒ ▒ ▒<br> 90%  █ █ █ █ █ █ █ █ █ ▒ ▒<br>100%  █ █ █ █ █ █ █ █ █ █ ▒<br>===========================<br>Bruteforce Finished<br><br>Transferring...<br>{{MONEY}}<br><br>OphiteCorp saying Thank you<br>----------------------------<br>Logging Out<br>============================<br>▒█░▒█ █▀▀█ █▀▀ █░█ █▀▀ █▀▀▄<br>▒█▀▀█ █▄▄█ █░░ █▀▄ █▀▀ █░░█<br>▒█░▒█ ▀░░▀ ▀▀▀ ▀░▀ ▀▀▀ ▀▀▀░",
-                 comment = "The message will be left in the remote system log. Use <br> for a new line\nDefault: █████████<br>█▄█████▄█<br>█▼▼▼▼▼<br>█$$$$$$$$$$$$$$$$$$$$$<br>█▲▲▲▲▲<br>█████████<br>_██____██__________________<br>===========================<br>Starting Bruteforce<br>===========================<br>  0%  █ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒<br> 10%  █ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒<br> 20%  █ █ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒<br> 30%  █ █ █ ▒ ▒ ▒ ▒ ▒ ▒ ▒ ▒<br> 40%  █ █ █ █ ▒ ▒ ▒ ▒ ▒ ▒ ▒<br> 50%  █ █ █ █ █ ▒ ▒ ▒ ▒ ▒ ▒<br> 60%  █ █ █ █ █ █ ▒ ▒ ▒ ▒ ▒<br> 70%  █ █ █ █ █ █ █ ▒ ▒ ▒ ▒<br> 80%  █ █ █ █ █ █ █ █ ▒ ▒ ▒<br> 90%  █ █ █ █ █ █ █ █ █ ▒ ▒<br>100%  █ █ █ █ █ █ █ █ █ █ ▒<br>===========================<br>Bruteforce Finished<br><br>Transferring...<br>{{MONEY}}<br><br>OphiteCorp saying Thank you<br>----------------------------<br>Logging Out<br>============================<br>▒█░▒█ █▀▀█ █▀▀ █░█ █▀▀ █▀▀▄<br>▒█▀▀█ █▄▄█ █░░ █▀▄ █▀▀ █░░█<br>▒█░▒█ ▀░░▀ ▀▀▀ ▀░▀ ▀▀▀ ▀▀▀░")
+    @ConfigValue(value = "game.message.left.in.log", defaultValue = "You have been hacked!",
+                 comment = "The message will be left in the remote system log. Use <br> for a new line and use only basic characters in ASCII table\nDefault: You have been hacked!")
     private String messageLog;
 
     @ConfigValue(value = "game.safe.netcoins", defaultValue = "5000",
@@ -60,6 +59,9 @@ public final class ApplicationConfig implements IBotnetConfig {
     @ConfigValue(value = "game.safe.malwares", defaultValue = "20",
                  comment = "The number of malwares that not be touched.\nDefault: 20")
     private String safeMalwares;
+
+    @ConfigValue(value = "game.api.version", defaultValue = "18", comment = "Game API " + "version")
+    private String gameApi;
 
     // maximální počet pokusů na odeslání požadavku na vHack server
 
@@ -375,7 +377,7 @@ public final class ApplicationConfig implements IBotnetConfig {
     public String getMessageLog() {
         var msg = messageLog.replaceAll("\"(.+?)\"", "$1");
         msg = msg.replaceAll("<br>", "\n");
-        msg = msg.replaceAll(" ", " ");
+        //msg = msg.replaceAll(" ", " ");
         return msg;
     }
 
@@ -615,5 +617,10 @@ public final class ApplicationConfig implements IBotnetConfig {
 
     public int getBoosterMaxTimeForNetcoins() {
         return ConfigHelper.getNumbericValue(sBoosterMaxTimeForNetcoins, Integer.class);
+    }
+
+    @Override
+    public int getGameApi() {
+        return ConfigHelper.getNumbericValue(gameApi, Integer.class);
     }
 }

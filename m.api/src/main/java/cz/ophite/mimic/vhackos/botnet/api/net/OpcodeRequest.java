@@ -1,7 +1,6 @@
 package cz.ophite.mimic.vhackos.botnet.api.net;
 
 import com.google.gson.Gson;
-import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
 import cz.ophite.mimic.vhackos.botnet.api.dto.ProxyData;
 import cz.ophite.mimic.vhackos.botnet.api.exception.*;
 import cz.ophite.mimic.vhackos.botnet.api.module.base.IModule;
@@ -30,9 +29,6 @@ import java.util.Map;
 public final class OpcodeRequest {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpcodeRequest.class);
-
-    // definuje URL na API herního serveru
-    private static final String REST_URI = "https://api.vhack.cc/mobile/" + IBotnet.REST_API_VERSION;
 
     private static final Gson GSON = new Gson();
     private static final byte EQUALS_SIGN = (byte) 61;
@@ -72,7 +68,7 @@ public final class OpcodeRequest {
         // vygeneruje ověřovací parametr "pass"
         var pass = HashUtils.toHexMd5(json + json + HashUtils.toHexMd5(json));
         // vygeneruje absolutní URI
-        var uri = getAbsoluteUri(opcode.getTarget(), jsonBase64, pass);
+        var uri = getAbsoluteUri(opcode.getTarget(), jsonBase64, pass, module.getBotnet().getConfig().getGameApi());
 
         HttpsURLConnection conn = null;
         Map responseMap;
@@ -118,7 +114,7 @@ public final class OpcodeRequest {
                                     throw new InvalidLoginException("2", "Invalid username or password");
 
                                 case "10":
-                                    throw new InvalidRequestException("10", "The server returned error 10, this might mean the robot is outdated, bug ocurred or invalid request");
+                                    throw new InvalidRequestException("10", "The server returned error 10, this might mean the bot is outdated, bug ocurred or invalid request");
 
                                 case "1":
                                     var login = module.getBotnet().getConfig().getUserName();
@@ -232,13 +228,14 @@ public final class OpcodeRequest {
      * @param target   Cíl adresy na kterou se má komunikovat.
      * @param userData Data uživatele (v base64).
      * @param pass     Ověřovací hash v md5.
+     * @param api      Verze herního API.
      */
-    private static String getAbsoluteUri(OpcodeTargetType target, String userData, String pass) {
-        return String.format("%s/%s.php?user=%s&pass=%s", REST_URI, target.getCode(), userData, pass);
+    private static String getAbsoluteUri(OpcodeTargetType target, String userData, String pass, int api) {
+        final var restUri = "https://api.vhack.cc/mobile/" + api;
+        return String.format("%s/%s.php?user=%s&pass=%s", restUri, target.getCode(), userData, pass);
     }
 
     /**
-     * Metoda přebrána z vHackOS.<br>
      * Vytvoří base64.
      */
     private static String encode(byte[] source, int offset, int len, byte[] alphabet, boolean doPadding) {
@@ -252,7 +249,6 @@ public final class OpcodeRequest {
     }
 
     /**
-     * Metoda přebrána z vHackOS.<br>
      * Vytvoří base64.
      */
     private static byte[] encode(byte[] source, int offset, int len, byte[] alphabet, int maxLineLength) {
@@ -296,7 +292,6 @@ public final class OpcodeRequest {
     }
 
     /**
-     * Metoda přebrána z vHackOS.<br>
      * Vytvoří base64.
      */
     private static byte[] encode3to4(byte[] src, int srcOffset, int numSigBytes, byte[] dest, int destOffset,

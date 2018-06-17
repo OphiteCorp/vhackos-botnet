@@ -270,6 +270,9 @@ public abstract class Service implements IService {
                 }
             }
             do {
+                if (!running) {
+                    break;
+                }
                 // initializace služby
                 try {
                     initialize();

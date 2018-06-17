@@ -79,12 +79,20 @@ public final class Botnet implements IBotnet {
         if (proxy != null) {
             LOG.info("A proxy server is set up. Instead, real IP will be used: {}:{}", proxy.getIp(), proxy.getPort());
         }
-        // zkontroluje, případně přihlásí uživatele s novým tokenem
-        LOG.info("Getting user '{}' information. Please wait...", config.getUserName());
+        // získá informace o poslední verzi Botnetu
+        LOG.info("Checking the latest version of Botnet. Please wait...", config.getUserName());
         var serviceConfig = new ServiceConfig();
         serviceConfig.setAsync(true);
         serviceConfig.setFirstRunSync(true);
+        Service.getServices().get(IService.SERVICE_BOTNET_UPDATE).start(serviceConfig);
+
+        // zkontroluje, případně přihlásí uživatele s novým tokenem
+        LOG.info("Getting user '{}' information. Please wait...", config.getUserName());
+        serviceConfig = new ServiceConfig();
+        serviceConfig.setAsync(true);
+        serviceConfig.setFirstRunSync(true);
         Service.getServices().get(IService.SERVICE_UPDATE).start(serviceConfig);
+
         SentryGuard.setBotnetUser(config.getUserName());
         SentryGuard.log("Botnet was launched under the user: " + config.getUserName());
 
@@ -99,9 +107,6 @@ public final class Botnet implements IBotnet {
     private void initializeServices() {
         var services = Service.getServices();
 
-        if (config.isBotnetUpdateEnable()) {
-            services.get(IService.SERVICE_BOTNET_UPDATE).start();
-        }
         if (config.isMinerEnable()) {
             services.get(IService.SERVICE_MINER).start();
         }

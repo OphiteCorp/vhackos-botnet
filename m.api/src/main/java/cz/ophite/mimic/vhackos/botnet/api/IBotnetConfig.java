@@ -48,4 +48,9 @@ public interface IBotnetConfig {
      * Prodleva pro odeslání a čtení požadavku.
      */
     int getConnectionTimeout();
+
+    /**
+     * Verze herního API.
+     */
+    int getGameApi();
 }

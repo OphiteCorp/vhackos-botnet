@@ -176,7 +176,7 @@ public final class ApplicationCommand extends BaseCommand {
     private String getVersion() {
         return execute("about", am -> {
             put(am, "Version", "v" + IBotnet.VERSION);
-            put(am, "Game API", IBotnet.REST_API_VERSION);
+            put(am, "Game API", getBotnet().getConfig().getGameApi());
             put(am, "Author", Constants.AUTHOR);
             put(am, "Year", Constants.YEAR);
             am.addRule();

@@ -14,12 +14,7 @@ public interface IBotnet {
     /**
      * Verze Botnetu.
      */
-    Version VERSION = Version.create("0.9.8");
-
-    /**
-     * Verze REST API pro vHackOS.
-     */
-    int REST_API_VERSION = 17;
+    Version VERSION = Version.create("0.9.7");
 
     /**
      * Konfigurace botnetu.

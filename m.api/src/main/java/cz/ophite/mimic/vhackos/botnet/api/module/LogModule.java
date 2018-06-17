@@ -94,20 +94,26 @@ public class LogModule extends Module {
         }
     }
 
-    private static List<String> toLogList(String logs) {
+    private List<String> toLogList(String logs) {
+        getLogger().debug("Get log message: {}", logs);
+
         var data = logs.split("\n");
         var list = new ArrayList<String>(data.length);
 
         for (var line : data) {
             // nastaví mezery na nezalomitelné znaky, protože v logu můžou být i ASCII obrazce
-            list.add(line.replace((char) 32, (char) 160));
+            var fixedLine = line.replaceAll(" ", " ");
+            list.add(fixedLine);
+            getLogger().debug(fixedLine);
         }
         return list;
     }
 
-    private static String fixLog(String log) {
+    private String fixLog(String log) {
+        getLogger().debug("Set log message1: {}", log);
         log = log.replaceAll("<br>", "\n");
-        log = log.replaceAll(" ", " ");
+        //log = log.replaceAll(" ", " ");
+        getLogger().debug("Set log message2: {}", log);
         return log;
     }
 }

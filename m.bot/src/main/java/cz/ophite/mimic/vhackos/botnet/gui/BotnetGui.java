@@ -74,6 +74,9 @@ public final class BotnetGui extends JFrame {
             setLocationRelativeTo(null);
             setVisible(true);
         } else {
+            setTitle(String.format("vHack OS - Botnet v%s | API: %s | by %s", IBotnet.VERSION, config
+                    .getGameApi(), Constants.AUTHOR));
+
             if (config.hasValidCredentials()) {
                 setTitle(getTitle() + " | Account: " + config.getUserName());
 
@@ -90,7 +93,7 @@ public final class BotnetGui extends JFrame {
         var width = (int) (0.8 * gd.getDisplayMode().getWidth());
         var height = (int) (0.8 * gd.getDisplayMode().getHeight());
 
-        setTitle(String.format("vHack OS - Botnet v%s | by " + Constants.AUTHOR, IBotnet.VERSION));
+        setTitle("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(width, height));
         setFont(font);

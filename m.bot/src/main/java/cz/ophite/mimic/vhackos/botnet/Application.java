@@ -4,6 +4,7 @@ import cz.ophite.mimic.vhackos.botnet.api.IBotnet;
 import cz.ophite.mimic.vhackos.botnet.api.exception.AccountBlockedException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.ConnectionException;
 import cz.ophite.mimic.vhackos.botnet.api.exception.InvalidLoginException;
+import cz.ophite.mimic.vhackos.botnet.command.ApplicationCommand;
 import cz.ophite.mimic.vhackos.botnet.command.base.BaseCommand;
 import cz.ophite.mimic.vhackos.botnet.config.ApplicationConfig;
 import cz.ophite.mimic.vhackos.botnet.config.ConfigProvider;
@@ -97,7 +98,6 @@ public final class Application implements ICommandListener {
                 }
             }
         }
-
         // vyhledá všechny dostupné příkazy
         CommandRunner.initialize(context);
         CommandRunner.initCommands(botnet);
@@ -162,7 +162,7 @@ public final class Application implements ICommandListener {
 
     @Override
     public void incomingCommand(CommandDispatcher dispatcher, String command) {
-        if (command.equalsIgnoreCase("q")) {
+        if (command.equalsIgnoreCase(ApplicationCommand.CMD_EXIT)) {
             dispatcher.shutdown();
             exit(0);
 
