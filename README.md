@@ -5,7 +5,7 @@ For the game server, Botnet behaves like a human, so when the settings are corre
 
 ## Join [Discord](https://discord.gg/Cdz39vu) for help, advice, chat, and more
 
-## Download latest [**HERE**](https://tinyurl.com/y9ee2hjw) (with changelog)
+## Download latest [**HERE**](https://tinyurl.com/y8t5q9q4) (with changelog)
 
 ***
 
